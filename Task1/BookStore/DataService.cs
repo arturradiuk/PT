@@ -6,9 +6,9 @@ namespace BookStore
 {
     public class DataService
     {
-        private DataRepository _dataRepository;
+        private IDataRepository _dataRepository;
 
-        public DataService(DataRepository dataRepository)
+        public DataService(IDataRepository dataRepository)
         {
             _dataRepository = dataRepository;
         }
