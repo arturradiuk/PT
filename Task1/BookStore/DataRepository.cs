@@ -7,7 +7,11 @@ namespace BookStore
     public class DataRepository : IDataRepository
     {
         private DataContext _dataContext = new DataContext();
+
         private IDataFiller _dataFiller;
+
+        // in this way we avoid the creating of id var and provide the data cohesion
+        private int _bookKey = 0;
 
         public DataRepository(IDataFiller dataFiller)
         {
@@ -15,17 +19,15 @@ namespace BookStore
             this._dataFiller.Fill(this._dataContext);
         }
 
-        public void AddBook(Book book)
-        {
-            if (_dataContext.Books.ContainsKey(book.Id))
-            {
-                throw new ArgumentException($"Book with Id {book.Id} already exists.");
-            }
 
-            _dataContext.Books.Add(book.Id, book);
+        public void AddBook(Book book) // todo check for the duplicate
+        {
+            // if()
+            _dataContext.Books.Add(this._bookKey, book);
+            this._bookKey++;
         }
 
-        public void AddClient(Client client)
+        public void AddClient(Client client) // done
         {
             if (_dataContext.Clients.Any(c => c.Email.Equals(client.Email)))
             {
@@ -35,124 +37,78 @@ namespace BookStore
             _dataContext.Clients.Add(client);
         }
 
-        public void AddInvoice(Invoice invoice)
+        // todo where should we check the data duplicates
+        public void AddInvoice(Invoice invoice) // changed 
         {
-            if (_dataContext.Invoices.Any(i => i.Id.Equals(invoice.Id)))
+            if (_dataContext.Invoices.Any(i => i.Equals(invoice)))
             {
-                throw new ArgumentException($"Invoice with Id {invoice.Id} already exists.");
+                throw new ArgumentException($"This invoice already exists.");
             }
 
             _dataContext.Invoices.Add(invoice);
         }
 
-        public void AddCopyDetails(CopyDetails copyDetails)
+        public void AddCopyDetails(CopyDetails copyDetails) // changed
         {
-            if (_dataContext.CopyDetailses.Any(c => c.Id.Equals(copyDetails.Id)))
+            if (_dataContext.CopyDetailses.Any(c => c.Equals(copyDetails)))
             {
-                throw new ArgumentException($"CopyDetails with Id {copyDetails.Id} already exists.");
+                throw new ArgumentException($"This copyDetails already exists.");
             }
 
             _dataContext.CopyDetailses.Add(copyDetails);
         }
 
 
-        public Book GetBook(Guid id)
+        public Book GetBook(int key) // changed
         {
-            return _dataContext.Books[id];
+            return _dataContext.Books[key];
         }
 
-        public Client GetClient(string email)
+        public Client GetClient(int index) // changed
         {
-            return _dataContext.Clients.FirstOrDefault(c => c.Email.Equals(email));
+            return _dataContext.Clients[index];
         }
 
-        public Invoice GetInvoice(Guid id)
+        public Invoice GetInvoice(int index) // changed
         {
-            return _dataContext.Invoices.FirstOrDefault(i => i.Id.Equals(id));
+            return _dataContext.Invoices[index];
         }
 
-        public CopyDetails GetCopyDetails(Guid id)
+        public CopyDetails GetCopyDetails(int index) //changed
         {
-            return _dataContext.CopyDetailses.FirstOrDefault(c => c.Id.Equals(id));
+            return _dataContext.CopyDetailses[index];
         }
 
 
-        public void UpdateBook(Book book, Guid id)
+        public void UpdateBook(Book book, int key) // changed 
         {
-            if (book.Id.Equals(id))
+            if (_dataContext.Books.ContainsKey(key))
             {
-                throw new ArgumentException($"Updating of the book Id is prohibited.");
+                _dataContext.Books[key] = book;
             }
 
-            if (_dataContext.Books.ContainsKey(id))
-            {
-                _dataContext.Books[id] = book;
-            }
-
-            throw new ArgumentException("Book with this Id doesn't exist.");
+            throw new ArgumentException("Book with this key doesn't exist.");
         }
 
-        public void UpdateClient(Client client, string email)
+        public void UpdateClient(Client client, int index) // changed
         {
-            if (client.Email.Equals(email))
-            {
-                throw new ArgumentException($"Updating of the client email is prohibited.");
-            }
-
-            int index = this._dataContext.Clients.FindIndex(c => c.Email.Equals(email));
-            if (index == -1)
-            {
-                throw new ArgumentException("Client with this email doesn't exist.");
-            }
-
             _dataContext.Clients[index] = client;
         }
 
-        public void UpdateInvoice(Invoice invoice, Guid id)
+        public void UpdateInvoice(Invoice invoice, int index) // changed // todo check for throw necessity 
         {
-            if (invoice.Id.Equals(id))
-            {
-                throw new ArgumentException($"Updating of the invoice Id is prohibited.");
-            }
-
-            int index = _dataContext.Invoices.IndexOf(invoice);
-
-            for (int i = 0; i < _dataContext.Invoices.Count; i++)
-            {
-                if (!(_dataContext.Invoices[i].Id.Equals(id))) continue;
-                _dataContext.Invoices[i] = invoice;
-                return;
-            }
-
-            throw new ArgumentException("Invoice with this Id doesn't exist.");
+            _dataContext.Invoices[index] = invoice;
         }
 
-        public void UpdateCopyDetails(CopyDetails copyDetails, Guid id)
+        public void UpdateCopyDetails(CopyDetails copyDetails, int index)
         {
-            if (copyDetails.Id.Equals(id))
-            {
-                throw new ArgumentException($"Updating of the copyDetails Id is prohibited.");
-            }
-
-            for (int i = 0; i < _dataContext.CopyDetailses.Count; i++)
-            {
-                if (!(_dataContext.CopyDetailses[i].Id.Equals(id))) continue;
-                _dataContext.CopyDetailses[i] = copyDetails;
-                return;
-            }
-
-            throw new ArgumentException("CopyDetails with this Id doesn't exist.");
+            _dataContext.CopyDetailses[index] = copyDetails;
         }
 
 
         public void DeleteBook(Book book)
         {
-            if (_dataContext.Books.ContainsKey(book.Id))
-            {
-                _dataContext.Books.Remove(book.Id);
-            }
-
-            throw new ArgumentException("Book with this Id doesn't exist.");
+            _dataContext.Books.Remove(_dataContext.Books.FirstOrDefault(b => b.Value == book).Key);
         }
 
         public void DeleteClient(Client client)

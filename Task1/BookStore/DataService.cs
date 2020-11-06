@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BookStore
 {
-    public class DataService
+    /*public class DataService
     {
         private IDataRepository _dataRepository;
 
@@ -13,6 +13,13 @@ namespace BookStore
             _dataRepository = dataRepository;
         }
 
+
+        public Book FindBook(string bookName, string authorName)
+        {
+        }
+        
+        
+        
         public void UpdateBookStock(Book book, int count)
         {
             if (count < 0)
@@ -190,5 +197,5 @@ namespace BookStore
         {
             return _dataRepository.GetAllInvoices();
         }
-    }
+    }*/
 }

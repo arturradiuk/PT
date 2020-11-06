@@ -10,15 +10,19 @@ namespace BookStore
         public void AddInvoice(Invoice invoice);
         public void AddCopyDetails(CopyDetails copyDetails);  
         
-        public Book GetBook(Guid id);
-        public Client GetClient(string email);
-        public Invoice GetInvoice(Guid id);
-        public CopyDetails GetCopyDetails(Guid id);
+        // public Book GetBook(Guid id);
+        // public Client GetClient(string email);
+        // public Invoice GetInvoice(Guid id); // todo check the necessity of this method
+        // public CopyDetails GetCopyDetails(Guid id); // todo check the necessity of this method
+        public Book GetBook(int key);
+        public Client GetClient(int index);
+        public Invoice GetInvoice(int index); // todo check the necessity of this method
+        public CopyDetails GetCopyDetails(int index); // todo check the necessity of this method
         
-        public void UpdateBook(Book book, Guid id);
-        public void UpdateClient(Client client, string email);
-        public void UpdateInvoice(Invoice invoice, Guid id);
-        public void UpdateCopyDetails(CopyDetails copyDetails, Guid id);
+        public void UpdateBook(Book book, int index);
+        public void UpdateClient(Client client, int index);
+        public void UpdateInvoice(Invoice invoice, int index);
+        public void UpdateCopyDetails(CopyDetails copyDetails, int index);
 
         
         public void DeleteBook(Book book);
