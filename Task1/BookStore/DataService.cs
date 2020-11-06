@@ -4,6 +4,24 @@ using System.Linq;
 
 namespace BookStore
 {
+    public class DataService
+    {
+        private IDataRepository _dataRepository;
+
+        public DataService(IDataRepository dataRepository)
+        {
+            _dataRepository = dataRepository;
+        }
+
+        #region FindRegion
+        public void FindBook(string bookName, string authorName)
+        {
+        }
+        #endregion
+        
+    }
+
+
     /*public class DataService
     {
         private IDataRepository _dataRepository;
