@@ -13,6 +13,13 @@ namespace BookStore
         // in this way we avoid the creating of id var and provide the data cohesion
         private int _bookKey = 0;
 
+        public int BookKey
+        {
+            get => _bookKey;
+            set => _bookKey = value;
+        }
+
+
         public DataRepository(IDataFiller dataFiller)
         {
             this._dataFiller = dataFiller;

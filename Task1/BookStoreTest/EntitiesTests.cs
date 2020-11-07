@@ -33,7 +33,7 @@ namespace BookStoreTest
         {
             Book b1 = new Book("Year 1984", "George Orwell", 1949, Genre.Fiction);
 
-            CopyDetails cd1 = new CopyDetails(b1, new decimal(35.99), new decimal(2.65), 1);
+            CopyDetails cd1 = new CopyDetails(b1, new decimal(35.99), new decimal(2.65), 1,"short description");
             
             Assert.Equal(b1, cd1.Book);
             Assert.Equal(new decimal(35.99), cd1.Price);
@@ -44,10 +44,10 @@ namespace BookStoreTest
         [Fact]
         public void InvoiceTest()
         {
-            DateTimeOffset purchaseTime = DateTimeOffset.Now;
+            DateTime purchaseTime = DateTime.Now;
             Book b1 = new Book("Year 1984", "George Orwell", 1949, Genre.Fiction);
             Client c1 = new Client("john.smith@edu.p.lodz.pl", "John", "Smith", "896-457-891");
-            CopyDetails cd1 = new CopyDetails(b1, new decimal(35.99), new decimal(2.65), 1);
+            CopyDetails cd1 = new CopyDetails(b1, new decimal(35.99), new decimal(2.65), 1,"short description");
             
             Invoice inv1 = new Invoice(c1, cd1,  purchaseTime);
             

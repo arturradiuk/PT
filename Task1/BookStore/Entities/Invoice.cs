@@ -7,10 +7,10 @@ namespace BookStore
         public Client Client;
         
         public CopyDetails CopyDetails;
-        public DateTimeOffset PurchaseTime { get; set; }
+        public DateTime PurchaseTime { get; set; }
         
 
-        public Invoice(Client client, CopyDetails copyDetails, DateTimeOffset purchaseTime)
+        public Invoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
         {
             Client = client;
             CopyDetails = copyDetails;
