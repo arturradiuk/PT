@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BookStore
 {
-    public class DataService
+    public class DataService //:IDataService ?
     {
         private IDataRepository _dataRepository;
 

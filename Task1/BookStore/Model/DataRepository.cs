@@ -13,30 +13,89 @@ namespace BookStore
         // in this way we avoid the creating of id var and provide the data cohesion
         // private int _bookKey = 0;
         private int _bookKey = 6; // there is setter to provide the start number
+
         public int BookKey
         {
             get => _bookKey;
             set => _bookKey = value; // check if the number greater than 8 
         }
 
+
+        #region client region
+
+        public IEnumerable<Client> GetAllClients()
+        {
+            return _dataContext.Clients;
+        }
+        public void AddClient(Client client) // done
+        {
+            if (_dataContext.Clients.Any(c => c.Email.Equals(client.Email)))
+            {
+                throw new ArgumentException($"Client with email {client.Email} already exists.");
+            }
+
+            _dataContext.Clients.Add(client);
+        }
+
+        public int FindClient(Client client) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        {
+            if (_dataContext.Clients.Contains(client))
+            {
+                return _dataContext.Clients.IndexOf(client) ;
+            }
+            throw new ArgumentException("This client does not exist.");
+        }
+        
+        public void UpdateClient(Client client, int index) // todo do we need here additional restrictions?
+        {
+            if (_dataContext.Clients.Count() > 0 && index >= 0 && index < _dataContext.Clients.Count())
+            {
+                _dataContext.Clients[index] = client;
+                return;
+            }
+            throw new ArgumentException("The index is invalid.");
+        }
+
+        public void DeleteClient(Client client)
+        {
+            if (!_dataContext.Clients.Remove(client))
+            {
+                throw new ArgumentException("Client with this Id doesn't exist.");
+            }
+        }
+
+        public Client GetClient(int index) //
+        {
+            if (_dataContext.Clients.Count() > 0 && index >= 0 && index < _dataContext.Clients.Count())
+            {
+                return _dataContext.Clients[index];
+            }
+            throw new ArgumentException("The index is invalid.");
+        }
+
+
+
+        #endregion
+
         // todo divide into regions 
 
-        public int FindBook(Book book) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        public int
+            FindBook(Book book) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
         {
-            return _dataContext.Books.FirstOrDefault(b => b.Equals(book)).Key; 
+            return _dataContext.Books.FirstOrDefault(b => b.Equals(book)).Key;
         }
 
-        public int FindClient(Client client)// todo need to be checked what is returning in case of not founding the object, the planing value is -1
-        {
-            return _dataContext.Clients.IndexOf(client);
-        }
 
-        public int FindCopyDetails(CopyDetails copyDetails)// todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        public int
+            FindCopyDetails(
+                CopyDetails copyDetails) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
         {
             return _dataContext.CopyDetailses.IndexOf(copyDetails);
         }
 
-        public int FindInvoice(Invoice invoice)// todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        public int
+            FindInvoice(
+                Invoice invoice) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
         {
             return _dataContext.Invoices.IndexOf(invoice);
         }
@@ -56,15 +115,6 @@ namespace BookStore
             this._bookKey++;
         }
 
-        public void AddClient(Client client) // done
-        {
-            if (_dataContext.Clients.Any(c => c.Email.Equals(client.Email)))
-            {
-                throw new ArgumentException($"Client with email {client.Email} already exists.");
-            }
-
-            _dataContext.Clients.Add(client);
-        }
 
         // todo where should we check the data duplicates
         public void AddInvoice(Invoice invoice) // changed 
@@ -93,10 +143,6 @@ namespace BookStore
             return _dataContext.Books[key];
         }
 
-        public Client GetClient(int index) // changed
-        {
-            return _dataContext.Clients[index];
-        }
 
         public Invoice GetInvoice(int index) // changed
         {
@@ -119,10 +165,6 @@ namespace BookStore
             throw new ArgumentException("Book with this key doesn't exist.");
         }
 
-        public void UpdateClient(Client client, int index) // changed
-        {
-            _dataContext.Clients[index] = client;
-        }
 
         public void UpdateInvoice(Invoice invoice, int index) // changed // todo check for throw necessity 
         {
@@ -140,13 +182,6 @@ namespace BookStore
             _dataContext.Books.Remove(_dataContext.Books.FirstOrDefault(b => b.Value == book).Key);
         }
 
-        public void DeleteClient(Client client)
-        {
-            if (!_dataContext.Clients.Remove(client))
-            {
-                throw new ArgumentException("Client with this Id doesn't exist.");
-            }
-        }
 
         public void DeleteInvoice(Invoice invoice)
         {
@@ -170,10 +205,6 @@ namespace BookStore
             return _dataContext.Books.Values;
         }
 
-        public IEnumerable<Client> GetAllClients()
-        {
-            return _dataContext.Clients;
-        }
 
         public IEnumerable<Invoice> GetAllInvoices()
         {
@@ -184,7 +215,5 @@ namespace BookStore
         {
             return _dataContext.CopyDetailses;
         }
-        
-        
     }
 }
