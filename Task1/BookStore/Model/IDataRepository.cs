@@ -19,7 +19,7 @@ namespace BookStore
 
 
         public int FindBook(Book book);
-        public int FindClient(Client book);
+        public int FindClient(Client client);
         public int FindCopyDetails(CopyDetails copyDetails);
         public int FindInvoice(Invoice invoice);
         
