@@ -4,6 +4,7 @@ namespace BookStore
 {
     public class Invoice
     {
+
         public Client Client;
         
         public CopyDetails CopyDetails;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace BookStore
 {
@@ -10,14 +11,18 @@ namespace BookStore
         public void AddInvoice(Invoice invoice);
         public void AddCopyDetails(CopyDetails copyDetails);  
         
-        // public Book GetBook(Guid id);
-        // public Client GetClient(string email);
-        // public Invoice GetInvoice(Guid id); // todo check the necessity of this method
-        // public CopyDetails GetCopyDetails(Guid id); // todo check the necessity of this method
         public Book GetBook(int key);
         public Client GetClient(int index);
         public Invoice GetInvoice(int index); // todo check the necessity of this method
         public CopyDetails GetCopyDetails(int index); // todo check the necessity of this method
+
+
+
+        public int FindBook(Book book);
+        public int FindClient(Client book);
+        public int FindCopyDetails(CopyDetails copyDetails);
+        public int FindInvoice(Invoice invoice);
+        
         
         public void UpdateBook(Book book, int index);
         public void UpdateClient(Client client, int index);

@@ -11,12 +11,34 @@ namespace BookStore
         private IDataFiller _dataFiller;
 
         // in this way we avoid the creating of id var and provide the data cohesion
-        private int _bookKey = 0;
-
+        // private int _bookKey = 0;
+        private int _bookKey = 6; // there is setter to provide the start number
         public int BookKey
         {
             get => _bookKey;
-            set => _bookKey = value;
+            set => _bookKey = value; // check if the number greater than 8 
+        }
+
+        // todo divide into regions 
+
+        public int FindBook(Book book) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        {
+            return _dataContext.Books.FirstOrDefault(b => b.Equals(book)).Key; 
+        }
+
+        public int FindClient(Client client)// todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        {
+            return _dataContext.Clients.IndexOf(client);
+        }
+
+        public int FindCopyDetails(CopyDetails copyDetails)// todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        {
+            return _dataContext.CopyDetailses.IndexOf(copyDetails);
+        }
+
+        public int FindInvoice(Invoice invoice)// todo need to be checked what is returning in case of not founding the object, the planing value is -1
+        {
+            return _dataContext.Invoices.IndexOf(invoice);
         }
 
 
@@ -162,5 +184,7 @@ namespace BookStore
         {
             return _dataContext.CopyDetailses;
         }
+        
+        
     }
 }

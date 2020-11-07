@@ -12,13 +12,53 @@ namespace BookStore
         {
             _dataRepository = dataRepository;
         }
+        
+        // public void UpdateBookStock(Book book, int count) 
+        public void UpdateBookStock(CopyDetails copyDetails, int count) // todo is is good idea to place here copydetails
+        {
+            if (count < 0)
+            {
+                throw new InvalidOperationException("You can't update book stock with negative number.");
+            }
 
-        #region FindRegion
+            _dataRepository.UpdateCopyDetails(copyDetails, _dataRepository.FindCopyDetails(copyDetails));
+        }
+
+        
+
+        
+        
+        
+        #region Find Region - find objects by its characteristics 
         public void FindBook(string bookName, string authorName)
         {
         }
+
         #endregion
         
+        
+        #region GetSets Region
+        public IEnumerable<Book> GetBooks()
+        {
+            return _dataRepository.GetAllBooks();
+        }
+
+        public IEnumerable<Client> GetClients()
+        {
+            return _dataRepository.GetAllClients();
+        }
+
+        public IEnumerable<CopyDetails> GetCopyDetailses()
+        {
+            return _dataRepository.GetAllCopyDetailses();
+        }
+
+        public IEnumerable<Invoice> GetInvoices()
+        {
+            return _dataRepository.GetAllInvoices();
+        }
+        
+        #endregion
     }
 
 
@@ -196,24 +236,6 @@ namespace BookStore
             _dataRepository.DeleteCopyDetails(copyDetails);
         }
 
-        public IEnumerable<Book> GetBooks()
-        {
-            return _dataRepository.GetAllBooks();
-        }
 
-        public IEnumerable<Client> GetClients()
-        {
-            return _dataRepository.GetAllClients();
-        }
-
-        public IEnumerable<CopyDetails> GetCopyDetailses()
-        {
-            return _dataRepository.GetAllCopyDetailses();
-        }
-
-        public IEnumerable<Invoice> GetInvoices()
-        {
-            return _dataRepository.GetAllInvoices();
-        }
     }*/
 }
