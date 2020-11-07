@@ -7,7 +7,7 @@ namespace BookStore
     public class DataContext
     {
         public List<Client> Clients = new List<Client>();
-        public Dictionary<Guid, Book> Books = new Dictionary<Guid, Book>();
+        public Dictionary<int, Book> Books = new Dictionary<int, Book>();
         public ObservableCollection<Invoice> Invoices = new ObservableCollection<Invoice>();
         public ObservableCollection<CopyDetails> CopyDetailses = new ObservableCollection<CopyDetails>();
     }

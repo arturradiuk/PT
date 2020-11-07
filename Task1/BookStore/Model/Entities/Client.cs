@@ -1,7 +1,11 @@
+using System;
+
 namespace BookStore
 {
     public class Client
     {
+
+
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
@@ -24,9 +28,10 @@ namespace BookStore
             else
             {
                 Client c = (Client) obj;
-                return (this.Email.Equals(c.Email)) && (this.FirstName.Equals(c.Email)) &&
+                return (this.Email.Equals(c.Email)) && (this.FirstName.Equals(c.FirstName)) &&
                        (this.SecondName.Equals(c.SecondName)) && (this.PhoneNumber.Equals(c.PhoneNumber));
             }
         }
+        
     }
 }

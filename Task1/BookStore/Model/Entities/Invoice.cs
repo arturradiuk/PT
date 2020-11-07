@@ -4,16 +4,17 @@ namespace BookStore
 {
     public class Invoice
     {
-        public Guid Id { get; set; }
-        public Client Client;
-        public CopyDetails CopyDetails;
-        public DateTimeOffset PurchaseTime { get; set; }
 
-        public Invoice(Client client, CopyDetails copyDetails, Guid id, DateTimeOffset purchaseTime)
+        public Client Client;
+        
+        public CopyDetails CopyDetails;
+        public DateTime PurchaseTime { get; set; }
+        
+
+        public Invoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
         {
             Client = client;
             CopyDetails = copyDetails;
-            Id = id;
             PurchaseTime = purchaseTime;
         }
 
@@ -27,7 +28,7 @@ namespace BookStore
             else
             {
                 Invoice i = (Invoice) obj;
-                return (this.Id.Equals(i.Id)) && (this.Client.Equals(i.Client)) &&
+                return (this.Client.Equals(i.Client)) &&
                        (this.CopyDetails.Equals(i.CopyDetails)) && (this.PurchaseTime.Equals(i.PurchaseTime));
             }
         }
