@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using BookStore;
@@ -379,6 +378,79 @@ namespace BookStoreTest
 
             Assert.Equal(originalCount - 1, dataService.GetInvoices().ToImmutableHashSet().Count);
             Assert.DoesNotContain(invoice, dataService.GetInvoices());
+        }
+
+        #endregion
+
+        #region copyDetails Tests
+
+        [Fact]
+        public void AddCopyDetailsTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            CopyDetails copyDetails =
+                new CopyDetails(dataRepository.GetBook(3), 15.60m, 2.60m, 2, "Sample book invoice");
+            int copyDetailsNumber = dataService.GetCopyDetailses().ToImmutableHashSet().Count;
+
+            dataService.AddCopyDetails(copyDetails);
+            Assert.Equal(copyDetailsNumber + 1, dataService.GetCopyDetailses().ToImmutableHashSet().Count);
+            Assert.Equal(copyDetails, dataService.GetCopyDetailses().Last());
+        }
+
+        [Fact]
+        public void GetCopyDetailsTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+            CopyDetails presentCopyDetails = dataRepository.GetCopyDetails(3);
+            Book book = presentCopyDetails.Book;
+            decimal price = presentCopyDetails.Price;
+            decimal tax = presentCopyDetails.Tax;
+            int count = presentCopyDetails.Count;
+            String description = presentCopyDetails.Description;
+
+            CopyDetails notPresentCopyDetails =
+                new CopyDetails(book, price, tax, 50, "There is no such description");
+            Assert.Equal(presentCopyDetails,
+                dataService.GetCopyDetails(book, price, tax, count, description));
+            Assert.DoesNotContain(notPresentCopyDetails, dataService.GetCopyDetailses());
+        }
+
+        [Fact]
+        public void UpdateCopyDetailsTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
+            copyDetails.Count = 999;
+
+            dataService.UpdateCopyDetails(copyDetails);
+
+            Assert.Equal(999, dataService.GetCopyDetailses().First().Count);
+        }
+
+        [Fact]
+        public void DeleteCopyDetailsTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            CopyDetails copyDetails = new CopyDetails(dataRepository.GetBook(2), 15.6m, 2.30m, 1, "Sample invoice");
+            dataService.AddCopyDetails(copyDetails);
+
+            int originalCount = dataService.GetCopyDetailses().ToImmutableHashSet().Count;
+
+            dataService.DeleteCopyDetails(copyDetails);
+
+            Assert.Equal(originalCount - 1, dataService.GetCopyDetailses().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(copyDetails, dataService.GetCopyDetailses());
         }
 
         #endregion
