@@ -64,7 +64,6 @@ namespace BookStore
             return temp;
         }
 
-
         public IEnumerable<Invoice> GetInvoicesForTheClient(Client client)
         {
             return GetInvoices().Where(invoice => invoice.Client.Email.Equals(client.Email));
