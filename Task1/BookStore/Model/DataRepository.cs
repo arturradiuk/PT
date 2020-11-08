@@ -17,17 +17,18 @@ namespace BookStore
         }
 
 
-        private int _bookKey = 6;
+        // in this way we avoid the creating of id var and provide the data cohesion
+        // private int _bookKey = 0;
+        private int _bookKey = 6; // there is setter to provide the start number
 
         public int BookKey
         {
             get => _bookKey;
-
-            set => _bookKey = value;
+            set => _bookKey = value; // check if the number greater than 8 
         }
 
 
-        #region client region 
+        #region client region ----------------------------------------------------------
 
         public IEnumerable<Client> GetAllClients()
         {
@@ -54,7 +55,7 @@ namespace BookStore
             throw new ArgumentException("This client does not exist.");
         }
 
-        public void UpdateClient(Client client, int index) 
+        public void UpdateClient(Client client, int index) // todo do we need here additional restrictions?
         {
             if (_dataContext.Clients.Count() > 0 && index >= 0 && index < _dataContext.Clients.Count())
             {
@@ -72,7 +73,7 @@ namespace BookStore
                 if (invoice.Client.Equals(client))
                 {
                     throw new ArgumentException(
-                        "You can't delete this client, because this client is used in invoice.");
+                        "You can't delete this client, because this client is used in invoice."); // todo create test in DataRepositoryTest
                 }
             }
 
@@ -94,7 +95,7 @@ namespace BookStore
 
         #endregion
 
-        #region book region 
+        #region book region ----------------------------------------------------------
 
         public IEnumerable<Book> GetAllBooks()
         {
@@ -128,10 +129,9 @@ namespace BookStore
             if (_dataContext.Books.ContainsKey(key))
             {
                 _dataContext.Books[key] = book;
-                return;
             }
 
-            throw new ArgumentException("Book with this key doesn't exist.");
+            else throw new ArgumentException("Book with this key doesn't exist.");
         }
 
         public void DeleteBook(Book book)
@@ -141,13 +141,11 @@ namespace BookStore
                 if (invoice.CopyDetails.Book.Equals(book))
                 {
                     throw new ArgumentException(
-                        "You can't delete this book, because this book is used in invoice."); 
+                        "You can't delete this book, because this book is used in invoice."); // todo create test in DataRepositoryTest
                 }
             }
 
             int key = -1;
-
-
             foreach (var b in _dataContext.Books)
             {
                 if (b.Value.Equals(book))
@@ -155,6 +153,7 @@ namespace BookStore
                     key = b.Key;
                 }
             }
+
 
             if (!_dataContext.Books.Remove(key))
             {
@@ -168,16 +167,13 @@ namespace BookStore
             {
                 return _dataContext.Books[key];
             }
-            else
-            {
-                throw new ArgumentException("The index is invalid.");
 
-            }
+            throw new ArgumentException("The index is invalid.");
         }
 
         #endregion
 
-        #region invoice region 
+        #region invoice region ----------------------------------------------------------
 
         public IEnumerable<Invoice> GetAllInvoices()
         {
@@ -211,7 +207,7 @@ namespace BookStore
                 _dataContext.Invoices[index] = invoice;
             }
 
-            throw new ArgumentException("The index is invalid.");
+            else throw new ArgumentException("The index is invalid.");
         }
 
         public void DeleteInvoice(Invoice invoice)
@@ -222,7 +218,7 @@ namespace BookStore
             }
         }
 
-        public Invoice GetInvoice(int index) 
+        public Invoice GetInvoice(int index) // changed
         {
             if (_dataContext.Invoices.Count() > 0 && index >= 0 && index < _dataContext.Invoices.Count())
             {
@@ -234,7 +230,7 @@ namespace BookStore
 
         #endregion
 
-        #region copydetails region 
+        #region copydetails region ----------------------------------------------------------
 
         public IEnumerable<CopyDetails> GetAllCopyDetailses()
         {
@@ -268,10 +264,9 @@ namespace BookStore
             if (_dataContext.CopyDetailses.Count() > 0 && index >= 0 && index < _dataContext.CopyDetailses.Count())
             {
                 _dataContext.CopyDetailses[index] = copyDetails;
-                return;
             }
 
-            throw new ArgumentException("The index is invalid.");
+            else throw new ArgumentException("The index is invalid.");
         }
 
         public void DeleteCopyDetails(CopyDetails copyDetails)
@@ -281,7 +276,7 @@ namespace BookStore
                 if (invoice.CopyDetails.Equals(copyDetails))
                 {
                     throw new ArgumentException(
-                        "You can't delete this copyDetails, because this client is used in copyDetails."); 
+                        "You can't delete this copyDetails, because this client is used in copyDetails."); // todo create test in DataRepositoryTest
                 }
             }
 
