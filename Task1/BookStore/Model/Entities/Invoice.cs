@@ -4,12 +4,11 @@ namespace BookStore
 {
     public class Invoice
     {
-
         public Client Client;
-        
+
         public CopyDetails CopyDetails;
         public DateTime PurchaseTime { get; set; }
-        
+
 
         public Invoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
         {
@@ -30,6 +29,11 @@ namespace BookStore
                 return (this.Client.Equals(i.Client)) &&
                        (this.CopyDetails.Equals(i.CopyDetails)) && (this.PurchaseTime.Equals(i.PurchaseTime));
             }
+        }
+
+        public override string ToString()
+        {
+            return "Invoice: " + Client + CopyDetails + "PurchaseTime: " + PurchaseTime+"; ";
         }
     }
 }

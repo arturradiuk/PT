@@ -34,5 +34,11 @@ namespace BookStore
                        (this.Description.Equals(cd.Description));
             }
         }
+
+        public override string ToString()
+        {
+            return "CopyDetails: " + Book.ToString() + "Price = " + Price + "; Tax = " + Tax + "; Count = " + Count +
+                   "; Description = " + Description+"; ";
+        }
     }
 }
