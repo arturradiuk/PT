@@ -211,7 +211,7 @@ namespace BookStore
                 _dataContext.Invoices[index] = invoice;
             }
 
-            throw new ArgumentException("The index is invalid.");
+            else throw new ArgumentException("The index is invalid.");
         }
 
         public void DeleteInvoice(Invoice invoice)
