@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BookStore
 {
-    public class DataService //:IDataService ?
+    public class DataService 
     {
         private IDataRepository _dataRepository;
 
@@ -130,30 +130,8 @@ namespace BookStore
                 _dataRepository.FindCopyDetails(new CopyDetails(book, price, tax, count, description)));
         }
 
-        //
-        /*public Book GetBook(int index)
-        {
-            return _dataRepository.GetBook(index);
-        }
-
-        public Client GetClient(int index)
-        {
-            return _dataRepository.GetClient(index);
-        }
-
-        public Invoice GetInvoice(int index)
-        {
-            return _dataRepository.GetInvoice(index);
-        }
-
-        public CopyDetails GetCopyDetails(int index)
-        {
-            return _dataRepository.GetCopyDetails(index);
-        }*/
-        //
 
 
-        #region GetSets Region
 
         public IEnumerable<Book> GetBooks()
         {
@@ -175,7 +153,6 @@ namespace BookStore
             return _dataRepository.GetAllInvoices();
         }
 
-        #endregion
 
 
         public void UpdateClient(Client client)
