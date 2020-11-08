@@ -133,7 +133,7 @@ namespace BookStore
                 _dataContext.Books[key] = book;
             }
 
-            throw new ArgumentException("Book with this key doesn't exist.");
+            else throw new ArgumentException("Book with this key doesn't exist.");
         }
 
         public void DeleteBook(Book book)
@@ -198,7 +198,7 @@ namespace BookStore
                 _dataContext.Invoices[index] = invoice;
             }
 
-            throw new ArgumentException("The index is invalid.");
+            else throw new ArgumentException("The index is invalid.");
         }
 
         public void DeleteInvoice(Invoice invoice)
@@ -257,7 +257,7 @@ namespace BookStore
                 _dataContext.CopyDetailses[index] = copyDetails;
             }
 
-            throw new ArgumentException("The index is invalid.");
+            else throw new ArgumentException("The index is invalid.");
         }
 
         public void DeleteCopyDetails(CopyDetails copyDetails)
