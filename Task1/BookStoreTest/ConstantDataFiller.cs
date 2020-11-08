@@ -17,15 +17,15 @@ namespace BookStoreTest
 
 
             dataContext.Books.Add(0,
-                new Book("Harry Potter and the Philosopher's Stone_0", "Joanne Rowling", 1997, Genre.Fiction));
+                new Book("Harry Potter and the Philosopher's Stone_0", "Joanne Rowling", 1997));
             dataContext.Books.Add(1,
-                new Book("Harry Potter and the Philosopher's Stone_1", "Joanne Rowling", 1997, Genre.Fiction));
+                new Book("Harry Potter and the Philosopher's Stone_1", "Joanne Rowling", 1997));
             dataContext.Books.Add(2,
-                new Book("Harry Potter and the Philosopher's Stone_2", "Joanne Rowling", 1997, Genre.Fiction));
+                new Book("Harry Potter and the Philosopher's Stone_2", "Joanne Rowling", 1997));
             dataContext.Books.Add(3,
-                new Book("Harry Potter and the Philosopher's Stone_3", "Joanne Rowling", 1997, Genre.Fiction));
+                new Book("Harry Potter and the Philosopher's Stone_3", "Joanne Rowling", 1997));
             dataContext.Books.Add(4,
-                new Book("Harry Potter and the Philosopher's Stone_4", "Joanne Rowling", 1997, Genre.Fiction));
+                new Book("Harry Potter and the Philosopher's Stone_4", "Joanne Rowling", 1997));
 
 
             dataContext.CopyDetailses.Add(new CopyDetails(dataContext.Books[0], 24.5m, 3.4m, 3, "short description 0"));

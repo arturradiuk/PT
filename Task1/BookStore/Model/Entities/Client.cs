@@ -32,6 +32,11 @@ namespace BookStore
                        (this.SecondName.Equals(c.SecondName)) && (this.PhoneNumber.Equals(c.PhoneNumber));
             }
         }
-        
+
+        public override string ToString()
+        {
+            return "Client: Email = " + Email + "; FirstName = " + FirstName + "; SecondName = " + SecondName +
+                   "; PhoneNumber = " + PhoneNumber + "; ";
+        }
     }
 }

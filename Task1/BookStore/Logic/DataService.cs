@@ -69,10 +69,6 @@ namespace BookStore
             return GetInvoices().Where(invoice => invoice.Client.Email.Equals(client.Email));
         }
 
-        public IEnumerable<Book> GetBooksWithGenre(Genre genre)
-        {
-            return _dataRepository.GetAllBooks().Where(book => book.Genre.Equals(genre));
-        }
 
         public IEnumerable<Book> GetInvoicesForTheBooksAuthorName(string authorName)
         {
@@ -114,9 +110,9 @@ namespace BookStore
 
 
         // tood check for the index using in this layer, its necessity 
-        public Book GetBook(string bookName, string author, int year, Genre genre)
+        public Book GetBook(string bookName, string author, int year)
         {
-            return _dataRepository.GetBook(_dataRepository.FindBook(new Book(bookName, author, year, genre)));
+            return _dataRepository.GetBook(_dataRepository.FindBook(new Book(bookName, author, year)));
         }
 
         public Client GetClient(string email, string firstName, string secondName, string phoneNumber)
