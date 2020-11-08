@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using BookStore;
@@ -178,6 +179,124 @@ namespace BookStoreTest
             try
             {
                 Assert.NotEqual(book, dataService.GetBook("W pustyni i w puczczy", "Henryk Sienkiewicz", 1910));
+            }
+            catch (System.ArgumentException)
+            {
+            }
+        }
+
+        #endregion
+
+        #region client tests
+
+        [Fact]
+        public void GetInvoicesForTheClientTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Client client = dataRepository.GetClient(1);
+            var invoices = dataService.GetInvoicesForTheClient(client);
+            foreach (var invoice in invoices)
+            {
+                Assert.Equal(client, invoice.Client);
+            }
+        }
+
+        [Fact]
+        public void GetClientsForTheBookTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Book book = dataRepository.GetBook(3);
+
+            var clients = dataService.GetClientsForTheBook(book).ToImmutableHashSet();
+            var bookInvoices = dataService.GetInvoicesForTheBook(book);
+
+            foreach (var invoice in bookInvoices)
+            {
+                Assert.Contains(invoice.Client, clients);
+            }
+        }
+
+        [Fact]
+        public void AddClientTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Client client = new Client("michu1212@gmail.com", "Michał", "Kopytko", "8462");
+
+            int clientsNumber = dataService.GetClients().ToImmutableHashSet().Count;
+            dataService.AddClient(client);
+            Assert.Equal(clientsNumber + 1, dataService.GetClients().ToImmutableHashSet().Count);
+            Assert.Equal(client, dataService.GetClients().Last());
+        }
+
+        [Fact]
+        public void GetClientTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+            Client presentClient = dataRepository.GetClient(2);
+            String presentClientEmail = presentClient.Email;
+            String presentClientFirstName = presentClient.FirstName;
+            String presentClientSecondName = presentClient.SecondName;
+            String presentClientPhoneNumber = presentClient.PhoneNumber;
+
+            Client notPresentClient = new Client("michu_one_two_three", "Mich", "Kasztanek", "1234");
+
+            Assert.Equal(presentClient,
+                dataService.GetClient(presentClientEmail, presentClientFirstName, presentClientSecondName,
+                    presentClientPhoneNumber));
+            try
+            {
+                Assert.NotEqual(notPresentClient,
+                    dataService.GetClient("michu_one_two_three", "Mich", "Kasztanek", "1234"));
+            }
+            catch (System.ArgumentException)
+            {
+            }
+        }
+
+        [Fact]
+        public void UpdateClientTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Client client = dataRepository.GetClient(0);
+            client.Email = "my_new_email@gmail.com";
+
+            dataService.UpdateClient(client);
+
+            Assert.Equal("my_new_email@gmail.com", dataService.GetClients().First().Email);
+        }
+
+        [Fact]
+        public void DeleteClientTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Client client = new Client("michu_one_two_three", "Mich", "Kasztanek", "1234");
+            dataService.AddClient(client);
+
+            int originalCount = dataService.GetClients().ToImmutableHashSet().Count;
+
+            dataService.DeleteClient(client);
+
+            Assert.Equal(originalCount - 1, dataService.GetClients().ToImmutableHashSet().Count);
+            try
+            {
+                Assert.NotEqual(client, dataService.GetClient("michu_one_two_three", "Mich", "Kasztanek", "1234"));
             }
             catch (System.ArgumentException)
             {
