@@ -14,9 +14,8 @@ namespace BookStore
             _dataRepository = dataRepository;
         }
 
-        // public void UpdateBookStock(Book book, int count) 
         public void
-            UpdateBookStock(CopyDetails copyDetails, int count) // todo is is good idea to place here copydetails
+            UpdateBookStock(CopyDetails copyDetails, int count)
         {
             if (count < 0)
             {
@@ -46,7 +45,6 @@ namespace BookStore
             return GetInvoices().Where(invoice => invoice.CopyDetails.Book.Equals(book));
         }
 
-        // public IEnumerable<ValueTuple<int,int>> GetBoughtBooksAndAmount()
         public IEnumerable<ValueTuple<Book, int>> GetBoughtBooksAndAmount()
         {
             List<ValueTuple<Book, int>> temp = new List<(Book, int)>();
@@ -109,7 +107,6 @@ namespace BookStore
         }
 
 
-        // tood check for the index using in this layer, its necessity 
         public Book GetBook(string bookName, string author, int year)
         {
             return _dataRepository.GetBook(_dataRepository.FindBook(new Book(bookName, author, year)));
@@ -123,12 +120,14 @@ namespace BookStore
 
         public Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
         {
-            return _dataRepository.GetInvoice(_dataRepository.FindInvoice(new Invoice(client,copyDetails,purchaseTime)));
+            return _dataRepository.GetInvoice(
+                _dataRepository.FindInvoice(new Invoice(client, copyDetails, purchaseTime)));
         }
 
-        public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count,string description)
+        public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description)
         {
-            return _dataRepository.GetCopyDetails(_dataRepository.FindCopyDetails(new CopyDetails(book,price,tax,count,description)));
+            return _dataRepository.GetCopyDetails(
+                _dataRepository.FindCopyDetails(new CopyDetails(book, price, tax, count, description)));
         }
 
         //
@@ -154,7 +153,6 @@ namespace BookStore
         //
 
 
-
         #region GetSets Region
 
         public IEnumerable<Book> GetBooks()
@@ -178,8 +176,8 @@ namespace BookStore
         }
 
         #endregion
-        
-        
+
+
         public void UpdateClient(Client client)
         {
             _dataRepository.UpdateClient(client, _dataRepository.FindClient(client));
@@ -197,8 +195,9 @@ namespace BookStore
 
         public void UpdateBook(Book book)
         {
-            _dataRepository.UpdateBook(book,_dataRepository.FindBook(book));
+            _dataRepository.UpdateBook(book, _dataRepository.FindBook(book));
         }
+
         public void DeleteBook(Book book)
         {
             _dataRepository.DeleteBook(book);
@@ -218,9 +217,5 @@ namespace BookStore
         {
             _dataRepository.DeleteCopyDetails(copyDetails);
         }
-
-        
-        
     }
-
 }

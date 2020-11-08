@@ -9,7 +9,7 @@ namespace BookStoreTest
         {
             // todo should we place here data similar to the real?
 
-            dataContext.Clients.Add(new Client("jankowalski@mail.com", "Jan_0", "Kowalski", "000"));
+            dataContext.Clients.Add(new Client("jankowalski_0@mail.com", "Jan_0", "Kowalski", "000"));
             dataContext.Clients.Add(new Client("jankowalski_1@mail.com", "Jan_1", "Kowalski", "0001"));
             dataContext.Clients.Add(new Client("jankowalski_2@mail.com", "Jan_2", "Kowalski", "0002"));
             dataContext.Clients.Add(new Client("jankowalski_3@mail.com", "Jan_3", "Kowalski", "0003"));
