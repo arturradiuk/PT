@@ -7,9 +7,6 @@ namespace BookStoreTest
 {
     public class DataRepositoryTest
     {
-        // todo should we test the implemented fillers
-        // todo does we should here implemented fillers
-
         #region client test region
 
         [Fact]
@@ -158,7 +155,7 @@ namespace BookStoreTest
             Assert.Equal(5, dataRepository.GetAllClients().Count());
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteClient(client));
         }
-
+        
         [Fact]
         public void GetClientValidValue()
         {
@@ -190,5 +187,7 @@ namespace BookStoreTest
         }
 
         #endregion
+
+
     }
 }
