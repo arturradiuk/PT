@@ -72,17 +72,15 @@ namespace BookStore
             {
                 if (invoice.Client.Equals(client))
                 {
-                    throw new ArgumentException("You can't delete this client, because this client is used in invoice."); // todo create test in DataRepositoryTest
+                    throw new ArgumentException(
+                        "You can't delete this client, because this client is used in invoice."); // todo create test in DataRepositoryTest
                 }
             }
-            
+
             if (!_dataContext.Clients.Remove(client))
             {
                 throw new ArgumentException("Client does not exist.");
             }
-            
-            
-            
         }
 
         public Client GetClient(int index)
@@ -116,11 +114,11 @@ namespace BookStore
         }
 
         public int
-            FindBook(Book book) 
+            FindBook(Book book)
         {
             if (_dataContext.Books.ContainsValue(book))
             {
-                return _dataContext.Books.FirstOrDefault(b => b.Equals(book)).Key;
+                return _dataContext.Books.FirstOrDefault(b => b.Value.Equals(book)).Key;
             }
 
             throw new ArgumentException("This book does not exist.");
@@ -142,11 +140,22 @@ namespace BookStore
             {
                 if (invoice.CopyDetails.Book.Equals(book))
                 {
-                    throw new ArgumentException("You can't delete this book, because this book is used in invoice."); // todo create test in DataRepositoryTest
+                    throw new ArgumentException(
+                        "You can't delete this book, because this book is used in invoice."); // todo create test in DataRepositoryTest
                 }
             }
-            
-            if (!_dataContext.Books.Remove(_dataContext.Books.FirstOrDefault(b => b.Value == book).Key))
+
+            int key = -1;
+            foreach (var b in _dataContext.Books)
+            {
+                if (b.Value.Equals(book))
+                {
+                    key = b.Key;
+                }
+            }
+
+
+            if (!_dataContext.Books.Remove(key))
             {
                 throw new ArgumentException("Book with doesn't exist.");
             }
@@ -266,10 +275,11 @@ namespace BookStore
             {
                 if (invoice.CopyDetails.Equals(copyDetails))
                 {
-                    throw new ArgumentException("You can't delete this copyDetails, because this client is used in copyDetails."); // todo create test in DataRepositoryTest
+                    throw new ArgumentException(
+                        "You can't delete this copyDetails, because this client is used in copyDetails."); // todo create test in DataRepositoryTest
                 }
             }
-            
+
             if (!_dataContext.CopyDetailses.Remove(copyDetails))
             {
                 throw new ArgumentException("CopyDetails does not exist.");
