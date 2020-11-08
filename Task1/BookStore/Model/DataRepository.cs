@@ -68,10 +68,21 @@ namespace BookStore
 
         public void DeleteClient(Client client)
         {
+            foreach (var invoice in _dataContext.Invoices)
+            {
+                if (invoice.Client.Equals(client))
+                {
+                    throw new ArgumentException("You can't delete this client, because this client is used in invoice."); // todo create test in DataRepositoryTest
+                }
+            }
+            
             if (!_dataContext.Clients.Remove(client))
             {
                 throw new ArgumentException("Client does not exist.");
             }
+            
+            
+            
         }
 
         public Client GetClient(int index)
@@ -105,7 +116,7 @@ namespace BookStore
         }
 
         public int
-            FindBook(Book book) // todo need to be checked what is returning in case of not founding the object, the planing value is -1
+            FindBook(Book book) 
         {
             if (_dataContext.Books.ContainsValue(book))
             {
@@ -127,6 +138,14 @@ namespace BookStore
 
         public void DeleteBook(Book book)
         {
+            foreach (var invoice in _dataContext.Invoices)
+            {
+                if (invoice.CopyDetails.Book.Equals(book))
+                {
+                    throw new ArgumentException("You can't delete this book, because this book is used in invoice."); // todo create test in DataRepositoryTest
+                }
+            }
+            
             if (!_dataContext.Books.Remove(_dataContext.Books.FirstOrDefault(b => b.Value == book).Key))
             {
                 throw new ArgumentException("Book with doesn't exist.");
@@ -243,6 +262,14 @@ namespace BookStore
 
         public void DeleteCopyDetails(CopyDetails copyDetails)
         {
+            foreach (var invoice in _dataContext.Invoices)
+            {
+                if (invoice.CopyDetails.Equals(copyDetails))
+                {
+                    throw new ArgumentException("You can't delete this copyDetails, because this client is used in copyDetails."); // todo create test in DataRepositoryTest
+                }
+            }
+            
             if (!_dataContext.CopyDetailses.Remove(copyDetails))
             {
                 throw new ArgumentException("CopyDetails does not exist.");
