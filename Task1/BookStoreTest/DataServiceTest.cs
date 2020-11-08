@@ -176,13 +176,7 @@ namespace BookStoreTest
             dataService.DeleteBook(book);
 
             Assert.Equal(originalCount - 1, dataService.GetBooks().ToImmutableHashSet().Count);
-            try
-            {
-                Assert.NotEqual(book, dataService.GetBook("W pustyni i w puczczy", "Henryk Sienkiewicz", 1910));
-            }
-            catch (System.ArgumentException)
-            {
-            }
+            Assert.DoesNotContain(book, dataService.GetBooks());
         }
 
         #endregion
@@ -294,13 +288,97 @@ namespace BookStoreTest
             dataService.DeleteClient(client);
 
             Assert.Equal(originalCount - 1, dataService.GetClients().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(client, dataService.GetClients());
+        }
+
+        #endregion
+
+        #region Invoices test region
+
+        [Fact]
+        public void GetInvoicesBetweenTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            DateTime startTime = new DateTime(2005, 1, 1);
+            DateTime stopTime = new DateTime(2008, 12, 31);
+            var invoices = dataService.GetInvoicesBetween(startTime, stopTime);
+            var allInvoices = dataService.GetInvoices();
+            foreach (var invoice in allInvoices)
+            {
+                if (invoice.PurchaseTime >= startTime && invoice.PurchaseTime <= stopTime)
+                {
+                    Assert.Contains(invoice, invoices);
+                }
+
+                else
+                {
+                    Assert.DoesNotContain(invoice, invoices);
+                }
+            }
+        }
+
+        [Fact]
+        public void GetInvoiceTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+            Invoice presentInvoice = dataRepository.GetInvoice(2);
+            Client presentInvoiceClient = presentInvoice.Client;
+            CopyDetails presentInvoiceCopyDetails = presentInvoice.CopyDetails;
+            DateTime presentInvoicePurchaseTime = presentInvoice.PurchaseTime;
+
+
+            Invoice notPresentInvoice = new Invoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
+                new DateTime(2040, 2, 2));
+
+            Assert.Equal(presentInvoice,
+                dataService.GetInvoice(presentInvoiceClient, presentInvoiceCopyDetails, presentInvoicePurchaseTime));
             try
             {
-                Assert.NotEqual(client, dataService.GetClient("michu_one_two_three", "Mich", "Kasztanek", "1234"));
+                Assert.NotEqual(notPresentInvoice,
+                    dataService.GetInvoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
+                        new DateTime(2040, 2, 2)));
             }
             catch (System.ArgumentException)
             {
             }
+        }
+
+        [Fact]
+        public void UpdateInvoiceTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Invoice invoice = dataRepository.GetInvoice(0);
+            DateTime newPurchaseTime = new DateTime(1410, 7, 15);
+            invoice.PurchaseTime = newPurchaseTime;
+
+            dataService.UpdateInvoice(invoice);
+
+            Assert.Equal(newPurchaseTime, dataService.GetInvoices().First().PurchaseTime);
+        }
+
+        [Fact]
+        public void DeleteInvoiceTest()
+        {
+            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
+            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            DataService dataService = new DataService(dataRepository);
+
+            Invoice invoice = dataRepository.GetInvoice(3);
+
+            int originalCount = dataService.GetInvoices().ToImmutableHashSet().Count;
+
+            dataService.DeleteInvoice(invoice);
+
+            Assert.Equal(originalCount - 1, dataService.GetInvoices().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(invoice, dataService.GetInvoices());
         }
 
         #endregion
