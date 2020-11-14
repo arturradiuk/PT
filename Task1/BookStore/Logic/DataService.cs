@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+
+// todo przenieść implementacje IDataFiller do testów ~~~~ SJ
+// todo event - zachowanie polimorficzne ---> model(entities, datarepository, dataservice); testy;  ~~~~~ AR
+// todo w testach umieścić implementacje IDataRepository na potrzeby testów ~~~~~ AR 
+// todo stworzyć api dla warstwy logiki IDataService ~~~~~ SJ
+// todo dodać przestrzeni nazw dla warstw ~~~~~ SJ
+
 namespace BookStore
 {
     public class DataService 
