@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using BookStore;
+using BookStore.Model.Entities;
 
 namespace BookStoreTest
 {

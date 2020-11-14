@@ -1,6 +1,6 @@
 using System;
-using System.Data;
-using BookStore;
+using BookStore.Model;
+using BookStore.Model.Entities;
 
 namespace BookStoreTest
 {

@@ -1,11 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using BookStore.Model;
+using BookStore.Model.Entities;
 
-namespace BookStore
+
+// todo przenieść implementacje IDataFiller do testów ~~~~ SJ
+// todo event - zachowanie polimorficzne ---> model(entities, datarepository, dataservice); testy;  ~~~~~ AR
+// todo w testach umieścić implementacje IDataRepository na potrzeby testów ~~~~~ AR 
+// todo stworzyć api dla warstwy logiki IDataService ~~~~~ SJ
+// dodać przestrzeni nazw dla warstw ~~~~~ SJ - done
+
+namespace BookStore.Logic
 {
-    public class DataService //:IDataService ?
+    public class DataService 
     {
         private IDataRepository _dataRepository;
 
@@ -14,9 +22,8 @@ namespace BookStore
             _dataRepository = dataRepository;
         }
 
-        // public void UpdateBookStock(Book book, int count) 
         public void
-            UpdateBookStock(CopyDetails copyDetails, int count) // todo is is good idea to place here copydetails
+            UpdateBookStock(CopyDetails copyDetails, int count)
         {
             if (count < 0)
             {
@@ -46,7 +53,6 @@ namespace BookStore
             return GetInvoices().Where(invoice => invoice.CopyDetails.Book.Equals(book));
         }
 
-        // public IEnumerable<ValueTuple<int,int>> GetBoughtBooksAndAmount()
         public IEnumerable<ValueTuple<Book, int>> GetBoughtBooksAndAmount()
         {
             List<ValueTuple<Book, int>> temp = new List<(Book, int)>();
@@ -109,7 +115,6 @@ namespace BookStore
         }
 
 
-        // tood check for the index using in this layer, its necessity 
         public Book GetBook(string bookName, string author, int year)
         {
             return _dataRepository.GetBook(_dataRepository.FindBook(new Book(bookName, author, year)));
@@ -123,39 +128,18 @@ namespace BookStore
 
         public Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
         {
-            return _dataRepository.GetInvoice(_dataRepository.FindInvoice(new Invoice(client,copyDetails,purchaseTime)));
+            return _dataRepository.GetInvoice(
+                _dataRepository.FindInvoice(new Invoice(client, copyDetails, purchaseTime)));
         }
 
-        public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count,string description)
+        public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description)
         {
-            return _dataRepository.GetCopyDetails(_dataRepository.FindCopyDetails(new CopyDetails(book,price,tax,count,description)));
+            return _dataRepository.GetCopyDetails(
+                _dataRepository.FindCopyDetails(new CopyDetails(book, price, tax, count, description)));
         }
 
-        //
-        /*public Book GetBook(int index)
-        {
-            return _dataRepository.GetBook(index);
-        }
-
-        public Client GetClient(int index)
-        {
-            return _dataRepository.GetClient(index);
-        }
-
-        public Invoice GetInvoice(int index)
-        {
-            return _dataRepository.GetInvoice(index);
-        }
-
-        public CopyDetails GetCopyDetails(int index)
-        {
-            return _dataRepository.GetCopyDetails(index);
-        }*/
-        //
 
 
-
-        #region GetSets Region
 
         public IEnumerable<Book> GetBooks()
         {
@@ -177,9 +161,8 @@ namespace BookStore
             return _dataRepository.GetAllInvoices();
         }
 
-        #endregion
-        
-        
+
+
         public void UpdateClient(Client client)
         {
             _dataRepository.UpdateClient(client, _dataRepository.FindClient(client));
@@ -197,8 +180,9 @@ namespace BookStore
 
         public void UpdateBook(Book book)
         {
-            _dataRepository.UpdateBook(book,_dataRepository.FindBook(book));
+            _dataRepository.UpdateBook(book, _dataRepository.FindBook(book));
         }
+
         public void DeleteBook(Book book)
         {
             _dataRepository.DeleteBook(book);
@@ -218,9 +202,5 @@ namespace BookStore
         {
             _dataRepository.DeleteCopyDetails(copyDetails);
         }
-
-        
-        
     }
-
 }
