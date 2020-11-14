@@ -8,7 +8,7 @@ using BookStore.Model.Entities;
 // przenieść implementacje IDataFiller do testów ~~~~ SJ - done
 // todo event - zachowanie polimorficzne ---> model(entities, datarepository, dataservice); testy;  ~~~~~ AR
 // todo w testach umieścić implementacje IDataRepository na potrzeby testów ~~~~~ AR 
-// stworzyć api dla warstwy logiki IDataService ~~~~~ SJ - kind of done
+// stworzyć api dla warstwy logiki IDataService ~~~~~ SJ - done
 // dodać przestrzeni nazw dla warstw ~~~~~ SJ - done
 
 namespace BookStore.Logic
