@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System;
-using BookStore;
-using Microsoft.VisualBasic.CompilerServices;
+using System.Collections.Generic;
+using BookStore.Model;
+using BookStore.Model.Entities;
 using Xunit;
 
 namespace BookStoreTest

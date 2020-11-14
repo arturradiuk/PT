@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BookStoreTest;
+using BookStore.Model.Entities;
 
-namespace BookStore
+namespace BookStore.Model
 {
     public class DataRepository : IDataRepository
     {

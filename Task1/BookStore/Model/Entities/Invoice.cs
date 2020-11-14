@@ -1,6 +1,6 @@
 using System;
 
-namespace BookStore
+namespace BookStore.Model.Entities
 {
     public class Invoice
     {

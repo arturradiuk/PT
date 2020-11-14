@@ -1,7 +1,7 @@
 using System;
-using BookStore;
+using BookStore.Model.Entities;
 
-namespace BookStoreTest
+namespace BookStore.Model
 {
     public class ConstantDataFiller : IDataFiller
     {

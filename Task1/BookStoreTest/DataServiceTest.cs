@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Immutable;
 using System.Linq;
-using BookStore;
+using BookStore.Logic;
+using BookStore.Model;
+using BookStore.Model.Entities;
 using Xunit;
 
 namespace BookStoreTest
@@ -128,7 +130,7 @@ namespace BookStoreTest
             {
                 Assert.NotEqual(notPresentBook, dataService.GetBook("I don't exist", "Neither do I", 2999));
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
             }
         }
@@ -252,7 +254,7 @@ namespace BookStoreTest
                 Assert.NotEqual(notPresentClient,
                     dataService.GetClient("michu_one_two_three", "Mich", "Kasztanek", "1234"));
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
             }
         }
@@ -342,7 +344,7 @@ namespace BookStoreTest
                     dataService.GetInvoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
                         new DateTime(2040, 2, 2)));
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
             }
         }

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using BookStore.Model;
+using BookStore.Model.Entities;
 
 
 // todo przenieść implementacje IDataFiller do testów ~~~~ SJ
@@ -10,7 +11,7 @@ using System.Linq;
 // todo stworzyć api dla warstwy logiki IDataService ~~~~~ SJ
 // todo dodać przestrzeni nazw dla warstw ~~~~~ SJ
 
-namespace BookStore
+namespace BookStore.Logic
 {
     public class DataService 
     {
