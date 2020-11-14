@@ -14,7 +14,7 @@ namespace BookStoreTest
         public void UpdateBookStockTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
             CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
             dataService.UpdateBookStock(copyDetails, 1);
@@ -26,7 +26,7 @@ namespace BookStoreTest
         public void BuyBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(2);
@@ -42,7 +42,7 @@ namespace BookStoreTest
         public void GetInvoicesForTheBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(1);
@@ -57,7 +57,7 @@ namespace BookStoreTest
         public void GetBoughtBooksAndAmountTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             var boughtBooks = dataService.GetBoughtBooksAndAmount();
@@ -79,7 +79,7 @@ namespace BookStoreTest
         public void GetInvoicesForTheBooksAuthorNameTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             String author = dataRepository.GetBook(0).AuthorName;
@@ -96,7 +96,7 @@ namespace BookStoreTest
         public void AddBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Book book = new Book("W pustyni i w puczczy", "Henryk Sienkiewicz", 1910);
@@ -111,7 +111,7 @@ namespace BookStoreTest
         public void GetBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
             Book presentBook = dataRepository.GetBook(0);
             String presentBookName = presentBook.BookName;
@@ -137,7 +137,7 @@ namespace BookStoreTest
         public void GetBooksTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             var allBooks = dataService.GetBooks();
@@ -149,7 +149,7 @@ namespace BookStoreTest
         public void UpdateBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(0);
@@ -164,7 +164,7 @@ namespace BookStoreTest
         public void DeleteBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Book book = new Book("W pustyni i w puczczy", "Henryk Sienkiewicz", 1910);
@@ -186,7 +186,7 @@ namespace BookStoreTest
         public void GetInvoicesForTheClientTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(1);
@@ -201,7 +201,7 @@ namespace BookStoreTest
         public void GetClientsForTheBookTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(3);
@@ -219,7 +219,7 @@ namespace BookStoreTest
         public void AddClientTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Client client = new Client("michu1212@gmail.com", "Michał", "Kopytko", "8462");
@@ -234,7 +234,7 @@ namespace BookStoreTest
         public void GetClientTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
             Client presentClient = dataRepository.GetClient(2);
             String presentClientEmail = presentClient.Email;
@@ -261,7 +261,7 @@ namespace BookStoreTest
         public void UpdateClientTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(0);
@@ -276,7 +276,7 @@ namespace BookStoreTest
         public void DeleteClientTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Client client = new Client("michu_one_two_three", "Mich", "Kasztanek", "1234");
@@ -298,7 +298,7 @@ namespace BookStoreTest
         public void GetInvoicesBetweenTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             DateTime startTime = new DateTime(2005, 1, 1);
@@ -323,7 +323,7 @@ namespace BookStoreTest
         public void GetInvoiceTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
             Invoice presentInvoice = dataRepository.GetInvoice(2);
             Client presentInvoiceClient = presentInvoice.Client;
@@ -351,7 +351,7 @@ namespace BookStoreTest
         public void UpdateInvoiceTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Invoice invoice = dataRepository.GetInvoice(0);
@@ -367,7 +367,7 @@ namespace BookStoreTest
         public void DeleteInvoiceTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             Invoice invoice = dataRepository.GetInvoice(3);
@@ -388,7 +388,7 @@ namespace BookStoreTest
         public void AddCopyDetailsTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             CopyDetails copyDetails =
@@ -404,7 +404,7 @@ namespace BookStoreTest
         public void GetCopyDetailsTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
             CopyDetails presentCopyDetails = dataRepository.GetCopyDetails(3);
             Book book = presentCopyDetails.Book;
@@ -424,7 +424,7 @@ namespace BookStoreTest
         public void UpdateCopyDetailsTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
@@ -439,7 +439,7 @@ namespace BookStoreTest
         public void DeleteCopyDetailsTest()
         {
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
             CopyDetails copyDetails = new CopyDetails(dataRepository.GetBook(2), 15.6m, 2.30m, 1, "Sample invoice");
