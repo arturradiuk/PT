@@ -52,7 +52,7 @@ namespace BookStoreTest
             
             Assert.Equal(c1, inv1.Client);
             Assert.Equal(cd1, inv1.CopyDetails);
-            Assert.Equal(purchaseTime, inv1.PurchaseTime);
+            Assert.Equal(purchaseTime, inv1.EventDateTime);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace BookStore
         public IEnumerable<Invoice> GetInvoicesBetween(DateTime start, DateTime end) // todo check 
         {
             return GetInvoices().Where(invoice =>
-                (invoice.PurchaseTime.CompareTo(start) == 1) && (invoice.PurchaseTime.CompareTo(end) == -1));
+                (invoice.EventDateTime.CompareTo(start) == 1) && (invoice.EventDateTime.CompareTo(end) == -1));
         }
 
         public IEnumerable<Client> GetClientsForTheBook(Book book)

@@ -322,7 +322,7 @@ namespace BookStoreTest
 
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5));
             dataRepository.AddInvoice(invoice);
-            Assert.Equal(new DateTime(2001, 10, 5), dataRepository.GetInvoice(5).PurchaseTime);
+            Assert.Equal(new DateTime(2001, 10, 5), dataRepository.GetInvoice(5).EventDateTime);
         }
 
         [Fact]
@@ -342,7 +342,7 @@ namespace BookStoreTest
 
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5));
             dataRepository.AddInvoice(invoice);
-            Assert.Throws<ArgumentException>(() => dataRepository.GetInvoice(504).PurchaseTime as object);
+            Assert.Throws<ArgumentException>(() => dataRepository.GetInvoice(504).EventDateTime as object);
         }
 
         [Fact]

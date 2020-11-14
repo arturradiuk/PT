@@ -307,7 +307,7 @@ namespace BookStoreTest
             var allInvoices = dataService.GetInvoices();
             foreach (var invoice in allInvoices)
             {
-                if (invoice.PurchaseTime >= startTime && invoice.PurchaseTime <= stopTime)
+                if (invoice.EventDateTime >= startTime && invoice.EventDateTime <= stopTime)
                 {
                     Assert.Contains(invoice, invoices);
                 }
@@ -328,7 +328,7 @@ namespace BookStoreTest
             Invoice presentInvoice = dataRepository.GetInvoice(2);
             Client presentInvoiceClient = presentInvoice.Client;
             CopyDetails presentInvoiceCopyDetails = presentInvoice.CopyDetails;
-            DateTime presentInvoicePurchaseTime = presentInvoice.PurchaseTime;
+            DateTime presentInvoicePurchaseTime = presentInvoice.EventDateTime;
 
 
             Invoice notPresentInvoice = new Invoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
@@ -356,11 +356,11 @@ namespace BookStoreTest
 
             Invoice invoice = dataRepository.GetInvoice(0);
             DateTime newPurchaseTime = new DateTime(1410, 7, 15);
-            invoice.PurchaseTime = newPurchaseTime;
+            invoice.EventDateTime = newPurchaseTime;
 
             dataService.UpdateInvoice(invoice);
 
-            Assert.Equal(newPurchaseTime, dataService.GetInvoices().First().PurchaseTime);
+            Assert.Equal(newPurchaseTime, dataService.GetInvoices().First().EventDateTime);
         }
 
         [Fact]
