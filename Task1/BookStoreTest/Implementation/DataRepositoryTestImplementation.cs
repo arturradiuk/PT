@@ -1,16 +1,19 @@
-using BookStore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using BookStore;
+using BookStore.Model;
+using BookStore.Model.Entities;
 
-namespace BookStoreTest
+namespace BookStoreTest.Implementation
 {
-    public class DataRepositoryTestImplementation : IDataRepository
+    public class DataRepositoryForTest : IDataRepository // todo rename this file
     {
         private DataContext _dataContext = new DataContext();
 
         private IDataFiller _dataFiller;
 
-        public DataRepositoryTestImplementation(IDataFiller dataFiller)
+        public DataRepositoryForTest(IDataFiller dataFiller)
         {
             this._dataFiller = dataFiller;
             this._dataFiller.Fill(this._dataContext);
@@ -74,7 +77,8 @@ namespace BookStoreTest
             this._bookKey++;
         }
 
-        public int FindBook(Book book)
+        public int
+            FindBook(Book book)
         {
             return _dataContext.Books.FirstOrDefault(b => b.Value.Equals(book)).Key;
         }
@@ -130,7 +134,7 @@ namespace BookStoreTest
             _dataContext.Events[index] = eEvent;
         }
 
-        public void DeleteEvent(Event eEvent)
+        public void DeleteEvent(Event eEvent) // todo explain and test
         {
             _dataContext.Events.Remove(eEvent);
         }
@@ -154,7 +158,9 @@ namespace BookStoreTest
             _dataContext.CopyDetailses.Add(copyDetails);
         }
 
-        public int FindCopyDetails(CopyDetails copyDetails)
+        public int
+            FindCopyDetails(
+                CopyDetails copyDetails)
         {
             return _dataContext.CopyDetailses.IndexOf(copyDetails);
         }

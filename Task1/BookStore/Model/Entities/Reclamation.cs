@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace BookStore
+namespace BookStore.Model.Entities
 {
     public class Reclamation : Event
     {

@@ -80,7 +80,7 @@ namespace BookStore.Logic
             return reclamation;
         }
 
-        public IEnumerable<Event> GetEventsForTheBook(Book book)
+        public IEnumerable<Event> GetInvoicesForTheBook(Book book)
         {
             return GetEvents().Where(eEvent =>
                 {
@@ -119,7 +119,7 @@ namespace BookStore.Logic
 
             foreach (var b in books)
             {
-                int amount = GetEventsForTheBook(b).Count();
+                int amount = GetInvoicesForTheBook(b).Count();
                 if (amount != 0)
                 {
                     temp.Add((b, amount));
@@ -129,7 +129,7 @@ namespace BookStore.Logic
             return temp;
         }
 
-        public IEnumerable<Event> GetEventsForTheClient(Client client)
+        public IEnumerable<Event> GetInvoicesForTheClient(Client client)
         {
             return GetEvents().Where(eEvent =>
                 {
@@ -162,10 +162,10 @@ namespace BookStore.Logic
         }
 
 
-        public IEnumerable<Book> GetEventForTheBooksAuthorName(string authorName)
-        {
-            return GetBooks().Where(book => book.AuthorName.Equals(authorName));
-        }
+        // public IEnumerable<Book> GetEventForTheBooksAuthorName(string authorName)
+        // {
+            // return GetBooks().Where(book => book.AuthorName.Equals(authorName));
+        // }
 
         public IEnumerable<Event> GetEventsBetween(DateTime start, DateTime end) // todo check 
         {
@@ -175,7 +175,7 @@ namespace BookStore.Logic
 
         public IEnumerable<Client> GetClientsForTheBook(Book book)
         {
-            IEnumerable<Event> events = GetEventsForTheBook(book);
+            IEnumerable<Event> events = GetInvoicesForTheBook(book);
             List<Client> clients = new List<Client>();
             foreach (var eEvent in events)
             {
@@ -265,9 +265,9 @@ namespace BookStore.Logic
             _dataRepository.UpdateClient(client, _dataRepository.FindClient(client));
         }
 
-        public void UpdateEvent(Invoice invoice) // todo change here 
+        public void UpdateEvent(Event eEvent) // todo change here 
         {
-            _dataRepository.UpdateEvent(invoice, _dataRepository.FindEvent(invoice));
+            _dataRepository.UpdateEvent(eEvent, _dataRepository.FindEvent(eEvent));
         }
 
         public void UpdateCopyDetails(CopyDetails copyDetails)
@@ -289,9 +289,9 @@ namespace BookStore.Logic
             _dataRepository.DeleteClient(client);
         }
 
-        public void DeleteEvent(Invoice invoice)
+        public void DeleteEvent(Event eEvent)
         {
-            _dataRepository.DeleteEvent(invoice);
+            _dataRepository.DeleteEvent(eEvent);
         }
 
         public void DeleteCopyDetails(CopyDetails copyDetails)

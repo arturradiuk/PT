@@ -1,5 +1,7 @@
 using System.Linq;
 using BookStore;
+using BookStore.Model;
+using BookStoreTest.Implementation;
 using Xunit;
 
 namespace BookStoreTest

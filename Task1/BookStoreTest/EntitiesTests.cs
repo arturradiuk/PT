@@ -49,7 +49,7 @@ namespace BookStoreTest
             Client c1 = new Client("john.smith@edu.p.lodz.pl", "John", "Smith", "896-457-891");
             CopyDetails cd1 = new CopyDetails(b1, new decimal(35.99), new decimal(2.65), 1,"short description");
             
-            Invoice inv1 = new Invoice(c1, cd1,  purchaseTime);
+            Invoice inv1 = new Invoice(c1, cd1,  purchaseTime,"description");
             
             Assert.Equal(c1, inv1.Client);
             Assert.Equal(cd1, inv1.CopyDetails);

@@ -9,14 +9,12 @@ namespace BookStore.Logic
         void
             UpdateBookStock(CopyDetails copyDetails, int count);
 
-        Invoice BuyBook(Client client, CopyDetails copyDetails);
-        IEnumerable<Invoice> GetInvoicesForTheBook(Book book);
+        Invoice BuyBook(Client client, CopyDetails copyDetails, string description);
+        IEnumerable<Event> GetInvoicesForTheBook(Book book); // todo rename 
         IEnumerable<ValueTuple<Book, int>> GetBoughtBooksAndAmount();
-        IEnumerable<Invoice> GetInvoicesForTheClient(Client client);
-        IEnumerable<Book> GetInvoicesForTheBooksAuthorName(string authorName);
-
-        IEnumerable<Invoice> GetInvoicesBetween(DateTime start, DateTime end) // todo check 
-            ;
+        IEnumerable<Event> GetInvoicesForTheClient(Client client); // todo rename
+        // IEnumerable<Book> GetInvoicesForTheBooksAuthorName(string authorName);
+        IEnumerable<Event> GetEventsBetween(DateTime start, DateTime end);
 
         IEnumerable<Client> GetClientsForTheBook(Book book);
         void AddBook(Book book);
@@ -24,19 +22,21 @@ namespace BookStore.Logic
         void AddCopyDetails(CopyDetails copyDetails);
         Book GetBook(string bookName, string author, int year);
         Client GetClient(string email, string firstName, string secondName, string phoneNumber);
-        Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime);
+        Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime,string description);
         CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description);
         IEnumerable<Book> GetBooks();
         IEnumerable<Client> GetClients();
         IEnumerable<CopyDetails> GetCopyDetailses();
-        IEnumerable<Invoice> GetInvoices();
+        IEnumerable<Event> GetEvents();
         void UpdateClient(Client client);
-        void UpdateInvoice(Invoice invoice);
+        void UpdateEvent(Event eEvent);
         void UpdateCopyDetails(CopyDetails copyDetails);
         void UpdateBook(Book book);
         void DeleteBook(Book book);
         void DeleteClient(Client client);
-        void DeleteInvoice(Invoice invoice);
+        void DeleteEvent(Event eEvent);
         void DeleteCopyDetails(CopyDetails copyDetails);
+        Reclamation GetReclamation(DateTime eventDateTime, Invoice invoice, string description);
+
     }
 }

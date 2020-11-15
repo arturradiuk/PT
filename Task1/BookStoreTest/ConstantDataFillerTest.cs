@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System;
 using BookStore;
-using Microsoft.VisualBasic.CompilerServices;
+using BookStore.Model;
+using BookStore.Model.Entities;
+using BookStoreTest.Implementation;
 using Xunit;
 
 namespace BookStoreTest
@@ -119,21 +121,23 @@ namespace BookStoreTest
 
             
 
-            List<Invoice> invoices = new List<Invoice>();
-            invoices.Add(new Invoice(clients[0], copyDetailses[0],
-                new DateTime(2006, 4, 14, 2, 34, 44)));
-            invoices.Add(new Invoice(clients[1], copyDetailses[1],
-                new DateTime(2007, 5, 4, 12, 24, 4)));
-            invoices.Add(new Invoice(clients[2], copyDetailses[2],
-                new DateTime(2004, 9, 5, 1, 14, 54)));
-            invoices.Add(new Invoice(clients[3], copyDetailses[3],
-                new DateTime(2008, 10, 10, 8, 39, 33)));
-            invoices.Add(new Invoice(clients[4], copyDetailses[4],
-                new DateTime(2010, 1, 6, 3, 38, 14)));
+            List<Event> events = new List<Event>();
+            events.Add(new Invoice(clients[0], copyDetailses[0],
+                new DateTime(2006, 4, 14, 2, 34, 44),"short description 0"));
+            events.Add(new Invoice(clients[1], copyDetailses[1],
+                new DateTime(2007, 5, 4, 12, 24, 4),"short description 1"));
+            events.Add(new Invoice(clients[2], copyDetailses[2],
+                new DateTime(2004, 9, 5, 1, 14, 54),"short description 2"));
+            events.Add(new Invoice(clients[3], copyDetailses[3],
+                new DateTime(2008, 10, 10, 8, 39, 33),"short description 3"));
+            events.Add(new Invoice(clients[4], copyDetailses[4],
+                new DateTime(2010, 1, 6, 3, 38, 14),"short description 4"));
+            events.Add(new Reclamation(new DateTime(2006,4,17,2,34,44),
+                events[0] as Invoice, "short description for the reclamation"));
 
-            for (int i = 0; i <invoices.Count ; i++)
+            for (int i = 0; i <events.Count ; i++)
             {
-                Assert.True(invoices[i].Equals(dataRepository.GetEvent(i)));
+                Assert.True(events[i].Equals(dataRepository.GetEvent(i)));
             }
         }
     }
