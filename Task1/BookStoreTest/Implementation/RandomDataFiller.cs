@@ -4,7 +4,6 @@ using BookStore.Model.Entities;
 
 namespace BookStoreTest.Implementation
 {
-    
     public class RandomDataFiller : IDataFiller
     {
         private int clientNumber;
@@ -48,7 +47,7 @@ namespace BookStoreTest.Implementation
                     random.Next(),
                     GenerateRandomString(5)
                 );
-                dataContext.CopyDetailses.Add(copyDetails);
+                dataContext.AllCopyDetails.Add(copyDetails);
             }
 
 
@@ -56,8 +55,9 @@ namespace BookStoreTest.Implementation
             {
                 Invoice invoice = new Invoice(
                     dataContext.Clients[random.Next(0, clientNumber)],
-                    dataContext.CopyDetailses[random.Next(0, copyDetailsNumber)],
-                    new DateTime(random.Next(2000, 2020), random.Next(1, 12), random.Next(1, 28)),GenerateRandomString(8)
+                    dataContext.AllCopyDetails[random.Next(0, copyDetailsNumber)],
+                    new DateTime(random.Next(2000, 2020), random.Next(1, 12), random.Next(1, 28)),
+                    GenerateRandomString(8)
                 );
                 dataContext.Events.Add(invoice);
             }

@@ -37,6 +37,6 @@ namespace BookStore.Model
         public IEnumerable<Book> GetAllBooks();
         public IEnumerable<Client> GetAllClients();
         public IEnumerable<Event> GetAllEvents();
-        public IEnumerable<CopyDetails> GetAllCopyDetailses();
+        public IEnumerable<CopyDetails> GetAllCopyDetails();
     }
 }

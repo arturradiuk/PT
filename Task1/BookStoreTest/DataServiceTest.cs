@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using BookStore;
 using BookStore.Logic;
 using BookStore.Model;
 using BookStore.Model.Entities;
@@ -11,22 +10,9 @@ using Xunit;
 
 namespace BookStoreTest
 {
-    // todo remove all var 
     public class DataServiceTest
     {
         #region books test
-
-        [Fact]
-        public void UpdateBookStockTest()
-        {
-            IDataFiller constantDataFiller = new ConstantDataFiller();
-            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
-            IDataService dataService = new DataService(dataRepository);
-            CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
-            dataService.UpdateBookStock(copyDetails, 1);
-
-            Assert.Equal(1, dataRepository.GetCopyDetails(0).Count);
-        }
 
         [Fact]
         public void BuyBookTest()
@@ -50,16 +36,22 @@ namespace BookStoreTest
             IDataFiller constantDataFiller = new ConstantDataFiller();
             IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
             IDataService dataService = new DataService(dataRepository);
-            
+
             Invoice invoice = dataRepository.GetEvent(2) as Invoice;
 
             int totalBookCount = invoice.CopyDetails.Count;
-            
+
             dataService.ReturnBook(invoice, false, "sample reclamation");
 
             Assert.Equal(totalBookCount + 1, (dataRepository.GetEvent(2) as Invoice).CopyDetails.Count);
 
+            Invoice notPresentInvoice = new Invoice(dataRepository.GetClient((2)), dataRepository.GetCopyDetails(2),
+                DateTime.Now, "sample description");
+
+            Assert.Throws<InvalidOperationException>(() =>
+                dataService.ReturnBook(notPresentInvoice, false, "sample invoice"));
         }
+
 
         [Fact]
         public void GetInvoicesForTheBookTest()
@@ -106,7 +98,19 @@ namespace BookStoreTest
 
             Assert.Equal(dataService.GetEvents().ToImmutableHashSet().Count, totalInvoices);
         }
-        
+
+        [Fact]
+        public void UpdateBookStockTest()
+        {
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+            CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
+            dataService.UpdateBookStock(copyDetails, 1);
+
+            Assert.Equal(1, dataRepository.GetCopyDetails(0).Count);
+        }
+
         [Fact]
         public void AddBookTest()
         {
@@ -140,7 +144,7 @@ namespace BookStoreTest
             {
                 Assert.NotEqual(notPresentBook, dataService.GetBook("I don't exist", "Neither do I", 2999));
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
             }
         }
@@ -282,7 +286,7 @@ namespace BookStoreTest
                 Assert.NotEqual(notPresentClient,
                     dataService.GetClient("michu_one_two_three", "Mich", "Kasztanek", "1234"));
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
             }
         }
@@ -333,7 +337,7 @@ namespace BookStoreTest
 
             DateTime startTime = new DateTime(2005, 1, 1);
             DateTime stopTime = new DateTime(2008, 12, 31);
-            IEnumerable<Event> invoices = dataService.GetEventsBetween(startTime, stopTime); // todo remove var
+            IEnumerable<Event> invoices = dataService.GetEventsBetween(startTime, stopTime);
             IEnumerable<Event> allInvoices = dataService.GetEvents();
             foreach (Event invoice in allInvoices)
             {
@@ -374,7 +378,7 @@ namespace BookStoreTest
                     dataService.GetInvoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
                         new DateTime(2040, 2, 2), "description"));
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
             }
         }
@@ -425,11 +429,11 @@ namespace BookStoreTest
 
             CopyDetails copyDetails =
                 new CopyDetails(dataRepository.GetBook(3), 15.60m, 2.60m, 2, "Sample book invoice");
-            int copyDetailsNumber = dataService.GetCopyDetailses().ToImmutableHashSet().Count;
+            int copyDetailsNumber = dataService.GetAllCopyDetails().ToImmutableHashSet().Count;
 
             dataService.AddCopyDetails(copyDetails);
-            Assert.Equal(copyDetailsNumber + 1, dataService.GetCopyDetailses().ToImmutableHashSet().Count);
-            Assert.Equal(copyDetails, dataService.GetCopyDetailses().Last());
+            Assert.Equal(copyDetailsNumber + 1, dataService.GetAllCopyDetails().ToImmutableHashSet().Count);
+            Assert.Equal(copyDetails, dataService.GetAllCopyDetails().Last());
         }
 
         [Fact]
@@ -449,7 +453,7 @@ namespace BookStoreTest
                 new CopyDetails(book, price, tax, 50, "There is no such description");
             Assert.Equal(presentCopyDetails,
                 dataService.GetCopyDetails(book, price, tax, count, description));
-            Assert.DoesNotContain(notPresentCopyDetails, dataService.GetCopyDetailses());
+            Assert.DoesNotContain(notPresentCopyDetails, dataService.GetAllCopyDetails());
         }
 
         [Fact]
@@ -464,7 +468,7 @@ namespace BookStoreTest
 
             dataService.UpdateCopyDetails(copyDetails);
 
-            Assert.Equal(999, dataService.GetCopyDetailses().First().Count);
+            Assert.Equal(999, dataService.GetAllCopyDetails().First().Count);
         }
 
         [Fact]
@@ -477,12 +481,12 @@ namespace BookStoreTest
             CopyDetails copyDetails = new CopyDetails(dataRepository.GetBook(2), 15.6m, 2.30m, 1, "Sample invoice");
             dataService.AddCopyDetails(copyDetails);
 
-            int originalCount = dataService.GetCopyDetailses().ToImmutableHashSet().Count;
+            int originalCount = dataService.GetAllCopyDetails().ToImmutableHashSet().Count;
 
             dataService.DeleteCopyDetails(copyDetails);
 
-            Assert.Equal(originalCount - 1, dataService.GetCopyDetailses().ToImmutableHashSet().Count);
-            Assert.DoesNotContain(copyDetails, dataService.GetCopyDetailses());
+            Assert.Equal(originalCount - 1, dataService.GetAllCopyDetails().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(copyDetails, dataService.GetAllCopyDetails());
         }
 
         #endregion

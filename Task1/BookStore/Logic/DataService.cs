@@ -4,14 +4,6 @@ using System.Linq;
 using BookStore.Model;
 using BookStore.Model.Entities;
 
-
-
-// todo create some additional tests
-
-// todo write some tests for the invalid operations 
-// todo create test for the invalid reclamation deleting in dataRepository test
-
-
 namespace BookStore.Logic
 {
     public class DataService : IDataService
@@ -63,7 +55,8 @@ namespace BookStore.Logic
                 invoice.CopyDetails.Count += 1;
             }
 
-            _dataRepository.UpdateCopyDetails(invoice.CopyDetails, this._dataRepository.FindCopyDetails(invoice.CopyDetails));
+            _dataRepository.UpdateCopyDetails(invoice.CopyDetails,
+                this._dataRepository.FindCopyDetails(invoice.CopyDetails));
             _dataRepository.AddEvent(reclamation);
             return reclamation;
         }
@@ -211,8 +204,6 @@ namespace BookStore.Logic
         }
 
 
-
-
         public IEnumerable<Book> GetBooks()
         {
             return _dataRepository.GetAllBooks();
@@ -223,9 +214,9 @@ namespace BookStore.Logic
             return _dataRepository.GetAllClients();
         }
 
-        public IEnumerable<CopyDetails> GetCopyDetailses()
+        public IEnumerable<CopyDetails> GetAllCopyDetails()
         {
-            return _dataRepository.GetAllCopyDetailses();
+            return _dataRepository.GetAllCopyDetails();
         }
 
         public IEnumerable<Event> GetEvents()
@@ -253,6 +244,7 @@ namespace BookStore.Logic
         {
             _dataRepository.UpdateBook(book, _dataRepository.FindBook(book));
         }
+
         public void DeleteBook(Book book)
         {
             _dataRepository.DeleteBook(book);
@@ -272,9 +264,5 @@ namespace BookStore.Logic
         {
             _dataRepository.DeleteCopyDetails(copyDetails);
         }
-
-        
-        
     }
-
 }

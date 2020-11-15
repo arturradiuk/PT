@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BookStore;
 using BookStore.Model;
 using BookStore.Model.Entities;
 using BookStoreTest.Implementation;
@@ -73,16 +72,16 @@ namespace BookStoreTest
                 new Book("Harry Potter and the Philosopher's Stone_4", "Joanne Rowling", 1997));
 
 
-            List<CopyDetails> copyDetailses = new List<CopyDetails>();
-            copyDetailses.Add(new CopyDetails(books[0], 24.5m, 3.4m, 3, "short description 0"));
-            copyDetailses.Add(new CopyDetails(books[1], 14.59m, 2.4m, 1, "short description 1"));
-            copyDetailses.Add(new CopyDetails(books[2], 26.45m, 1.4m, 3, "short description 2"));
-            copyDetailses.Add(new CopyDetails(books[3], 246.99m, 35.4m, 5, "short description 3"));
-            copyDetailses.Add(new CopyDetails(books[4], 134.5m, 13.4m, 1, "short description 4"));
+            List<CopyDetails> copyDetailsList = new List<CopyDetails>();
+            copyDetailsList.Add(new CopyDetails(books[0], 24.5m, 3.4m, 3, "short description 0"));
+            copyDetailsList.Add(new CopyDetails(books[1], 14.59m, 2.4m, 1, "short description 1"));
+            copyDetailsList.Add(new CopyDetails(books[2], 26.45m, 1.4m, 3, "short description 2"));
+            copyDetailsList.Add(new CopyDetails(books[3], 246.99m, 35.4m, 5, "short description 3"));
+            copyDetailsList.Add(new CopyDetails(books[4], 134.5m, 13.4m, 1, "short description 4"));
 
-            for (int i = 0; i < copyDetailses.Count; i++)
+            for (int i = 0; i < copyDetailsList.Count; i++)
             {
-                Assert.True(dataRepository.GetCopyDetails(i).Equals(copyDetailses[i]));
+                Assert.True(dataRepository.GetCopyDetails(i).Equals(copyDetailsList[i]));
             }
         }
 
@@ -111,30 +110,29 @@ namespace BookStoreTest
             books.Add(4,
                 new Book("Harry Potter and the Philosopher's Stone_4", "Joanne Rowling", 1997));
 
-            List<CopyDetails> copyDetailses = new List<CopyDetails>();
-            copyDetailses.Add(new CopyDetails(books[0], 24.5m, 3.4m, 3, "short description 0"));
-            copyDetailses.Add(new CopyDetails(books[1], 14.59m, 2.4m, 1, "short description 1"));
-            copyDetailses.Add(new CopyDetails(books[2], 26.45m, 1.4m, 3, "short description 2"));
-            copyDetailses.Add(new CopyDetails(books[3], 246.99m, 35.4m, 5, "short description 3"));
-            copyDetailses.Add(new CopyDetails(books[4], 134.5m, 13.4m, 1, "short description 4"));
+            List<CopyDetails> copyDetailsList = new List<CopyDetails>();
+            copyDetailsList.Add(new CopyDetails(books[0], 24.5m, 3.4m, 3, "short description 0"));
+            copyDetailsList.Add(new CopyDetails(books[1], 14.59m, 2.4m, 1, "short description 1"));
+            copyDetailsList.Add(new CopyDetails(books[2], 26.45m, 1.4m, 3, "short description 2"));
+            copyDetailsList.Add(new CopyDetails(books[3], 246.99m, 35.4m, 5, "short description 3"));
+            copyDetailsList.Add(new CopyDetails(books[4], 134.5m, 13.4m, 1, "short description 4"));
 
-            
 
             List<Event> events = new List<Event>();
-            events.Add(new Invoice(clients[0], copyDetailses[0],
-                new DateTime(2006, 4, 14, 2, 34, 44),"short description 0"));
-            events.Add(new Invoice(clients[1], copyDetailses[1],
-                new DateTime(2007, 5, 4, 12, 24, 4),"short description 1"));
-            events.Add(new Invoice(clients[2], copyDetailses[2],
-                new DateTime(2004, 9, 5, 1, 14, 54),"short description 2"));
-            events.Add(new Invoice(clients[3], copyDetailses[3],
-                new DateTime(2008, 10, 10, 8, 39, 33),"short description 3"));
-            events.Add(new Invoice(clients[4], copyDetailses[4],
-                new DateTime(2010, 1, 6, 3, 38, 14),"short description 4"));
-            events.Add(new Reclamation(new DateTime(2006,4,17,2,34,44),
+            events.Add(new Invoice(clients[0], copyDetailsList[0],
+                new DateTime(2006, 4, 14, 2, 34, 44), "short description 0"));
+            events.Add(new Invoice(clients[1], copyDetailsList[1],
+                new DateTime(2007, 5, 4, 12, 24, 4), "short description 1"));
+            events.Add(new Invoice(clients[2], copyDetailsList[2],
+                new DateTime(2004, 9, 5, 1, 14, 54), "short description 2"));
+            events.Add(new Invoice(clients[3], copyDetailsList[3],
+                new DateTime(2008, 10, 10, 8, 39, 33), "short description 3"));
+            events.Add(new Invoice(clients[4], copyDetailsList[4],
+                new DateTime(2010, 1, 6, 3, 38, 14), "short description 4"));
+            events.Add(new Reclamation(new DateTime(2006, 4, 17, 2, 34, 44),
                 events[0] as Invoice, "short description for the reclamation"));
 
-            for (int i = 0; i <events.Count ; i++)
+            for (int i = 0; i < events.Count; i++)
             {
                 Assert.True(events[i].Equals(dataRepository.GetEvent(i)));
             }

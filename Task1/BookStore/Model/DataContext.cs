@@ -9,6 +9,6 @@ namespace BookStore.Model
         public List<Client> Clients = new List<Client>();
         public Dictionary<int, Book> Books = new Dictionary<int, Book>();
         public ObservableCollection<Event> Events = new ObservableCollection<Event>();
-        public ObservableCollection<CopyDetails> CopyDetailses = new ObservableCollection<CopyDetails>();
+        public ObservableCollection<CopyDetails> AllCopyDetails = new ObservableCollection<CopyDetails>();
     }
 }

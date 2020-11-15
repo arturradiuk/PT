@@ -30,9 +30,7 @@ namespace BookStore.Model.Entities
 
         public override string ToString()
         {
-            return "Book: BookName = " + BookName + "; AuthorName = " + AuthorName + "; Year = " + Year+"; ";
+            return "Book: BookName = " + BookName + "; AuthorName = " + AuthorName + "; Year = " + Year + "; ";
         }
     }
-    
-
 }

@@ -36,7 +36,7 @@ namespace BookStore.Model.Entities
         public override string ToString()
         {
             return "CopyDetails: " + Book.ToString() + "Price = " + Price + "; Tax = " + Tax + "; Count = " + Count +
-                   "; Description = " + Description+"; ";
+                   "; Description = " + Description + "; ";
         }
     }
 }

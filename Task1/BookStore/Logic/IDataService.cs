@@ -25,7 +25,7 @@ namespace BookStore.Logic
         CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description);
         IEnumerable<Book> GetBooks();
         IEnumerable<Client> GetClients();
-        IEnumerable<CopyDetails> GetCopyDetailses();
+        IEnumerable<CopyDetails> GetAllCopyDetails();
         IEnumerable<Event> GetEvents();
         void UpdateClient(Client client);
         void UpdateEvent(Event eEvent);

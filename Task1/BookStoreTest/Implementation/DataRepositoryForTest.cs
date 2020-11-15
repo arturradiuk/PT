@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using BookStore;
 using BookStore.Model;
 using BookStore.Model.Entities;
 
@@ -124,7 +122,7 @@ namespace BookStoreTest.Implementation
         }
 
         public int
-            FindEvent(Event eEvent) // todo should we place here some changes due to creating invoice and reclamation? 
+            FindEvent(Event eEvent)
         {
             return _dataContext.Events.IndexOf(eEvent);
         }
@@ -134,7 +132,7 @@ namespace BookStoreTest.Implementation
             _dataContext.Events[index] = eEvent;
         }
 
-        public void DeleteEvent(Event eEvent) // todo explain and test
+        public void DeleteEvent(Event eEvent)
         {
             _dataContext.Events.Remove(eEvent);
         }
@@ -148,36 +146,36 @@ namespace BookStoreTest.Implementation
 
         #region copydetails region
 
-        public IEnumerable<CopyDetails> GetAllCopyDetailses()
+        public IEnumerable<CopyDetails> GetAllCopyDetails()
         {
-            return _dataContext.CopyDetailses;
+            return _dataContext.AllCopyDetails;
         }
 
         public void AddCopyDetails(CopyDetails copyDetails)
         {
-            _dataContext.CopyDetailses.Add(copyDetails);
+            _dataContext.AllCopyDetails.Add(copyDetails);
         }
 
         public int
             FindCopyDetails(
                 CopyDetails copyDetails)
         {
-            return _dataContext.CopyDetailses.IndexOf(copyDetails);
+            return _dataContext.AllCopyDetails.IndexOf(copyDetails);
         }
 
         public void UpdateCopyDetails(CopyDetails copyDetails, int index)
         {
-            _dataContext.CopyDetailses[index] = copyDetails;
+            _dataContext.AllCopyDetails[index] = copyDetails;
         }
 
         public void DeleteCopyDetails(CopyDetails copyDetails)
         {
-            _dataContext.CopyDetailses.Remove(copyDetails);
+            _dataContext.AllCopyDetails.Remove(copyDetails);
         }
 
         public CopyDetails GetCopyDetails(int index)
         {
-            return _dataContext.CopyDetailses[index];
+            return _dataContext.AllCopyDetails[index];
         }
 
         #endregion

@@ -9,8 +9,6 @@ namespace BookStoreTest
 {
     public class DataRepositoryTest
     {
-        // todo use RandomDataFiller somewhere 
-
         #region client test region
 
         [Fact]
@@ -188,8 +186,8 @@ namespace BookStoreTest
         [Fact]
         public void GetClientInvalidValue()
         {
-            IDataFiller constantDataFiller = new ConstantDataFiller();
-            IDataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller randomDataFiller = new RandomDataFiller(2, 9, 1);
+            IDataRepository dataRepository = new DataRepository(randomDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -230,7 +228,7 @@ namespace BookStoreTest
             Assert.Equal(6, dataRepository.GetAllClients().Count());
             Assert.Equal(client, dataRepository.GetClient(5));
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"some description");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now, "some description");
             dataRepository.AddEvent(invoice);
             Assert.Equal(7, dataRepository.GetAllEvents().Count());
             Assert.Equal(invoice, dataRepository.GetEvent(6));
@@ -253,7 +251,7 @@ namespace BookStoreTest
             Assert.Equal(6, dataRepository.GetAllClients().Count());
             Assert.Equal(client, dataRepository.GetClient(5));
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now, "description");
             dataRepository.AddEvent(invoice);
 
             Assert.Equal(7, dataRepository.GetAllEvents().Count());
@@ -278,7 +276,7 @@ namespace BookStoreTest
             Assert.Equal(6, dataRepository.GetAllClients().Count());
             Assert.Equal(client, dataRepository.GetClient(5));
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now, "description");
             dataRepository.AddEvent(invoice);
 
             Assert.Equal(6, dataRepository.FindEvent(invoice));
@@ -301,7 +299,7 @@ namespace BookStoreTest
             Assert.Equal(6, dataRepository.GetAllClients().Count());
             Assert.Equal(client, dataRepository.GetClient(5));
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now, "description");
 
             Assert.Throws<ArgumentException>(() => dataRepository.FindEvent(invoice) as object);
         }
@@ -321,7 +319,8 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"description");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),
+                "description");
             dataRepository.AddEvent(invoice);
             Assert.Equal(new DateTime(2001, 10, 5), dataRepository.GetEvent(6).EventDateTime);
         }
@@ -341,7 +340,8 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),
+                "description");
             dataRepository.AddEvent(invoice);
             Assert.Throws<ArgumentException>(() => dataRepository.GetEvent(504).EventDateTime as object);
         }
@@ -361,7 +361,8 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),
+                "description");
             dataRepository.AddEvent(invoice);
 
             Assert.Equal(7, dataRepository.GetAllEvents().Count());
@@ -384,7 +385,8 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),
+                "description");
 
             Assert.Equal(6, dataRepository.GetAllEvents().Count());
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteEvent(invoice));
@@ -405,7 +407,8 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),
+                "description");
             dataRepository.AddEvent(invoice);
 
             Assert.NotNull(dataRepository.GetEvent(dataRepository.FindEvent(invoice)));
@@ -426,7 +429,8 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),
+                "description");
 
 
             Assert.Throws<ArgumentException>(() => dataRepository.GetEvent(dataRepository.FindEvent(invoice)));
@@ -559,7 +563,7 @@ namespace BookStoreTest
         {
             IDataFiller constantDataFiller = new ConstantDataFiller();
             IDataRepository dataRepository = new DataRepository(constantDataFiller);
-            Book book = (dataRepository.GetEvent(0) as Invoice ).CopyDetails.Book;
+            Book book = (dataRepository.GetEvent(0) as Invoice).CopyDetails.Book;
 
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteBook(book));
         }
@@ -595,7 +599,7 @@ namespace BookStoreTest
             IDataFiller constantDataFiller = new ConstantDataFiller();
             IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
-            Assert.Equal(5, dataRepository.GetAllCopyDetailses().Count());
+            Assert.Equal(5, dataRepository.GetAllCopyDetails().Count());
         }
 
         [Fact]
@@ -610,7 +614,7 @@ namespace BookStoreTest
 
             dataRepository.AddCopyDetails(cd1);
 
-            Assert.Equal(6, dataRepository.GetAllCopyDetailses().Count());
+            Assert.Equal(6, dataRepository.GetAllCopyDetails().Count());
             Assert.Equal(cd1, dataRepository.GetCopyDetails(5));
         }
 
@@ -706,9 +710,9 @@ namespace BookStoreTest
 
             dataRepository.AddCopyDetails(cd1);
 
-            Assert.Equal(6, dataRepository.GetAllCopyDetailses().Count());
+            Assert.Equal(6, dataRepository.GetAllCopyDetails().Count());
             dataRepository.DeleteCopyDetails(cd1);
-            Assert.Equal(5, dataRepository.GetAllCopyDetailses().Count());
+            Assert.Equal(5, dataRepository.GetAllCopyDetails().Count());
         }
 
         [Fact]
@@ -722,7 +726,7 @@ namespace BookStoreTest
             CopyDetails cd1 = new CopyDetails(b1, new decimal(35.99), new decimal(2.65), 1, "short description");
 
 
-            Assert.Equal(5, dataRepository.GetAllCopyDetailses().Count());
+            Assert.Equal(5, dataRepository.GetAllCopyDetails().Count());
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteCopyDetails(cd1));
         }
 

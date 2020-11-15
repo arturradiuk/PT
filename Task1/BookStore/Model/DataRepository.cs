@@ -73,7 +73,6 @@ namespace BookStore.Model
                 Invoice invoice = eEvent as Invoice;
                 if (invoice != null)
                 {
-
                     if (invoice.Client.Equals(client))
                     {
                         throw new ArgumentException(
@@ -147,7 +146,6 @@ namespace BookStore.Model
                 Invoice invoice = eEvent as Invoice;
                 if (invoice != null)
                 {
-
                     if (invoice.CopyDetails.Book.Equals(book))
                     {
                         throw new ArgumentException(
@@ -271,28 +269,28 @@ namespace BookStore.Model
 
         #region copydetails region
 
-        public IEnumerable<CopyDetails> GetAllCopyDetailses()
+        public IEnumerable<CopyDetails> GetAllCopyDetails()
         {
-            return _dataContext.CopyDetailses;
+            return _dataContext.AllCopyDetails;
         }
 
         public void AddCopyDetails(CopyDetails copyDetails)
         {
-            if (_dataContext.CopyDetailses.Contains(copyDetails))
+            if (_dataContext.AllCopyDetails.Contains(copyDetails))
             {
                 throw new ArgumentException($"This copyDetails already exists.");
             }
 
-            _dataContext.CopyDetailses.Add(copyDetails);
+            _dataContext.AllCopyDetails.Add(copyDetails);
         }
 
         public int
             FindCopyDetails(
                 CopyDetails copyDetails)
         {
-            if (this._dataContext.CopyDetailses.Contains(copyDetails))
+            if (this._dataContext.AllCopyDetails.Contains(copyDetails))
             {
-                return _dataContext.CopyDetailses.IndexOf(copyDetails);
+                return _dataContext.AllCopyDetails.IndexOf(copyDetails);
             }
 
             throw new ArgumentException("This copy details does not exist.");
@@ -300,9 +298,9 @@ namespace BookStore.Model
 
         public void UpdateCopyDetails(CopyDetails copyDetails, int index)
         {
-            if (_dataContext.CopyDetailses.Count() > 0 && index >= 0 && index < _dataContext.CopyDetailses.Count())
+            if (_dataContext.AllCopyDetails.Count() > 0 && index >= 0 && index < _dataContext.AllCopyDetails.Count())
             {
-                _dataContext.CopyDetailses[index] = copyDetails;
+                _dataContext.AllCopyDetails[index] = copyDetails;
                 return;
             }
 
@@ -313,21 +311,18 @@ namespace BookStore.Model
         {
             foreach (Event eEvent in _dataContext.Events)
             {
-
                 Invoice invoice = eEvent as Invoice;
                 if (invoice != null)
                 {
-
                     if (invoice.CopyDetails.Equals(copyDetails))
                     {
                         throw new ArgumentException(
                             "You can't delete this copyDetails, because this client is used in copyDetails.");
                     }
                 }
-                
             }
 
-            if (!_dataContext.CopyDetailses.Remove(copyDetails))
+            if (!_dataContext.AllCopyDetails.Remove(copyDetails))
             {
                 throw new ArgumentException("CopyDetails does not exist.");
             }
@@ -335,9 +330,9 @@ namespace BookStore.Model
 
         public CopyDetails GetCopyDetails(int index)
         {
-            if (_dataContext.CopyDetailses.Count() > 0 && index >= 0 && index < _dataContext.CopyDetailses.Count())
+            if (_dataContext.AllCopyDetails.Count() > 0 && index >= 0 && index < _dataContext.AllCopyDetails.Count())
             {
-                return _dataContext.CopyDetailses[index];
+                return _dataContext.AllCopyDetails[index];
             }
 
             throw new ArgumentException("The index is invalid.");
