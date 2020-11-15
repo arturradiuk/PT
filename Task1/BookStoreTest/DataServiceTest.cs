@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using BookStore.Logic;
 using BookStore.Model;
 using BookStore.Model.Entities;
+using BookStoreTest.Implementation;
 using Xunit;
 
 namespace BookStoreTest
@@ -13,11 +15,96 @@ namespace BookStoreTest
         #region books test
 
         [Fact]
+        public void BuyBookTest()
+        {
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+
+            Client client = dataRepository.GetClient(2);
+            CopyDetails copyDetails = dataRepository.GetCopyDetails(3);
+            int originalCopyDetailsCount = copyDetails.Count;
+            int totalInvoices = dataRepository.GetAllEvents().ToImmutableHashSet().Count;
+            dataService.BuyBook(client, copyDetails, "description");
+            Assert.Equal(originalCopyDetailsCount - 1, dataRepository.GetCopyDetails(3).Count);
+            Assert.Equal(totalInvoices + 1, dataRepository.GetAllEvents().ToImmutableHashSet().Count);
+        }
+
+        [Fact]
+        void ReturnBookTest()
+        {
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+
+            Invoice invoice = dataRepository.GetEvent(2) as Invoice;
+
+            int totalBookCount = invoice.CopyDetails.Count;
+
+            dataService.ReturnBook(invoice, false, "sample reclamation");
+
+            Assert.Equal(totalBookCount + 1, (dataRepository.GetEvent(2) as Invoice).CopyDetails.Count);
+
+            Invoice notPresentInvoice = new Invoice(dataRepository.GetClient((2)), dataRepository.GetCopyDetails(2),
+                DateTime.Now, "sample description");
+
+            Assert.Throws<InvalidOperationException>(() =>
+                dataService.ReturnBook(notPresentInvoice, false, "sample invoice"));
+        }
+
+
+        [Fact]
+        public void GetInvoicesForTheBookTest()
+        {
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+
+            Book book = dataRepository.GetBook(1);
+            IEnumerable<Event> eEvent = dataService.GetEventsForTheBook(book);
+            foreach (Event e in eEvent)
+            {
+                Reclamation r = e as Reclamation;
+                Invoice i = e as Invoice;
+                if (i != null)
+                {
+                    Assert.Equal(book, i.CopyDetails.Book);
+                }
+                else
+                {
+                    Assert.Equal(book, r.Invoice.CopyDetails.Book);
+                }
+            }
+        }
+
+        [Fact]
+        public void GetBoughtBooksAndAmountTest()
+        {
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+
+            IEnumerable<ValueTuple<Book, int>> boughtBooks = dataService.GetBoughtBooksAndAmount();
+
+            int booksCount = dataService.GetBooks().ToImmutableHashSet().Count;
+
+            Assert.Equal(booksCount, boughtBooks.ToImmutableHashSet().Count);
+
+            int totalInvoices = 0;
+            foreach (ValueTuple<Book, int> book in boughtBooks)
+            {
+                totalInvoices += book.Item2;
+            }
+
+            Assert.Equal(dataService.GetEvents().ToImmutableHashSet().Count, totalInvoices);
+        }
+
+        [Fact]
         public void UpdateBookStockTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
             CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
             dataService.UpdateBookStock(copyDetails, 1);
 
@@ -25,81 +112,11 @@ namespace BookStoreTest
         }
 
         [Fact]
-        public void BuyBookTest()
-        {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
-
-            Client client = dataRepository.GetClient(2);
-            CopyDetails copyDetails = dataRepository.GetCopyDetails(3);
-            int originalCopyDetailsCount = copyDetails.Count;
-            int totalInvoices = dataRepository.GetAllInvoices().ToImmutableHashSet().Count;
-            dataService.BuyBook(client, copyDetails);
-            Assert.Equal(originalCopyDetailsCount - 1, dataRepository.GetCopyDetails(3).Count);
-            Assert.Equal(totalInvoices + 1, dataRepository.GetAllInvoices().ToImmutableHashSet().Count);
-        }
-
-        [Fact]
-        public void GetInvoicesForTheBookTest()
-        {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
-
-            Book book = dataRepository.GetBook(1);
-            var invoices = dataService.GetInvoicesForTheBook(book);
-            foreach (var invoice in invoices)
-            {
-                Assert.Equal(book, invoice.CopyDetails.Book);
-            }
-        }
-
-        [Fact]
-        public void GetBoughtBooksAndAmountTest()
-        {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
-
-            var boughtBooks = dataService.GetBoughtBooksAndAmount();
-
-            int booksCount = dataService.GetBooks().ToImmutableHashSet().Count;
-
-            Assert.Equal(booksCount, boughtBooks.ToImmutableHashSet().Count);
-
-            int totalInvoices = 0;
-            foreach (var book in boughtBooks)
-            {
-                totalInvoices += book.Item2;
-            }
-
-            Assert.Equal(dataService.GetInvoices().ToImmutableHashSet().Count, totalInvoices);
-        }
-
-        [Fact]
-        public void GetInvoicesForTheBooksAuthorNameTest()
-        {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
-
-            String author = dataRepository.GetBook(0).AuthorName;
-
-            var authorBooks = dataService.GetInvoicesForTheBooksAuthorName(author);
-
-            foreach (var book in authorBooks)
-            {
-                Assert.Equal(author, book.AuthorName);
-            }
-        }
-
-        [Fact]
         public void AddBookTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Book book = new Book("W pustyni i w puczczy", "Henryk Sienkiewicz", 1910);
 
@@ -112,16 +129,13 @@ namespace BookStoreTest
         [Fact]
         public void GetBookTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
             Book presentBook = dataRepository.GetBook(0);
             String presentBookName = presentBook.BookName;
             String presentBookAuthor = presentBook.AuthorName;
             int presentBookYear = presentBook.Year;
-
-            // Book x = new Book(presentBookName, presentBookAuthor, presentBookYear);
-            // Assert.Equal(x, presentBook);
 
             Book notPresentBook = new Book("I don't exist", "Neither do I", 2999);
 
@@ -138,11 +152,11 @@ namespace BookStoreTest
         [Fact]
         public void GetBooksTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
-            var allBooks = dataService.GetBooks();
+            IEnumerable<Book> allBooks = dataService.GetBooks();
 
             Assert.Equal(dataRepository.GetAllBooks().ToImmutableHashSet().Count, allBooks.ToImmutableHashSet().Count);
         }
@@ -150,9 +164,9 @@ namespace BookStoreTest
         [Fact]
         public void UpdateBookTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(0);
             book.BookName = "W pustyni i w puszczy";
@@ -165,9 +179,9 @@ namespace BookStoreTest
         [Fact]
         public void DeleteBookTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Book book = new Book("W pustyni i w puczczy", "Henryk Sienkiewicz", 1910);
             dataService.AddBook(book);
@@ -187,42 +201,60 @@ namespace BookStoreTest
         [Fact]
         public void GetInvoicesForTheClientTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(1);
-            var invoices = dataService.GetInvoicesForTheClient(client);
-            foreach (var invoice in invoices)
+            IEnumerable<Event> events = dataService.GetEventsForTheClient(client);
+            foreach (Event e in events)
             {
-                Assert.Equal(client, invoice.Client);
+                Reclamation r = e as Reclamation;
+                Invoice i = e as Invoice;
+                if (i != null)
+                {
+                    Assert.Equal(client, i.Client);
+                }
+                else
+                {
+                    Assert.Equal(client, r.Invoice.Client);
+                }
             }
         }
 
         [Fact]
         public void GetClientsForTheBookTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(3);
 
-            var clients = dataService.GetClientsForTheBook(book).ToImmutableHashSet();
-            var bookInvoices = dataService.GetInvoicesForTheBook(book);
+            ImmutableHashSet<Client> clients = dataService.GetClientsForTheBook(book).ToImmutableHashSet();
+            IEnumerable<Event> events = dataService.GetEventsForTheBook(book);
 
-            foreach (var invoice in bookInvoices)
+            foreach (Event e in events)
             {
-                Assert.Contains(invoice.Client, clients);
+                Reclamation r = e as Reclamation;
+                Invoice i = e as Invoice;
+                if (i != null)
+                {
+                    Assert.Contains(i.Client, clients);
+                }
+                else
+                {
+                    Assert.Contains(r.Invoice.Client, clients);
+                }
             }
         }
 
         [Fact]
         public void AddClientTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Client client = new Client("michu1212@gmail.com", "Michał", "Kopytko", "8462");
 
@@ -235,9 +267,9 @@ namespace BookStoreTest
         [Fact]
         public void GetClientTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
             Client presentClient = dataRepository.GetClient(2);
             String presentClientEmail = presentClient.Email;
             String presentClientFirstName = presentClient.FirstName;
@@ -262,9 +294,9 @@ namespace BookStoreTest
         [Fact]
         public void UpdateClientTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(0);
             client.Email = "my_new_email@gmail.com";
@@ -277,9 +309,9 @@ namespace BookStoreTest
         [Fact]
         public void DeleteClientTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             Client client = new Client("michu_one_two_three", "Mich", "Kasztanek", "1234");
             dataService.AddClient(client);
@@ -294,22 +326,22 @@ namespace BookStoreTest
 
         #endregion
 
-        #region Invoices test region
+        #region Events test region
 
         [Fact]
         public void GetInvoicesBetweenTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             DateTime startTime = new DateTime(2005, 1, 1);
             DateTime stopTime = new DateTime(2008, 12, 31);
-            var invoices = dataService.GetInvoicesBetween(startTime, stopTime);
-            var allInvoices = dataService.GetInvoices();
-            foreach (var invoice in allInvoices)
+            IEnumerable<Event> invoices = dataService.GetEventsBetween(startTime, stopTime);
+            IEnumerable<Event> allInvoices = dataService.GetEvents();
+            foreach (Event invoice in allInvoices)
             {
-                if (invoice.PurchaseTime >= startTime && invoice.PurchaseTime <= stopTime)
+                if (invoice.EventDateTime >= startTime && invoice.EventDateTime <= stopTime)
                 {
                     Assert.Contains(invoice, invoices);
                 }
@@ -324,25 +356,27 @@ namespace BookStoreTest
         [Fact]
         public void GetInvoiceTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
-            Invoice presentInvoice = dataRepository.GetInvoice(2);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+            Invoice presentInvoice = dataRepository.GetEvent(2) as Invoice;
             Client presentInvoiceClient = presentInvoice.Client;
             CopyDetails presentInvoiceCopyDetails = presentInvoice.CopyDetails;
-            DateTime presentInvoicePurchaseTime = presentInvoice.PurchaseTime;
+            DateTime presentInvoicePurchaseTime = presentInvoice.EventDateTime;
+            String presentInvoiceDescription = presentInvoice.Description;
 
 
             Invoice notPresentInvoice = new Invoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
-                new DateTime(2040, 2, 2));
+                new DateTime(2040, 2, 2), "description");
 
             Assert.Equal(presentInvoice,
-                dataService.GetInvoice(presentInvoiceClient, presentInvoiceCopyDetails, presentInvoicePurchaseTime));
+                dataService.GetInvoice(presentInvoiceClient, presentInvoiceCopyDetails, presentInvoicePurchaseTime,
+                    presentInvoiceDescription));
             try
             {
                 Assert.NotEqual(notPresentInvoice,
                     dataService.GetInvoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
-                        new DateTime(2040, 2, 2)));
+                        new DateTime(2040, 2, 2), "description"));
             }
             catch (ArgumentException)
             {
@@ -352,34 +386,34 @@ namespace BookStoreTest
         [Fact]
         public void UpdateInvoiceTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
-            Invoice invoice = dataRepository.GetInvoice(0);
+            Invoice invoice = (Invoice) dataRepository.GetEvent(0);
             DateTime newPurchaseTime = new DateTime(1410, 7, 15);
-            invoice.PurchaseTime = newPurchaseTime;
+            invoice.EventDateTime = newPurchaseTime;
 
-            dataService.UpdateInvoice(invoice);
+            dataService.UpdateEvent(invoice);
 
-            Assert.Equal(newPurchaseTime, dataService.GetInvoices().First().PurchaseTime);
+            Assert.Equal(newPurchaseTime, dataService.GetEvents().First().EventDateTime);
         }
 
         [Fact]
         public void DeleteInvoiceTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
-            Invoice invoice = dataRepository.GetInvoice(3);
+            Invoice invoice = (Invoice) dataRepository.GetEvent(3);
 
-            int originalCount = dataService.GetInvoices().ToImmutableHashSet().Count;
+            int originalCount = dataService.GetEvents().ToImmutableHashSet().Count;
 
-            dataService.DeleteInvoice(invoice);
+            dataService.DeleteEvent(invoice);
 
-            Assert.Equal(originalCount - 1, dataService.GetInvoices().ToImmutableHashSet().Count);
-            Assert.DoesNotContain(invoice, dataService.GetInvoices());
+            Assert.Equal(originalCount - 1, dataService.GetEvents().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(invoice, dataService.GetEvents());
         }
 
         #endregion
@@ -389,25 +423,25 @@ namespace BookStoreTest
         [Fact]
         public void AddCopyDetailsTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             CopyDetails copyDetails =
                 new CopyDetails(dataRepository.GetBook(3), 15.60m, 2.60m, 2, "Sample book invoice");
-            int copyDetailsNumber = dataService.GetCopyDetailses().ToImmutableHashSet().Count;
+            int copyDetailsNumber = dataService.GetAllCopyDetails().ToImmutableHashSet().Count;
 
             dataService.AddCopyDetails(copyDetails);
-            Assert.Equal(copyDetailsNumber + 1, dataService.GetCopyDetailses().ToImmutableHashSet().Count);
-            Assert.Equal(copyDetails, dataService.GetCopyDetailses().Last());
+            Assert.Equal(copyDetailsNumber + 1, dataService.GetAllCopyDetails().ToImmutableHashSet().Count);
+            Assert.Equal(copyDetails, dataService.GetAllCopyDetails().Last());
         }
 
         [Fact]
         public void GetCopyDetailsTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
             CopyDetails presentCopyDetails = dataRepository.GetCopyDetails(3);
             Book book = presentCopyDetails.Book;
             decimal price = presentCopyDetails.Price;
@@ -419,40 +453,40 @@ namespace BookStoreTest
                 new CopyDetails(book, price, tax, 50, "There is no such description");
             Assert.Equal(presentCopyDetails,
                 dataService.GetCopyDetails(book, price, tax, count, description));
-            Assert.DoesNotContain(notPresentCopyDetails, dataService.GetCopyDetailses());
+            Assert.DoesNotContain(notPresentCopyDetails, dataService.GetAllCopyDetails());
         }
 
         [Fact]
         public void UpdateCopyDetailsTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             CopyDetails copyDetails = dataRepository.GetCopyDetails(0);
             copyDetails.Count = 999;
 
             dataService.UpdateCopyDetails(copyDetails);
 
-            Assert.Equal(999, dataService.GetCopyDetailses().First().Count);
+            Assert.Equal(999, dataService.GetAllCopyDetails().First().Count);
         }
 
         [Fact]
         public void DeleteCopyDetailsTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            DataService dataService = new DataService(dataRepository);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
 
             CopyDetails copyDetails = new CopyDetails(dataRepository.GetBook(2), 15.6m, 2.30m, 1, "Sample invoice");
             dataService.AddCopyDetails(copyDetails);
 
-            int originalCount = dataService.GetCopyDetailses().ToImmutableHashSet().Count;
+            int originalCount = dataService.GetAllCopyDetails().ToImmutableHashSet().Count;
 
             dataService.DeleteCopyDetails(copyDetails);
 
-            Assert.Equal(originalCount - 1, dataService.GetCopyDetailses().ToImmutableHashSet().Count);
-            Assert.DoesNotContain(copyDetails, dataService.GetCopyDetailses());
+            Assert.Equal(originalCount - 1, dataService.GetAllCopyDetails().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(copyDetails, dataService.GetAllCopyDetails());
         }
 
         #endregion

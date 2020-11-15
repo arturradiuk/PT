@@ -2,19 +2,18 @@ using System;
 
 namespace BookStore.Model.Entities
 {
-    public class Invoice
+    public class Invoice : Event
     {
         public Client Client;
 
         public CopyDetails CopyDetails;
-        public DateTime PurchaseTime { get; set; }
 
-
-        public Invoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
+        public Invoice(Client client, CopyDetails copyDetails, DateTime eventDateTime, string description) : base(
+            eventDateTime, description)
         {
             Client = client;
             CopyDetails = copyDetails;
-            PurchaseTime = purchaseTime;
+            EventDateTime = eventDateTime;
         }
 
         public override bool Equals(object? obj)
@@ -25,15 +24,12 @@ namespace BookStore.Model.Entities
             }
             else
             {
-                Invoice i = (Invoice) obj;
+                Invoice i = obj as Invoice;
+                if (i == null) return false;
                 return (this.Client.Equals(i.Client)) &&
-                       (this.CopyDetails.Equals(i.CopyDetails)) && (this.PurchaseTime.Equals(i.PurchaseTime));
+                       (this.CopyDetails.Equals(i.CopyDetails)) && (this.EventDateTime.Equals(i.EventDateTime))
+                       && (this.Description.Equals(i.Description));
             }
-        }
-
-        public override string ToString()
-        {
-            return "Invoice: " + Client + CopyDetails + "PurchaseTime: " + PurchaseTime+"; ";
         }
     }
 }

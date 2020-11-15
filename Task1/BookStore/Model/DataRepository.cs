@@ -28,7 +28,7 @@ namespace BookStore.Model
         }
 
 
-        #region client region 
+        #region client region
 
         public IEnumerable<Client> GetAllClients()
         {
@@ -55,7 +55,7 @@ namespace BookStore.Model
             throw new ArgumentException("This client does not exist.");
         }
 
-        public void UpdateClient(Client client, int index) 
+        public void UpdateClient(Client client, int index)
         {
             if (_dataContext.Clients.Count() > 0 && index >= 0 && index < _dataContext.Clients.Count())
             {
@@ -68,12 +68,16 @@ namespace BookStore.Model
 
         public void DeleteClient(Client client)
         {
-            foreach (var invoice in _dataContext.Invoices)
+            foreach (Event eEvent in _dataContext.Events)
             {
-                if (invoice.Client.Equals(client))
+                Invoice invoice = eEvent as Invoice;
+                if (invoice != null)
                 {
-                    throw new ArgumentException(
-                        "You can't delete this client, because this client is used in invoice.");
+                    if (invoice.Client.Equals(client))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this client, because this client is used in event.");
+                    }
                 }
             }
 
@@ -95,7 +99,7 @@ namespace BookStore.Model
 
         #endregion
 
-        #region book region 
+        #region book region
 
         public IEnumerable<Book> GetAllBooks()
         {
@@ -137,19 +141,23 @@ namespace BookStore.Model
 
         public void DeleteBook(Book book)
         {
-            foreach (var invoice in _dataContext.Invoices)
+            foreach (Event eEvent in _dataContext.Events)
             {
-                if (invoice.CopyDetails.Book.Equals(book))
+                Invoice invoice = eEvent as Invoice;
+                if (invoice != null)
                 {
-                    throw new ArgumentException(
-                        "You can't delete this book, because this book is used in invoice."); 
+                    if (invoice.CopyDetails.Book.Equals(book))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this book, because this book is used in event.");
+                    }
                 }
             }
 
             int key = -1;
 
 
-            foreach (var b in _dataContext.Books)
+            foreach (KeyValuePair<int, Book> b in _dataContext.Books)
             {
                 if (b.Value.Equals(book))
                 {
@@ -172,62 +180,86 @@ namespace BookStore.Model
             else
             {
                 throw new ArgumentException("The index is invalid.");
-
             }
         }
 
         #endregion
 
-        #region invoice region 
+        #region event region
 
-        public IEnumerable<Invoice> GetAllInvoices()
+        public IEnumerable<Event> GetAllEvents()
         {
-            return _dataContext.Invoices;
+            return _dataContext.Events;
         }
 
-        public void AddInvoice(Invoice invoice)
+        public void AddEvent(Event eEvent)
         {
-            if (_dataContext.Invoices.Any(i => i.Equals(invoice)))
+            if (_dataContext.Events.Any(i => i.Equals(eEvent)))
             {
-                throw new ArgumentException($"This invoice already exists.");
+                throw new ArgumentException($"This event already exists.");
             }
 
-            _dataContext.Invoices.Add(invoice);
+            _dataContext.Events.Add(eEvent);
         }
 
-        public int FindInvoice(Invoice invoice)
+        public int
+            FindEvent(Event eEvent)
         {
-            if (this._dataContext.Invoices.Contains(invoice))
+            if (this._dataContext.Events.Contains(eEvent))
             {
-                return _dataContext.Invoices.IndexOf(invoice);
+                return _dataContext.Events.IndexOf(eEvent);
             }
 
-            throw new ArgumentException("This invoice does not exist.");
+            throw new ArgumentException("This event does not exist.");
         }
 
-        public void UpdateInvoice(Invoice invoice, int index)
+        public void UpdateEvent(Event eEvent, int index)
         {
-            if (_dataContext.Invoices.Count() > 0 && index >= 0 && index < _dataContext.Invoices.Count())
+            if (_dataContext.Events.Count() > 0 && index >= 0 && index < _dataContext.Events.Count())
             {
-                _dataContext.Invoices[index] = invoice;
+                _dataContext.Events[index] = eEvent;
             }
 
             else throw new ArgumentException("The index is invalid.");
         }
 
-        public void DeleteInvoice(Invoice invoice)
+        public void DeleteEvent(Event eEvent)
         {
-            if (!_dataContext.Invoices.Remove(invoice))
+            if (null == eEvent as Invoice)
             {
-                throw new ArgumentException("Invoice does not exist.");
+                if (!_dataContext.Events.Remove(eEvent))
+                {
+                    throw new ArgumentException("Event does not exist.");
+                }
+
+                return;
+            }
+
+            Invoice invoice = eEvent as Invoice;
+
+            foreach (Event e in _dataContext.Events)
+            {
+                if (null != e as Reclamation)
+                {
+                    if ((e as Reclamation).Invoice.Equals(invoice))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this invoice, because this invoice is used in reclamation.");
+                    }
+                }
+            }
+
+            if (!_dataContext.Events.Remove(eEvent))
+            {
+                throw new ArgumentException("Event does not exist.");
             }
         }
 
-        public Invoice GetInvoice(int index) 
+        public Event GetEvent(int index)
         {
-            if (_dataContext.Invoices.Count() > 0 && index >= 0 && index < _dataContext.Invoices.Count())
+            if (_dataContext.Events.Count() > 0 && index >= 0 && index < _dataContext.Events.Count())
             {
-                return _dataContext.Invoices[index];
+                return _dataContext.Events[index];
             }
 
             throw new ArgumentException("The index is invalid.");
@@ -235,30 +267,30 @@ namespace BookStore.Model
 
         #endregion
 
-        #region copydetails region 
+        #region copydetails region
 
-        public IEnumerable<CopyDetails> GetAllCopyDetailses()
+        public IEnumerable<CopyDetails> GetAllCopyDetails()
         {
-            return _dataContext.CopyDetailses;
+            return _dataContext.AllCopyDetails;
         }
 
         public void AddCopyDetails(CopyDetails copyDetails)
         {
-            if (_dataContext.CopyDetailses.Contains(copyDetails))
+            if (_dataContext.AllCopyDetails.Contains(copyDetails))
             {
                 throw new ArgumentException($"This copyDetails already exists.");
             }
 
-            _dataContext.CopyDetailses.Add(copyDetails);
+            _dataContext.AllCopyDetails.Add(copyDetails);
         }
 
         public int
             FindCopyDetails(
                 CopyDetails copyDetails)
         {
-            if (this._dataContext.CopyDetailses.Contains(copyDetails))
+            if (this._dataContext.AllCopyDetails.Contains(copyDetails))
             {
-                return _dataContext.CopyDetailses.IndexOf(copyDetails);
+                return _dataContext.AllCopyDetails.IndexOf(copyDetails);
             }
 
             throw new ArgumentException("This copy details does not exist.");
@@ -266,9 +298,9 @@ namespace BookStore.Model
 
         public void UpdateCopyDetails(CopyDetails copyDetails, int index)
         {
-            if (_dataContext.CopyDetailses.Count() > 0 && index >= 0 && index < _dataContext.CopyDetailses.Count())
+            if (_dataContext.AllCopyDetails.Count() > 0 && index >= 0 && index < _dataContext.AllCopyDetails.Count())
             {
-                _dataContext.CopyDetailses[index] = copyDetails;
+                _dataContext.AllCopyDetails[index] = copyDetails;
                 return;
             }
 
@@ -277,16 +309,20 @@ namespace BookStore.Model
 
         public void DeleteCopyDetails(CopyDetails copyDetails)
         {
-            foreach (var invoice in _dataContext.Invoices)
+            foreach (Event eEvent in _dataContext.Events)
             {
-                if (invoice.CopyDetails.Equals(copyDetails))
+                Invoice invoice = eEvent as Invoice;
+                if (invoice != null)
                 {
-                    throw new ArgumentException(
-                        "You can't delete this copyDetails, because this client is used in copyDetails."); 
+                    if (invoice.CopyDetails.Equals(copyDetails))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this copyDetails, because this client is used in copyDetails.");
+                    }
                 }
             }
 
-            if (!_dataContext.CopyDetailses.Remove(copyDetails))
+            if (!_dataContext.AllCopyDetails.Remove(copyDetails))
             {
                 throw new ArgumentException("CopyDetails does not exist.");
             }
@@ -294,9 +330,9 @@ namespace BookStore.Model
 
         public CopyDetails GetCopyDetails(int index)
         {
-            if (_dataContext.CopyDetailses.Count() > 0 && index >= 0 && index < _dataContext.CopyDetailses.Count())
+            if (_dataContext.AllCopyDetails.Count() > 0 && index >= 0 && index < _dataContext.AllCopyDetails.Count())
             {
-                return _dataContext.CopyDetailses[index];
+                return _dataContext.AllCopyDetails[index];
             }
 
             throw new ArgumentException("The index is invalid.");
