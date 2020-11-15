@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
-using BookStore;
+using BookStore.Model;
+using BookStore.Model.Entities;
+using BookStoreTest.Implementation;
 using Xunit;
 
 namespace BookStoreTest
@@ -15,8 +17,8 @@ namespace BookStoreTest
         [Fact]
         public void GetAllClientsTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Assert.Equal(5, dataRepository.GetAllClients().Count());
         }
@@ -24,8 +26,8 @@ namespace BookStoreTest
         [Fact]
         public void AddClientValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -42,8 +44,8 @@ namespace BookStoreTest
         [Fact]
         public void AddClientInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -59,8 +61,8 @@ namespace BookStoreTest
         [Fact]
         public void FindClientValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -75,8 +77,8 @@ namespace BookStoreTest
         [Fact]
         public void FindClientInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -90,8 +92,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateClientValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -109,8 +111,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateClientInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -128,8 +130,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteClientValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -146,8 +148,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteClientInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -162,9 +164,9 @@ namespace BookStoreTest
         [Fact]
         public void DeleteClientForbiddenTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
-            Client client = dataRepository.GetEvent(0).Client;
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
+            Client client = dataRepository.GetInvoice(0).Client;
 
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteClient(client));
         }
@@ -172,8 +174,8 @@ namespace BookStoreTest
         [Fact]
         public void GetClientValidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -187,8 +189,8 @@ namespace BookStoreTest
         [Fact]
         public void GetClientInvalidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -206,8 +208,8 @@ namespace BookStoreTest
         [Fact]
         public void GetAllInvoicesTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Assert.Equal(5, dataRepository.GetAllEvents().Count());
         }
@@ -215,8 +217,8 @@ namespace BookStoreTest
         [Fact]
         public void AddInvoiceValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -238,8 +240,8 @@ namespace BookStoreTest
         [Fact]
         public void AddInvoiceInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -263,8 +265,8 @@ namespace BookStoreTest
         [Fact]
         public void FindInvoiceValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -286,8 +288,8 @@ namespace BookStoreTest
         [Fact]
         public void FindInvoiceInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -308,8 +310,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateInvoiceValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -328,8 +330,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateInvoiceInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -348,8 +350,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteInvoiceValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -371,8 +373,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteInvoiceInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -392,8 +394,8 @@ namespace BookStoreTest
         [Fact]
         public void GetInvoiceValidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -413,8 +415,8 @@ namespace BookStoreTest
         [Fact]
         public void GetInvoiceInvalidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             const string email = "student.gmail.com";
             const string firstName = "Lolek";
@@ -438,8 +440,8 @@ namespace BookStoreTest
         [Fact]
         public void GetAllBooksTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Assert.Equal(5, dataRepository.GetAllBooks().Count());
         }
@@ -447,8 +449,8 @@ namespace BookStoreTest
         [Fact]
         public void AddBookValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
@@ -461,8 +463,8 @@ namespace BookStoreTest
         [Fact]
         public void AddBookInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
@@ -478,8 +480,8 @@ namespace BookStoreTest
         [Fact]
         public void FindBookValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
@@ -490,8 +492,8 @@ namespace BookStoreTest
         [Fact]
         public void FindBookInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
@@ -501,8 +503,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateBookValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
@@ -517,8 +519,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateBookInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
@@ -533,8 +535,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteBookValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
             Book book = new Book("Year 1984", "George Orwell", 1949);
             dataRepository.AddBook(book);
             Assert.Equal(6, dataRepository.GetAllBooks().Count());
@@ -545,8 +547,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteBookInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
             Assert.Equal(5, dataRepository.GetAllBooks().Count());
@@ -556,8 +558,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteBookForbiddenTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
             Book book = dataRepository.GetEvent(0).CopyDetails.Book;
 
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteBook(book));
@@ -566,8 +568,8 @@ namespace BookStoreTest
         [Fact]
         public void GetBookValidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
             Book book = new Book("Year 1984", "George Orwell", 1949);
             dataRepository.AddBook(book);
 
@@ -577,8 +579,8 @@ namespace BookStoreTest
         [Fact]
         public void GetBookInvalidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
             Book book = new Book("Year 1984", "George Orwell", 1949);
 
             Assert.Throws<ArgumentException>(() => dataRepository.GetBook(dataRepository.FindBook(book)));
@@ -591,8 +593,8 @@ namespace BookStoreTest
         [Fact]
         public void GetAllCopyDetailsesTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Assert.Equal(5, dataRepository.GetAllCopyDetailses().Count());
         }
@@ -600,8 +602,8 @@ namespace BookStoreTest
         [Fact]
         public void AddCopyDetailsValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -616,8 +618,8 @@ namespace BookStoreTest
         [Fact]
         public void AddCopyDetailsInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -632,8 +634,8 @@ namespace BookStoreTest
         [Fact]
         public void FindClientCopyDetailsValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -647,8 +649,8 @@ namespace BookStoreTest
         [Fact]
         public void FindCopyDetailsInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -660,8 +662,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateCopyDetailsValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -678,8 +680,8 @@ namespace BookStoreTest
         [Fact]
         public void UpdateCopyDetailsInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -696,8 +698,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteCopyDetailsValidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -713,8 +715,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteCopyDetailsInvalidValueTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -728,8 +730,8 @@ namespace BookStoreTest
         [Fact]
         public void DeleteCopyDetailsForbiddenTest()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
             CopyDetails copyDetails = dataRepository.GetEvent(0).CopyDetails;
 
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteCopyDetails(copyDetails));
@@ -738,8 +740,8 @@ namespace BookStoreTest
         [Fact]
         public void GetCopyDetailsValidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 
@@ -753,8 +755,8 @@ namespace BookStoreTest
         [Fact]
         public void GetCopyDetailsInvalidValue()
         {
-            ConstantDataFiller constantDataFiller = new ConstantDataFiller();
-            DataRepository dataRepository = new DataRepository(constantDataFiller);
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             Book b1 = new Book("Year 1984", "George Orwell", 1949);
 

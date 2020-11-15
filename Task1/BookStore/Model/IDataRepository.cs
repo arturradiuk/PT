@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using Microsoft.VisualBasic.CompilerServices;
+using BookStore.Model.Entities;
 
-namespace BookStore
+namespace BookStore.Model
 {
     public interface IDataRepository
     {

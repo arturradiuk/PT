@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BookStore.Model;
+using BookStore.Model.Entities;
+
 
 
 // todo przenieść implementacje IDataFiller do testów ~~~~ SJ
@@ -20,9 +23,9 @@ using System.Linq;
 // todo create test for the invalid reclamation deleting in dataRepository test
 
 
-namespace BookStore
+namespace BookStore.Logic
 {
-    public class DataService
+    public class DataService : IDataService
     {
         private IDataRepository _dataRepository;
 
@@ -31,8 +34,9 @@ namespace BookStore
             _dataRepository = dataRepository;
         }
 
+        // public void UpdateBookStock(Book book, int count) 
         public void
-            UpdateBookStock(CopyDetails copyDetails, int count)
+            UpdateBookStock(CopyDetails copyDetails, int count) // todo is is good idea to place here copydetails
         {
             if (count < 0)
             {
@@ -201,6 +205,7 @@ namespace BookStore
         }
 
 
+        // tood check for the index using in this layer, its necessity 
         public Book GetBook(string bookName, string author, int year)
         {
             return _dataRepository.GetBook(_dataRepository.FindBook(new Book(bookName, author, year)));
@@ -232,6 +237,8 @@ namespace BookStore
         }
 
 
+
+
         public IEnumerable<Book> GetBooks()
         {
             return _dataRepository.GetAllBooks();
@@ -258,7 +265,7 @@ namespace BookStore
             _dataRepository.UpdateClient(client, _dataRepository.FindClient(client));
         }
 
-        public void UpdateEvent(Invoice invoice)
+        public void UpdateEvent(Invoice invoice) // todo change here 
         {
             _dataRepository.UpdateEvent(invoice, _dataRepository.FindEvent(invoice));
         }
@@ -272,7 +279,6 @@ namespace BookStore
         {
             _dataRepository.UpdateBook(book, _dataRepository.FindBook(book));
         }
-
         public void DeleteBook(Book book)
         {
             _dataRepository.DeleteBook(book);
@@ -292,5 +298,9 @@ namespace BookStore
         {
             _dataRepository.DeleteCopyDetails(copyDetails);
         }
+
+        
+        
     }
+
 }
