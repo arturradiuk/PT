@@ -58,7 +58,7 @@ namespace BookStoreTest
                     dataContext.CopyDetailses[random.Next(0, copyDetailsNumber)],
                     new DateTime(random.Next(2000, 2020), random.Next(1, 12), random.Next(1, 28))
                 );
-                dataContext.Invoices.Add(invoice);
+                dataContext.Events.Add(invoice);
             }
         }
 

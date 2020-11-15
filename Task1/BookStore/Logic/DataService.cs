@@ -10,9 +10,19 @@ using System.Linq;
 // todo stworzyć api dla warstwy logiki IDataService ~~~~~ SJ
 // todo dodać przestrzeni nazw dla warstw ~~~~~ SJ
 
+// todo create some additional tests
+// todo modify existing tests 
+
+// todo add some Reclamations to the Fillers 
+// todo test returnBook method
+
+// todo write some tests for the invalid operations 
+// todo create test for the invalid reclamation deleting in dataRepository test
+
+
 namespace BookStore
 {
-    public class DataService 
+    public class DataService
     {
         private IDataRepository _dataRepository;
 
@@ -43,13 +53,27 @@ namespace BookStore
             Invoice createdInvoice = new Invoice(client, copyDetails, DateTime.Now);
             copyDetails.Count -= 1;
             _dataRepository.UpdateCopyDetails(copyDetails, this._dataRepository.FindCopyDetails(copyDetails));
-            _dataRepository.AddInvoice(createdInvoice);
+            _dataRepository.AddEvent(createdInvoice);
             return createdInvoice;
         }
 
-        public IEnumerable<Invoice> GetInvoicesForTheBook(Book book)
+        public Reclamation ReturnBook(Client client, CopyDetails copyDetails, Invoice invoice) 
         {
-            return GetInvoices().Where(invoice => invoice.CopyDetails.Book.Equals(book));
+            if (!this._dataRepository.GetAllEvents().Contains(invoice))
+            {
+                throw new InvalidOperationException("We don't have such invoice.");
+            }
+
+            Reclamation reclamation = new Reclamation(client, copyDetails, DateTime.Now,invoice);
+            copyDetails.Count += 1;
+            _dataRepository.UpdateCopyDetails(copyDetails, this._dataRepository.FindCopyDetails(copyDetails));
+            _dataRepository.AddEvent(reclamation);
+            return reclamation;
+        }
+
+        public IEnumerable<Event> GetEventsForTheBook(Book book)
+        {
+            return GetEvents().Where(eEvent => eEvent.CopyDetails.Book.Equals(book));
         }
 
         public IEnumerable<ValueTuple<Book, int>> GetBoughtBooksAndAmount()
@@ -59,7 +83,7 @@ namespace BookStore
 
             foreach (var b in books)
             {
-                int amount = GetInvoicesForTheBook(b).Count();
+                int amount = GetEventsForTheBook(b).Count();
                 if (amount != 0)
                 {
                     temp.Add((b, amount));
@@ -69,28 +93,28 @@ namespace BookStore
             return temp;
         }
 
-        public IEnumerable<Invoice> GetInvoicesForTheClient(Client client)
+        public IEnumerable<Event> GetEventsForTheClient(Client client)
         {
-            return GetInvoices().Where(invoice => invoice.Client.Email.Equals(client.Email));
+            return GetEvents().Where(eEvent => eEvent.Client.Email.Equals(client.Email));
         }
 
 
-        public IEnumerable<Book> GetInvoicesForTheBooksAuthorName(string authorName)
+        public IEnumerable<Book> GetEventForTheBooksAuthorName(string authorName)
         {
             return GetBooks().Where(book => book.AuthorName.Equals(authorName));
         }
 
-        public IEnumerable<Invoice> GetInvoicesBetween(DateTime start, DateTime end) // todo check 
+        public IEnumerable<Event> GetEventsBetween(DateTime start, DateTime end) // todo check 
         {
-            return GetInvoices().Where(invoice =>
-                (invoice.EventDateTime.CompareTo(start) == 1) && (invoice.EventDateTime.CompareTo(end) == -1));
+            return GetEvents().Where(eEvent =>
+                (eEvent.EventDateTime.CompareTo(start) == 1) && (eEvent.EventDateTime.CompareTo(end) == -1));
         }
 
         public IEnumerable<Client> GetClientsForTheBook(Book book)
         {
-            IEnumerable<Invoice> invoices = GetInvoicesForTheBook(book);
+            IEnumerable<Event> eEvent = GetEventsForTheBook(book);
             List<Client> clients = new List<Client>();
-            foreach (var i in invoices)
+            foreach (var i in eEvent)
             {
                 clients.Add(i.Client);
             }
@@ -125,10 +149,22 @@ namespace BookStore
                 _dataRepository.FindClient(new Client(email, firstName, secondName, phoneNumber)));
         }
 
-        public Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime)
+        // public Event GetEvent(Client client, CopyDetails copyDetails, DateTime eventDateTime) // todo remove getEvent and create GetInvoice + GetReclamation
+        // {
+        //     return _dataRepository.GetEvent(
+        //         _dataRepository.FindEvent(new Invoice(client, copyDetails, eventDateTime)));
+        // }
+
+        public Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime eventDateTime)
         {
-            return _dataRepository.GetInvoice(
-                _dataRepository.FindInvoice(new Invoice(client, copyDetails, purchaseTime)));
+            return _dataRepository.GetEvent(
+                _dataRepository.FindEvent(new Invoice(client, copyDetails, eventDateTime))) as Invoice;
+        }
+
+        public Reclamation GetReclamation(Client client, CopyDetails copyDetails, DateTime eventDateTime, Invoice invoice)
+        {
+            return _dataRepository.GetEvent(
+                _dataRepository.FindEvent(new Reclamation(client, copyDetails, eventDateTime,invoice))) as Reclamation;
         }
 
         public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description)
@@ -136,8 +172,6 @@ namespace BookStore
             return _dataRepository.GetCopyDetails(
                 _dataRepository.FindCopyDetails(new CopyDetails(book, price, tax, count, description)));
         }
-
-
 
 
         public IEnumerable<Book> GetBooks()
@@ -155,11 +189,10 @@ namespace BookStore
             return _dataRepository.GetAllCopyDetailses();
         }
 
-        public IEnumerable<Invoice> GetInvoices()
+        public IEnumerable<Event> GetEvents()
         {
-            return _dataRepository.GetAllInvoices();
+            return _dataRepository.GetAllEvents();
         }
-
 
 
         public void UpdateClient(Client client)
@@ -167,9 +200,9 @@ namespace BookStore
             _dataRepository.UpdateClient(client, _dataRepository.FindClient(client));
         }
 
-        public void UpdateInvoice(Invoice invoice)
+        public void UpdateEvent(Invoice invoice)
         {
-            _dataRepository.UpdateInvoice(invoice, _dataRepository.FindInvoice(invoice));
+            _dataRepository.UpdateEvent(invoice, _dataRepository.FindEvent(invoice));
         }
 
         public void UpdateCopyDetails(CopyDetails copyDetails)
@@ -192,9 +225,9 @@ namespace BookStore
             _dataRepository.DeleteClient(client);
         }
 
-        public void DeleteInvoice(Invoice invoice)
+        public void DeleteEvent(Invoice invoice)
         {
-            _dataRepository.DeleteInvoice(invoice);
+            _dataRepository.DeleteEvent(invoice);
         }
 
         public void DeleteCopyDetails(CopyDetails copyDetails)

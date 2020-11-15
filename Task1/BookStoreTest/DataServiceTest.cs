@@ -2,6 +2,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using BookStore;
+using Microsoft.VisualBasic.CompilerServices;
 using Xunit;
 
 namespace BookStoreTest
@@ -32,10 +33,16 @@ namespace BookStoreTest
             Client client = dataRepository.GetClient(2);
             CopyDetails copyDetails = dataRepository.GetCopyDetails(3);
             int originalCopyDetailsCount = copyDetails.Count;
-            int totalInvoices = dataRepository.GetAllInvoices().ToImmutableHashSet().Count;
+            int totalInvoices = dataRepository.GetAllEvents().ToImmutableHashSet().Count;
             dataService.BuyBook(client, copyDetails);
             Assert.Equal(originalCopyDetailsCount - 1, dataRepository.GetCopyDetails(3).Count);
-            Assert.Equal(totalInvoices + 1, dataRepository.GetAllInvoices().ToImmutableHashSet().Count);
+            Assert.Equal(totalInvoices + 1, dataRepository.GetAllEvents().ToImmutableHashSet().Count);
+        }
+
+        [Fact]
+        void ReturnBookTest()
+        {
+            // throw new IncompleteInitialization();
         }
 
         [Fact]
@@ -46,7 +53,7 @@ namespace BookStoreTest
             DataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(1);
-            var invoices = dataService.GetInvoicesForTheBook(book);
+            var invoices = dataService.GetEventsForTheBook(book);
             foreach (var invoice in invoices)
             {
                 Assert.Equal(book, invoice.CopyDetails.Book);
@@ -72,7 +79,7 @@ namespace BookStoreTest
                 totalInvoices += book.Item2;
             }
 
-            Assert.Equal(dataService.GetInvoices().ToImmutableHashSet().Count, totalInvoices);
+            Assert.Equal(dataService.GetEvents().ToImmutableHashSet().Count, totalInvoices);
         }
 
         [Fact]
@@ -84,7 +91,7 @@ namespace BookStoreTest
 
             String author = dataRepository.GetBook(0).AuthorName;
 
-            var authorBooks = dataService.GetInvoicesForTheBooksAuthorName(author);
+            var authorBooks = dataService.GetEventForTheBooksAuthorName(author);
 
             foreach (var book in authorBooks)
             {
@@ -190,7 +197,7 @@ namespace BookStoreTest
             DataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(1);
-            var invoices = dataService.GetInvoicesForTheClient(client);
+            var invoices = dataService.GetEventsForTheClient(client);
             foreach (var invoice in invoices)
             {
                 Assert.Equal(client, invoice.Client);
@@ -207,7 +214,7 @@ namespace BookStoreTest
             Book book = dataRepository.GetBook(3);
 
             var clients = dataService.GetClientsForTheBook(book).ToImmutableHashSet();
-            var bookInvoices = dataService.GetInvoicesForTheBook(book);
+            var bookInvoices = dataService.GetEventsForTheBook(book);
 
             foreach (var invoice in bookInvoices)
             {
@@ -292,7 +299,7 @@ namespace BookStoreTest
 
         #endregion
 
-        #region Invoices test region
+        #region Events test region
 
         [Fact]
         public void GetInvoicesBetweenTest()
@@ -303,8 +310,8 @@ namespace BookStoreTest
 
             DateTime startTime = new DateTime(2005, 1, 1);
             DateTime stopTime = new DateTime(2008, 12, 31);
-            var invoices = dataService.GetInvoicesBetween(startTime, stopTime);
-            var allInvoices = dataService.GetInvoices();
+            var invoices = dataService.GetEventsBetween(startTime, stopTime);
+            var allInvoices = dataService.GetEvents();
             foreach (var invoice in allInvoices)
             {
                 if (invoice.EventDateTime >= startTime && invoice.EventDateTime <= stopTime)
@@ -325,7 +332,7 @@ namespace BookStoreTest
             ConstantDataFiller constantDataFiller = new ConstantDataFiller();
             IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
-            Invoice presentInvoice = dataRepository.GetInvoice(2);
+            Invoice presentInvoice = (Invoice)dataRepository.GetEvent(2);
             Client presentInvoiceClient = presentInvoice.Client;
             CopyDetails presentInvoiceCopyDetails = presentInvoice.CopyDetails;
             DateTime presentInvoicePurchaseTime = presentInvoice.EventDateTime;
@@ -354,13 +361,13 @@ namespace BookStoreTest
             IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
-            Invoice invoice = dataRepository.GetInvoice(0);
+            Invoice invoice = (Invoice)dataRepository.GetEvent(0);
             DateTime newPurchaseTime = new DateTime(1410, 7, 15);
             invoice.EventDateTime = newPurchaseTime;
 
-            dataService.UpdateInvoice(invoice);
+            dataService.UpdateEvent(invoice);
 
-            Assert.Equal(newPurchaseTime, dataService.GetInvoices().First().EventDateTime);
+            Assert.Equal(newPurchaseTime, dataService.GetEvents().First().EventDateTime);
         }
 
         [Fact]
@@ -370,14 +377,14 @@ namespace BookStoreTest
             IDataRepository dataRepository = new DataRepositoryTestImplementation(constantDataFiller);
             DataService dataService = new DataService(dataRepository);
 
-            Invoice invoice = dataRepository.GetInvoice(3);
+            Invoice invoice = (Invoice)dataRepository.GetEvent(3);
 
-            int originalCount = dataService.GetInvoices().ToImmutableHashSet().Count;
+            int originalCount = dataService.GetEvents().ToImmutableHashSet().Count;
 
-            dataService.DeleteInvoice(invoice);
+            dataService.DeleteEvent(invoice);
 
-            Assert.Equal(originalCount - 1, dataService.GetInvoices().ToImmutableHashSet().Count);
-            Assert.DoesNotContain(invoice, dataService.GetInvoices());
+            Assert.Equal(originalCount - 1, dataService.GetEvents().ToImmutableHashSet().Count);
+            Assert.DoesNotContain(invoice, dataService.GetEvents());
         }
 
         #endregion

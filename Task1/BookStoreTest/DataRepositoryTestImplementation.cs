@@ -107,36 +107,37 @@ namespace BookStoreTest
 
         #endregion
 
-        #region invoice region
+        #region event region
 
-        public IEnumerable<Invoice> GetAllInvoices()
+        public IEnumerable<Event> GetAllEvents()
         {
-            return _dataContext.Invoices;
+            return _dataContext.Events;
         }
 
-        public void AddInvoice(Invoice invoice)
+        public void AddEvent(Event eEvent)
         {
-            _dataContext.Invoices.Add(invoice);
+            _dataContext.Events.Add(eEvent);
         }
 
-        public int FindInvoice(Invoice invoice)
+        public int
+            FindEvent(Event eEvent) // todo should we place here some changes due to creating invoice and reclamation? 
         {
-            return _dataContext.Invoices.IndexOf(invoice);
+            return _dataContext.Events.IndexOf(eEvent);
         }
 
-        public void UpdateInvoice(Invoice invoice, int index)
+        public void UpdateEvent(Event eEvent, int index)
         {
-            _dataContext.Invoices[index] = invoice;
+            _dataContext.Events[index] = eEvent;
         }
 
-        public void DeleteInvoice(Invoice invoice)
+        public void DeleteEvent(Event eEvent)
         {
-            _dataContext.Invoices.Remove(invoice);
+            _dataContext.Events.Remove(eEvent);
         }
 
-        public Invoice GetInvoice(int index)
+        public Event GetEvent(int index)
         {
-            return _dataContext.Invoices[index];
+            return _dataContext.Events[index];
         }
 
         #endregion

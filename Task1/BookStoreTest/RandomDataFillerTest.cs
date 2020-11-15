@@ -14,7 +14,7 @@ namespace BookStoreTest
 
             Assert.Equal(8,dataRepository.GetAllBooks().Count());
             Assert.Equal(8,dataRepository.GetAllCopyDetailses().Count());
-            Assert.Equal(20,dataRepository.GetAllInvoices().Count());
+            Assert.Equal(20,dataRepository.GetAllEvents().Count());
             Assert.Equal(6,dataRepository.GetAllClients().Count());
 
         }

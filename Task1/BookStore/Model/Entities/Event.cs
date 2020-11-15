@@ -34,5 +34,7 @@ namespace BookStore
         {
             return "Event: " + Client + CopyDetails + "EventDateTime: " + EventDateTime + "; ";
         }
+        
+        
     }
 }

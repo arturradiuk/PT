@@ -133,7 +133,7 @@ namespace BookStoreTest
 
             for (int i = 0; i <invoices.Count ; i++)
             {
-                Assert.True(invoices[i].Equals(dataRepository.GetInvoice(i)));
+                Assert.True(invoices[i].Equals(dataRepository.GetEvent(i)));
             }
         }
     }
