@@ -68,7 +68,7 @@ namespace BookStore.Model
 
         public void DeleteClient(Client client)
         {
-            foreach (var eEvent in _dataContext.Events)
+            foreach (Event eEvent in _dataContext.Events)
             {
                 Invoice invoice = eEvent as Invoice;
                 if (invoice != null)
@@ -142,7 +142,7 @@ namespace BookStore.Model
 
         public void DeleteBook(Book book)
         {
-            foreach (var eEvent in _dataContext.Events)
+            foreach (Event eEvent in _dataContext.Events)
             {
                 Invoice invoice = eEvent as Invoice;
                 if (invoice != null)
@@ -159,7 +159,7 @@ namespace BookStore.Model
             int key = -1;
 
 
-            foreach (var b in _dataContext.Books)
+            foreach (KeyValuePair<int, Book> b in _dataContext.Books)
             {
                 if (b.Value.Equals(book))
                 {
@@ -205,7 +205,7 @@ namespace BookStore.Model
         }
 
         public int
-            FindEvent(Event eEvent) // todo should we place here some changes due to creating invoice and reclamation? 
+            FindEvent(Event eEvent)
         {
             if (this._dataContext.Events.Contains(eEvent))
             {
@@ -225,7 +225,7 @@ namespace BookStore.Model
             else throw new ArgumentException("The index is invalid.");
         }
 
-        public void DeleteEvent(Event eEvent) // todo explain and test
+        public void DeleteEvent(Event eEvent)
         {
             if (null == eEvent as Invoice)
             {
@@ -239,7 +239,7 @@ namespace BookStore.Model
 
             Invoice invoice = eEvent as Invoice;
 
-            foreach (var e in _dataContext.Events)
+            foreach (Event e in _dataContext.Events)
             {
                 if (null != e as Reclamation)
                 {
@@ -255,7 +255,6 @@ namespace BookStore.Model
             {
                 throw new ArgumentException("Event does not exist.");
             }
-            // _dataContext.Events.Remove(eEvent);
         }
 
         public Event GetEvent(int index)
@@ -312,7 +311,7 @@ namespace BookStore.Model
 
         public void DeleteCopyDetails(CopyDetails copyDetails)
         {
-            foreach (var eEvent in _dataContext.Events)
+            foreach (Event eEvent in _dataContext.Events)
             {
 
                 Invoice invoice = eEvent as Invoice;

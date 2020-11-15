@@ -65,31 +65,31 @@ namespace BookStoreTest.Implementation
 
         private String GenerateRandomString(int length)
         {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var stringChars = new char[length];
-            var random = new Random();
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            char[] stringChars = new char[length];
+            Random random = new Random();
 
             for (int i = 0; i < stringChars.Length; i++)
             {
                 stringChars[i] = chars[random.Next(chars.Length)];
             }
 
-            var finalString = new String(stringChars);
+            string finalString = new String(stringChars);
             return finalString;
         }
 
         private String GenerateNumberString(int length)
         {
-            var chars = "0123456789";
-            var stringChars = new char[length];
-            var random = new Random();
+            string chars = "0123456789";
+            char[] stringChars = new char[length];
+            Random random = new Random();
 
             for (int i = 0; i < stringChars.Length; i++)
             {
                 stringChars[i] = chars[random.Next(chars.Length)];
             }
 
-            var finalString = new String(stringChars);
+            string finalString = new String(stringChars);
             return finalString;
         }
     }

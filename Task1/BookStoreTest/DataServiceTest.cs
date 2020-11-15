@@ -47,7 +47,18 @@ namespace BookStoreTest
         [Fact]
         void ReturnBookTest()
         {
-            // throw new IncompleteInitialization();
+            IDataFiller constantDataFiller = new ConstantDataFiller();
+            IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
+            IDataService dataService = new DataService(dataRepository);
+            
+            Invoice invoice = dataRepository.GetEvent(2) as Invoice;
+
+            int totalBookCount = invoice.CopyDetails.Count;
+            
+            dataService.ReturnBook(invoice, false, "sample reclamation");
+
+            Assert.Equal(totalBookCount + 1, (dataRepository.GetEvent(2) as Invoice).CopyDetails.Count);
+
         }
 
         [Fact]
@@ -58,8 +69,8 @@ namespace BookStoreTest
             IDataService dataService = new DataService(dataRepository);
 
             Book book = dataRepository.GetBook(1);
-            IEnumerable<Event> eEvent = dataService.GetInvoicesForTheBook(book);
-            foreach (var e in eEvent)
+            IEnumerable<Event> eEvent = dataService.GetEventsForTheBook(book);
+            foreach (Event e in eEvent)
             {
                 Reclamation r = e as Reclamation;
                 Invoice i = e as Invoice;
@@ -81,38 +92,21 @@ namespace BookStoreTest
             IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
             IDataService dataService = new DataService(dataRepository);
 
-            var boughtBooks = dataService.GetBoughtBooksAndAmount();
+            IEnumerable<ValueTuple<Book, int>> boughtBooks = dataService.GetBoughtBooksAndAmount();
 
             int booksCount = dataService.GetBooks().ToImmutableHashSet().Count;
 
             Assert.Equal(booksCount, boughtBooks.ToImmutableHashSet().Count);
 
             int totalInvoices = 0;
-            foreach (var book in boughtBooks)
+            foreach (ValueTuple<Book, int> book in boughtBooks)
             {
                 totalInvoices += book.Item2;
             }
 
             Assert.Equal(dataService.GetEvents().ToImmutableHashSet().Count, totalInvoices);
         }
-
-        // [Fact]
-        // public void GetInvoicesForTheBooksAuthorNameTest()
-        // {
-        // IDataFiller constantDataFiller = new ConstantDataFiller();
-        // IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
-        // IDataService dataService = new DataService(dataRepository);
-
-        // String author = dataRepository.GetBook(0).AuthorName;
-
-        // var authorBooks = dataService.GetEventForTheBooksAuthorName(author);
-
-        // foreach (var book in authorBooks)
-        // {
-        // Assert.Equal(author, book.AuthorName);
-        // }
-        // }
-
+        
         [Fact]
         public void AddBookTest()
         {
@@ -139,9 +133,6 @@ namespace BookStoreTest
             String presentBookAuthor = presentBook.AuthorName;
             int presentBookYear = presentBook.Year;
 
-            // Book x = new Book(presentBookName, presentBookAuthor, presentBookYear);
-            // Assert.Equal(x, presentBook);
-
             Book notPresentBook = new Book("I don't exist", "Neither do I", 2999);
 
             Assert.Equal(presentBook, dataService.GetBook(presentBookName, presentBookAuthor, presentBookYear));
@@ -161,7 +152,7 @@ namespace BookStoreTest
             IDataRepository dataRepository = new DataRepositoryForTest(constantDataFiller);
             IDataService dataService = new DataService(dataRepository);
 
-            var allBooks = dataService.GetBooks();
+            IEnumerable<Book> allBooks = dataService.GetBooks();
 
             Assert.Equal(dataRepository.GetAllBooks().ToImmutableHashSet().Count, allBooks.ToImmutableHashSet().Count);
         }
@@ -211,7 +202,7 @@ namespace BookStoreTest
             IDataService dataService = new DataService(dataRepository);
 
             Client client = dataRepository.GetClient(1);
-            IEnumerable<Event> events = dataService.GetInvoicesForTheClient(client);
+            IEnumerable<Event> events = dataService.GetEventsForTheClient(client);
             foreach (Event e in events)
             {
                 Reclamation r = e as Reclamation;
@@ -236,8 +227,8 @@ namespace BookStoreTest
 
             Book book = dataRepository.GetBook(3);
 
-            var clients = dataService.GetClientsForTheBook(book).ToImmutableHashSet();
-            IEnumerable<Event> events = dataService.GetInvoicesForTheBook(book);
+            ImmutableHashSet<Client> clients = dataService.GetClientsForTheBook(book).ToImmutableHashSet();
+            IEnumerable<Event> events = dataService.GetEventsForTheBook(book);
 
             foreach (Event e in events)
             {
@@ -342,9 +333,9 @@ namespace BookStoreTest
 
             DateTime startTime = new DateTime(2005, 1, 1);
             DateTime stopTime = new DateTime(2008, 12, 31);
-            var invoices = dataService.GetEventsBetween(startTime, stopTime); // todo remove var
-            var allInvoices = dataService.GetEvents();
-            foreach (var invoice in allInvoices)
+            IEnumerable<Event> invoices = dataService.GetEventsBetween(startTime, stopTime); // todo remove var
+            IEnumerable<Event> allInvoices = dataService.GetEvents();
+            foreach (Event invoice in allInvoices)
             {
                 if (invoice.EventDateTime >= startTime && invoice.EventDateTime <= stopTime)
                 {

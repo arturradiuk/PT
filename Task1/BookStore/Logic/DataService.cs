@@ -1,23 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using BookStore.Model;
 using BookStore.Model.Entities;
 
 
 
-// todo przenieść implementacje IDataFiller do testów ~~~~ SJ
-// todo event - zachowanie polimorficzne ---> model(entities, datarepository, dataservice); testy;  ~~~~~ AR
-// todo w testach umieścić implementacje IDataRepository na potrzeby testów ~~~~~ AR 
-// todo stworzyć api dla warstwy logiki IDataService ~~~~~ SJ
-// todo dodać przestrzeni nazw dla warstw ~~~~~ SJ
-
 // todo create some additional tests
-// todo modify existing tests 
-
-// todo add some Reclamations to the Fillers 
-// todo test returnBook method
 
 // todo write some tests for the invalid operations 
 // todo create test for the invalid reclamation deleting in dataRepository test
@@ -34,9 +23,8 @@ namespace BookStore.Logic
             _dataRepository = dataRepository;
         }
 
-        // public void UpdateBookStock(Book book, int count) 
         public void
-            UpdateBookStock(CopyDetails copyDetails, int count) // todo is is good idea to place here copydetails
+            UpdateBookStock(CopyDetails copyDetails, int count)
         {
             if (count < 0)
             {
@@ -61,7 +49,7 @@ namespace BookStore.Logic
             return createdInvoice;
         }
 
-        public Reclamation ReturnBook(Client client, CopyDetails copyDetails, Invoice invoice, bool isBookFaulty,
+        public Reclamation ReturnBook(Invoice invoice, bool isBookFaulty,
             string description)
         {
             if (!this._dataRepository.GetAllEvents().Contains(invoice))
@@ -72,15 +60,15 @@ namespace BookStore.Logic
             Reclamation reclamation = new Reclamation(DateTime.Now, invoice, description, isBookFaulty);
             if (!isBookFaulty)
             {
-                copyDetails.Count += 1;
+                invoice.CopyDetails.Count += 1;
             }
 
-            _dataRepository.UpdateCopyDetails(copyDetails, this._dataRepository.FindCopyDetails(copyDetails));
+            _dataRepository.UpdateCopyDetails(invoice.CopyDetails, this._dataRepository.FindCopyDetails(invoice.CopyDetails));
             _dataRepository.AddEvent(reclamation);
             return reclamation;
         }
 
-        public IEnumerable<Event> GetInvoicesForTheBook(Book book)
+        public IEnumerable<Event> GetEventsForTheBook(Book book)
         {
             return GetEvents().Where(eEvent =>
                 {
@@ -117,9 +105,9 @@ namespace BookStore.Logic
             List<ValueTuple<Book, int>> temp = new List<(Book, int)>();
             IEnumerable<Book> books = GetBooks();
 
-            foreach (var b in books)
+            foreach (Book b in books)
             {
-                int amount = GetInvoicesForTheBook(b).Count();
+                int amount = GetEventsForTheBook(b).Count();
                 if (amount != 0)
                 {
                     temp.Add((b, amount));
@@ -129,7 +117,7 @@ namespace BookStore.Logic
             return temp;
         }
 
-        public IEnumerable<Event> GetInvoicesForTheClient(Client client)
+        public IEnumerable<Event> GetEventsForTheClient(Client client)
         {
             return GetEvents().Where(eEvent =>
                 {
@@ -161,13 +149,7 @@ namespace BookStore.Logic
             );
         }
 
-
-        // public IEnumerable<Book> GetEventForTheBooksAuthorName(string authorName)
-        // {
-            // return GetBooks().Where(book => book.AuthorName.Equals(authorName));
-        // }
-
-        public IEnumerable<Event> GetEventsBetween(DateTime start, DateTime end) // todo check 
+        public IEnumerable<Event> GetEventsBetween(DateTime start, DateTime end)
         {
             return GetEvents().Where(eEvent =>
                 (eEvent.EventDateTime.CompareTo(start) == 1) && (eEvent.EventDateTime.CompareTo(end) == -1));
@@ -175,9 +157,9 @@ namespace BookStore.Logic
 
         public IEnumerable<Client> GetClientsForTheBook(Book book)
         {
-            IEnumerable<Event> events = GetInvoicesForTheBook(book);
+            IEnumerable<Event> events = GetEventsForTheBook(book);
             List<Client> clients = new List<Client>();
-            foreach (var eEvent in events)
+            foreach (Event eEvent in events)
             {
                 Invoice invoice = eEvent as Invoice;
                 if (null != invoice)
@@ -205,7 +187,6 @@ namespace BookStore.Logic
         }
 
 
-        // tood check for the index using in this layer, its necessity 
         public Book GetBook(string bookName, string author, int year)
         {
             return _dataRepository.GetBook(_dataRepository.FindBook(new Book(bookName, author, year)));
@@ -221,13 +202,6 @@ namespace BookStore.Logic
         {
             return _dataRepository.GetEvent(
                 _dataRepository.FindEvent(new Invoice(client, copyDetails, eventDateTime, description))) as Invoice;
-        }
-
-        public Reclamation GetReclamation(DateTime eventDateTime,
-            Invoice invoice, string description)
-        {
-            return _dataRepository.GetEvent(
-                _dataRepository.FindEvent(new Reclamation(eventDateTime, invoice, description))) as Reclamation;
         }
 
         public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description)
@@ -265,7 +239,7 @@ namespace BookStore.Logic
             _dataRepository.UpdateClient(client, _dataRepository.FindClient(client));
         }
 
-        public void UpdateEvent(Event eEvent) // todo change here 
+        public void UpdateEvent(Event eEvent)
         {
             _dataRepository.UpdateEvent(eEvent, _dataRepository.FindEvent(eEvent));
         }

@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using BookStore;
 using BookStore.Model;
 using BookStore.Model.Entities;
 using BookStoreTest.Implementation;

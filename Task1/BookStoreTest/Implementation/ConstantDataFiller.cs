@@ -8,7 +8,6 @@ namespace BookStoreTest.Implementation
     {
         public void Fill(DataContext dataContext)
         {
-            // todo should we place here data similar to the real?
 
             dataContext.Clients.Add(new Client("jankowalski@mail.com", "Jan_0", "Kowalski", "000"));
             dataContext.Clients.Add(new Client("jankowalski_1@mail.com", "Jan_1", "Kowalski", "0001"));

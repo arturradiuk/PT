@@ -7,7 +7,7 @@ using BookStore.Model.Entities;
 
 namespace BookStoreTest.Implementation
 {
-    public class DataRepositoryForTest : IDataRepository // todo rename this file
+    public class DataRepositoryForTest : IDataRepository
     {
         private DataContext _dataContext = new DataContext();
 
@@ -93,7 +93,7 @@ namespace BookStoreTest.Implementation
             int key = -1;
 
 
-            foreach (var b in _dataContext.Books)
+            foreach (KeyValuePair<int, Book> b in _dataContext.Books)
             {
                 if (b.Value.Equals(book))
                 {

@@ -29,7 +29,7 @@ namespace BookStoreTest
             books.Add(4,
                 new Book("Harry Potter and the Philosopher's Stone_4", "Joanne Rowling", 1997));
 
-            foreach (var b in drBooks)
+            foreach (Book b in drBooks)
             {
                 Assert.True(books.ContainsValue(b));
             }

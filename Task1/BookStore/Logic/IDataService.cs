@@ -10,10 +10,9 @@ namespace BookStore.Logic
             UpdateBookStock(CopyDetails copyDetails, int count);
 
         Invoice BuyBook(Client client, CopyDetails copyDetails, string description);
-        IEnumerable<Event> GetInvoicesForTheBook(Book book); // todo rename 
+        IEnumerable<Event> GetEventsForTheBook(Book book);
         IEnumerable<ValueTuple<Book, int>> GetBoughtBooksAndAmount();
-        IEnumerable<Event> GetInvoicesForTheClient(Client client); // todo rename
-        // IEnumerable<Book> GetInvoicesForTheBooksAuthorName(string authorName);
+        IEnumerable<Event> GetEventsForTheClient(Client client);
         IEnumerable<Event> GetEventsBetween(DateTime start, DateTime end);
 
         IEnumerable<Client> GetClientsForTheBook(Book book);
@@ -22,7 +21,7 @@ namespace BookStore.Logic
         void AddCopyDetails(CopyDetails copyDetails);
         Book GetBook(string bookName, string author, int year);
         Client GetClient(string email, string firstName, string secondName, string phoneNumber);
-        Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime,string description);
+        Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime purchaseTime, string description);
         CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description);
         IEnumerable<Book> GetBooks();
         IEnumerable<Client> GetClients();
@@ -36,7 +35,8 @@ namespace BookStore.Logic
         void DeleteClient(Client client);
         void DeleteEvent(Event eEvent);
         void DeleteCopyDetails(CopyDetails copyDetails);
-        Reclamation GetReclamation(DateTime eventDateTime, Invoice invoice, string description);
 
+        Reclamation ReturnBook(Invoice invoice, bool isBookFaulty,
+            string description);
     }
 }
