@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BookStoreTest;
 
 namespace BookStore
 {
@@ -70,10 +69,15 @@ namespace BookStore
         {
             foreach (var eEvent in _dataContext.Events)
             {
-                if (eEvent.Client.Equals(client))
+                Invoice invoice = eEvent as Invoice;
+                if (invoice != null)
                 {
-                    throw new ArgumentException(
-                        "You can't delete this client, because this client is used in event.");
+
+                    if (invoice.Client.Equals(client))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this client, because this client is used in event.");
+                    }
                 }
             }
 
@@ -139,10 +143,15 @@ namespace BookStore
         {
             foreach (var eEvent in _dataContext.Events)
             {
-                if (eEvent.CopyDetails.Book.Equals(book))
+                Invoice invoice = eEvent as Invoice;
+                if (invoice != null)
                 {
-                    throw new ArgumentException(
-                        "You can't delete this book, because this book is used in event.");
+
+                    if (invoice.CopyDetails.Book.Equals(book))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this book, because this book is used in event.");
+                    }
                 }
             }
 
@@ -300,11 +309,18 @@ namespace BookStore
         {
             foreach (var eEvent in _dataContext.Events)
             {
-                if (eEvent.CopyDetails.Equals(copyDetails))
+
+                Invoice invoice = eEvent as Invoice;
+                if (invoice != null)
                 {
-                    throw new ArgumentException(
-                        "You can't delete this copyDetails, because this client is used in copyDetails.");
+
+                    if (invoice.CopyDetails.Equals(copyDetails))
+                    {
+                        throw new ArgumentException(
+                            "You can't delete this copyDetails, because this client is used in copyDetails.");
+                    }
                 }
+                
             }
 
             if (!_dataContext.CopyDetailses.Remove(copyDetails))

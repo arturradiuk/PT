@@ -43,29 +43,34 @@ namespace BookStore
             _dataRepository.UpdateCopyDetails(copyDetails, _dataRepository.FindCopyDetails(copyDetails));
         }
 
-        public Invoice BuyBook(Client client, CopyDetails copyDetails)
+        public Invoice BuyBook(Client client, CopyDetails copyDetails, string description)
         {
             if (copyDetails.Count <= 0)
             {
                 throw new InvalidOperationException("We don't have these books, wait for book stock updating.");
             }
 
-            Invoice createdInvoice = new Invoice(client, copyDetails, DateTime.Now);
+            Invoice createdInvoice = new Invoice(client, copyDetails, DateTime.Now, description);
             copyDetails.Count -= 1;
             _dataRepository.UpdateCopyDetails(copyDetails, this._dataRepository.FindCopyDetails(copyDetails));
             _dataRepository.AddEvent(createdInvoice);
             return createdInvoice;
         }
 
-        public Reclamation ReturnBook(Client client, CopyDetails copyDetails, Invoice invoice) 
+        public Reclamation ReturnBook(Client client, CopyDetails copyDetails, Invoice invoice, bool isBookFaulty,
+            string description)
         {
             if (!this._dataRepository.GetAllEvents().Contains(invoice))
             {
                 throw new InvalidOperationException("We don't have such invoice.");
             }
 
-            Reclamation reclamation = new Reclamation(client, copyDetails, DateTime.Now,invoice);
-            copyDetails.Count += 1;
+            Reclamation reclamation = new Reclamation(DateTime.Now, invoice, description, isBookFaulty);
+            if (!isBookFaulty)
+            {
+                copyDetails.Count += 1;
+            }
+
             _dataRepository.UpdateCopyDetails(copyDetails, this._dataRepository.FindCopyDetails(copyDetails));
             _dataRepository.AddEvent(reclamation);
             return reclamation;
@@ -73,7 +78,34 @@ namespace BookStore
 
         public IEnumerable<Event> GetEventsForTheBook(Book book)
         {
-            return GetEvents().Where(eEvent => eEvent.CopyDetails.Book.Equals(book));
+            return GetEvents().Where(eEvent =>
+                {
+                    Reclamation r = eEvent as Reclamation;
+                    Invoice i = eEvent as Invoice;
+                    if (r != null)
+                    {
+                        if (r.Invoice.CopyDetails.Book.Equals(book))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (i.CopyDetails.Book.Equals(book))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            );
         }
 
         public IEnumerable<ValueTuple<Book, int>> GetBoughtBooksAndAmount()
@@ -95,7 +127,34 @@ namespace BookStore
 
         public IEnumerable<Event> GetEventsForTheClient(Client client)
         {
-            return GetEvents().Where(eEvent => eEvent.Client.Email.Equals(client.Email));
+            return GetEvents().Where(eEvent =>
+                {
+                    Reclamation r = eEvent as Reclamation;
+                    Invoice i = eEvent as Invoice;
+                    if (r != null)
+                    {
+                        if (r.Invoice.Client.Email.Equals(client.Email))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (i.Client.Email.Equals(client.Email))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            );
         }
 
 
@@ -112,11 +171,15 @@ namespace BookStore
 
         public IEnumerable<Client> GetClientsForTheBook(Book book)
         {
-            IEnumerable<Event> eEvent = GetEventsForTheBook(book);
+            IEnumerable<Event> events = GetEventsForTheBook(book);
             List<Client> clients = new List<Client>();
-            foreach (var i in eEvent)
+            foreach (var eEvent in events)
             {
-                clients.Add(i.Client);
+                Invoice invoice = eEvent as Invoice;
+                if (null != invoice)
+                {
+                    clients.Add(invoice.Client);
+                }
             }
 
             return clients;
@@ -149,22 +212,17 @@ namespace BookStore
                 _dataRepository.FindClient(new Client(email, firstName, secondName, phoneNumber)));
         }
 
-        // public Event GetEvent(Client client, CopyDetails copyDetails, DateTime eventDateTime) // todo remove getEvent and create GetInvoice + GetReclamation
-        // {
-        //     return _dataRepository.GetEvent(
-        //         _dataRepository.FindEvent(new Invoice(client, copyDetails, eventDateTime)));
-        // }
-
-        public Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime eventDateTime)
+        public Invoice GetInvoice(Client client, CopyDetails copyDetails, DateTime eventDateTime, string description)
         {
             return _dataRepository.GetEvent(
-                _dataRepository.FindEvent(new Invoice(client, copyDetails, eventDateTime))) as Invoice;
+                _dataRepository.FindEvent(new Invoice(client, copyDetails, eventDateTime, description))) as Invoice;
         }
 
-        public Reclamation GetReclamation(Client client, CopyDetails copyDetails, DateTime eventDateTime, Invoice invoice)
+        public Reclamation GetReclamation(DateTime eventDateTime,
+            Invoice invoice, string description)
         {
             return _dataRepository.GetEvent(
-                _dataRepository.FindEvent(new Reclamation(client, copyDetails, eventDateTime,invoice))) as Reclamation;
+                _dataRepository.FindEvent(new Reclamation(eventDateTime, invoice, description))) as Reclamation;
         }
 
         public CopyDetails GetCopyDetails(Book book, decimal price, decimal tax, int count, string description)
