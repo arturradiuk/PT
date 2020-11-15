@@ -15,5 +15,21 @@ namespace BookStore.Model.Entities
             CopyDetails = copyDetails;
             EventDateTime = eventDateTime;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Invoice i = obj as Invoice;
+                if (i == null) return false;
+                return (this.Client.Equals(i.Client)) &&
+                       (this.CopyDetails.Equals(i.CopyDetails)) && (this.EventDateTime.Equals(i.EventDateTime))
+                       && (this.Description.Equals(i.Description));
+            }
+        }
     }
 }

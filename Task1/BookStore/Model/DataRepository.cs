@@ -227,7 +227,7 @@ namespace BookStore.Model
 
         public void DeleteEvent(Event eEvent) // todo explain and test
         {
-            if (null != eEvent as Reclamation)
+            if (null == eEvent as Invoice)
             {
                 if (!_dataContext.Events.Remove(eEvent))
                 {
@@ -251,7 +251,11 @@ namespace BookStore.Model
                 }
             }
 
-            _dataContext.Events.Remove(eEvent);
+            if (!_dataContext.Events.Remove(eEvent))
+            {
+                throw new ArgumentException("Event does not exist.");
+            }
+            // _dataContext.Events.Remove(eEvent);
         }
 
         public Event GetEvent(int index)

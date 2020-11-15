@@ -368,6 +368,7 @@ namespace BookStoreTest
             Client presentInvoiceClient = presentInvoice.Client;
             CopyDetails presentInvoiceCopyDetails = presentInvoice.CopyDetails;
             DateTime presentInvoicePurchaseTime = presentInvoice.EventDateTime;
+            String presentInvoiceDescription = presentInvoice.Description;
 
 
             Invoice notPresentInvoice = new Invoice(dataRepository.GetClient(2), dataRepository.GetCopyDetails(3),
@@ -375,7 +376,7 @@ namespace BookStoreTest
 
             Assert.Equal(presentInvoice,
                 dataService.GetInvoice(presentInvoiceClient, presentInvoiceCopyDetails, presentInvoicePurchaseTime,
-                    "description"));
+                    presentInvoiceDescription));
             try
             {
                 Assert.NotEqual(notPresentInvoice,

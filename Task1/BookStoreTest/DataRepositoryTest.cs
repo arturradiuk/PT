@@ -211,7 +211,7 @@ namespace BookStoreTest
             IDataFiller constantDataFiller = new ConstantDataFiller();
             IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
-            Assert.Equal(5, dataRepository.GetAllEvents().Count());
+            Assert.Equal(6, dataRepository.GetAllEvents().Count());
         }
 
         [Fact]
@@ -233,8 +233,8 @@ namespace BookStoreTest
 
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"some description");
             dataRepository.AddEvent(invoice);
-            Assert.Equal(6, dataRepository.GetAllEvents().Count());
-            Assert.Equal(invoice, dataRepository.GetEvent(5));
+            Assert.Equal(7, dataRepository.GetAllEvents().Count());
+            Assert.Equal(invoice, dataRepository.GetEvent(6));
         }
 
         [Fact]
@@ -257,8 +257,8 @@ namespace BookStoreTest
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"descrtption");
             dataRepository.AddEvent(invoice);
 
-            Assert.Equal(6, dataRepository.GetAllEvents().Count());
-            Assert.Equal(invoice, dataRepository.GetEvent(5));
+            Assert.Equal(7, dataRepository.GetAllEvents().Count());
+            Assert.Equal(invoice, dataRepository.GetEvent(6));
             Assert.Throws<ArgumentException>(() => dataRepository.AddEvent(invoice));
         }
 
@@ -282,7 +282,7 @@ namespace BookStoreTest
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), DateTime.Now,"descrtption");
             dataRepository.AddEvent(invoice);
 
-            Assert.Equal(5, dataRepository.FindEvent(invoice));
+            Assert.Equal(6, dataRepository.FindEvent(invoice));
         }
 
         [Fact]
@@ -322,9 +322,9 @@ namespace BookStoreTest
             dataRepository.AddClient(client);
 
 
-            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
+            Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"description");
             dataRepository.AddEvent(invoice);
-            Assert.Equal(new DateTime(2001, 10, 5), dataRepository.GetEvent(5).EventDateTime);
+            Assert.Equal(new DateTime(2001, 10, 5), dataRepository.GetEvent(6).EventDateTime);
         }
 
         [Fact]
@@ -365,9 +365,9 @@ namespace BookStoreTest
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
             dataRepository.AddEvent(invoice);
 
-            Assert.Equal(6, dataRepository.GetAllEvents().Count());
+            Assert.Equal(7, dataRepository.GetAllEvents().Count());
             dataRepository.DeleteEvent(invoice);
-            Assert.Equal(5, dataRepository.GetAllEvents().Count());
+            Assert.Equal(6, dataRepository.GetAllEvents().Count());
         }
 
         [Fact]
@@ -387,7 +387,7 @@ namespace BookStoreTest
 
             Invoice invoice = new Invoice(client, dataRepository.GetCopyDetails(0), new DateTime(2001, 10, 5),"descrtption");
 
-            Assert.Equal(5, dataRepository.GetAllEvents().Count());
+            Assert.Equal(6, dataRepository.GetAllEvents().Count());
             Assert.Throws<ArgumentException>(() => dataRepository.DeleteEvent(invoice));
         }
 

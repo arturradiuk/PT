@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System;
+using System.Collections.Generic;
 using BookStore;
 using BookStore.Model;
 using BookStore.Model.Entities;
@@ -43,7 +42,7 @@ namespace BookStoreTest
             IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             List<Client> clients = new List<Client>();
-            clients.Add(new Client("jankowalski_0@mail.com", "Jan_0", "Kowalski", "000"));
+            clients.Add(new Client("jankowalski@mail.com", "Jan_0", "Kowalski", "000"));
             clients.Add(new Client("jankowalski_1@mail.com", "Jan_1", "Kowalski", "0001"));
             clients.Add(new Client("jankowalski_2@mail.com", "Jan_2", "Kowalski", "0002"));
             clients.Add(new Client("jankowalski_3@mail.com", "Jan_3", "Kowalski", "0003"));
@@ -94,7 +93,7 @@ namespace BookStoreTest
             IDataRepository dataRepository = new DataRepository(constantDataFiller);
 
             List<Client> clients = new List<Client>();
-            clients.Add(new Client("jankowalski_0@mail.com", "Jan_0", "Kowalski", "000"));
+            clients.Add(new Client("jankowalski@mail.com", "Jan_0", "Kowalski", "000"));
             clients.Add(new Client("jankowalski_1@mail.com", "Jan_1", "Kowalski", "0001"));
             clients.Add(new Client("jankowalski_2@mail.com", "Jan_2", "Kowalski", "0002"));
             clients.Add(new Client("jankowalski_3@mail.com", "Jan_3", "Kowalski", "0003"));
