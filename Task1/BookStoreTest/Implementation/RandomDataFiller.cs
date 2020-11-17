@@ -1,8 +1,7 @@
 using System;
 using BookStore.Model;
-using BookStore.Model.Entities;
 
-namespace BookStoreTest.Implementation
+namespace BookStoreTest
 {
     public class RandomDataFiller : IDataFiller
     {

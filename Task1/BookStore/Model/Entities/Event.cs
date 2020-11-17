@@ -1,6 +1,6 @@
 using System;
 
-namespace BookStore.Model.Entities
+namespace BookStore.Model
 {
     public abstract class Event
     {
