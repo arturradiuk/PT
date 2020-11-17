@@ -1,6 +1,5 @@
 using System;
 using BookStore.Model;
-using BookStore.Model.Entities;
 
 namespace BookStoreTest.Implementation
 {

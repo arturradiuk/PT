@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using BookStore.Model.Entities;
 
 namespace BookStore.Model
 {

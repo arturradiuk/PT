@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using BookStore.Logic;
 using BookStore.Model;
-using BookStore.Model.Entities;
 using BookStoreTest.Implementation;
 using Xunit;
 

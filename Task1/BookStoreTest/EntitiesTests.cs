@@ -1,5 +1,5 @@
 ﻿using System;
-using BookStore.Model.Entities;
+using BookStore.Model;
 using Xunit;
 
 namespace BookStoreTest

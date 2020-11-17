@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BookStore.Model.Entities;
+using BookStore.Model;
 
 namespace BookStore.Logic
 {
