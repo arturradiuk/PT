@@ -2,6 +2,7 @@ using System;
 
 namespace BookStore.Model
 {
+    [Serializable]
     public class Reclamation : Event
     {
         public Invoice Invoice { get; set; }

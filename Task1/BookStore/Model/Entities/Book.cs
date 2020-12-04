@@ -1,5 +1,8 @@
+using System;
+
 namespace BookStore.Model
 {
+    [Serializable]
     public class Book
     {
         public string BookName { get; set; }

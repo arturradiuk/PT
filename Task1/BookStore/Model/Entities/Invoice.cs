@@ -2,6 +2,7 @@ using System;
 
 namespace BookStore.Model
 {
+    [Serializable]
     public class Invoice : Event
     {
         public Client Client;

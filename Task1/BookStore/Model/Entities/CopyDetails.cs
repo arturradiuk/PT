@@ -1,5 +1,8 @@
+using System;
+
 namespace BookStore.Model
 {
+    [Serializable]
     public class CopyDetails
     {
         public Book Book { get; set; }

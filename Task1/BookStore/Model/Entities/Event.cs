@@ -2,6 +2,7 @@ using System;
 
 namespace BookStore.Model
 {
+    [Serializable]
     public abstract class Event
     {
         public DateTime EventDateTime { get; set; }

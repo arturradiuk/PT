@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore", "BookStore\Book
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStoreTest", "BookStoreTest\BookStoreTest.csproj", "{8CCBCB52-6FE4-46D3-98FE-22C32B1B9D34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serializer", "Serializer\Serializer.csproj", "{DF367615-E881-44B5-BCF8-E00FD29917D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializerTest", "SerializerTest\SerializerTest.csproj", "{F10EB0F8-A9DB-4CCC-A1B7-A646C235E194}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{DDA75B42-E638-4082-88C6-F7CA7E9E8C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA75B42-E638-4082-88C6-F7CA7E9E8C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDA75B42-E638-4082-88C6-F7CA7E9E8C97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF367615-E881-44B5-BCF8-E00FD29917D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF367615-E881-44B5-BCF8-E00FD29917D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF367615-E881-44B5-BCF8-E00FD29917D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF367615-E881-44B5-BCF8-E00FD29917D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F10EB0F8-A9DB-4CCC-A1B7-A646C235E194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F10EB0F8-A9DB-4CCC-A1B7-A646C235E194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F10EB0F8-A9DB-4CCC-A1B7-A646C235E194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F10EB0F8-A9DB-4CCC-A1B7-A646C235E194}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

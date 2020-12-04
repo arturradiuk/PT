@@ -1,5 +1,8 @@
+using System;
+
 namespace BookStore.Model
 {
+    [Serializable]
     public class Client
     {
         public string Email { get; set; }
