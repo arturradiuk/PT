@@ -23,18 +23,16 @@ namespace OwnSerializerLib
         
         private StringBuilder _dataSB = new StringBuilder();
         private String _dataStr = "";
-
-        private void SaveToDataSB()
-        {
-            this._dataSB.Append(_dataStr + "\n");
-            this._dataStr = "";
-        }
+        
 
         private void SaveToStream(Stream serializationStream)
         {
-            using (StreamWriter writer = new StreamWriter(serializationStream))
+            if (serializationStream != null)
             {
+                using (StreamWriter writer = new StreamWriter(serializationStream))
+                {
                     writer.Write(this._dataSB);
+                }
             }
         }
         public override void Serialize(Stream serializationStream, object graph)
@@ -42,16 +40,22 @@ namespace OwnSerializerLib
             ISerializable sGraph = graph as ISerializable;
             SerializationInfo info = new SerializationInfo(graph.GetType(), new FormatterConverter());
             Binder.BindToName(graph.GetType(), out string assemblyName, out string typeName);
+            this.m_idGenerator.GetId(graph, out bool firstTime);
+            
             sGraph.GetObjectData(info, Context);
+            
             foreach (SerializationEntry se in info)
             {
                 WriteMember(se.Name, se.Value);
             }
-            this.SaveToDataSB();
+            this._dataSB.Append("\n");
+            
             while (this.m_objectQueue.Count != 0)
             {
                 this.Serialize(null,this.m_objectQueue.Dequeue());
             }
+            
+            this.SaveToStream(serializationStream);
         }
 
         public override object Deserialize(Stream serializationStream)
@@ -76,7 +80,7 @@ namespace OwnSerializerLib
 
         protected override void WriteBoolean(bool val, string name)
         {
-            throw new NotImplementedException();
+            this._dataSB.Append( "{" + val.GetType() + ":" + name + ":" + "\"" + val + "\""+"}");
         }
 
         protected override void WriteByte(byte val, string name)
@@ -111,22 +115,53 @@ namespace OwnSerializerLib
 
         protected override void WriteInt32(int val, string name)
         {
-            throw new NotImplementedException();
+            this._dataSB.Append( "{" + val.GetType() + ":" + name + ":" + "\"" + val + "\""+"}");
         }
 
         protected override void WriteInt64(long val, string name)
         {
             throw new NotImplementedException();
         }
-
+    
+        
         protected override void WriteObjectRef(object obj, string name, Type memberType)
         {
-            throw new NotImplementedException();
+            if (memberType.Equals(typeof(String)))
+            {
+                WriteString(obj, name);
+            }
+            else
+            {
+                WriteObject(obj,name,memberType);
+            }
         }
-
-        protected override void WriteMember(string memberName, object data)
+        
+        protected void WriteObject(object obj, string name, Type memberType)
         {
-            base.WriteMember(memberName, data);
+            if (obj != null)
+            {
+                this._dataSB.Append( "{" + memberType + ":" + name + ":" + this.m_idGenerator.GetId(obj, out bool firstTime).ToString()+"}") ;
+                
+                if (firstTime)
+                {
+                    this.m_objectQueue.Enqueue(obj);
+                }
+                
+            }
+            else
+            {
+                this._dataSB.Append( "{" + "null" + ":" + name + ":null"); 
+            }
+        }
+        
+        protected void WriteString(object obj, string name)
+        {
+            this._dataSB.Append( "{" + obj.GetType() + ":" + name + ":" + "\"" + (String)obj + "\""+"}");
+        }
+        
+        protected override void WriteSingle(float val, string name)
+        {
+            this._dataSB.Append("{"+val.GetType()+":"+name+":"+val.ToString() +"}");
         }
 
         protected override void WriteSByte(sbyte val, string name)
@@ -134,10 +169,7 @@ namespace OwnSerializerLib
             throw new NotImplementedException();
         }
 
-        protected override void WriteSingle(float val, string name)
-        {
-            throw new NotImplementedException();
-        }
+
 
         protected override void WriteTimeSpan(TimeSpan val, string name)
         {

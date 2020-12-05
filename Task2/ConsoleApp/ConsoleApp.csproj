@@ -52,5 +52,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OwnSerializerLib\OwnSerializerLib.csproj">
+      <Project>{2af76833-0e4f-496d-8adb-1ab656b051b5}</Project>
+      <Name>OwnSerializerLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XMLSerializerLib\XMLSerializerLib.csproj">
+      <Project>{d8cf5bde-dcc6-4e47-b889-6d75cc7143da}</Project>
+      <Name>XMLSerializerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
