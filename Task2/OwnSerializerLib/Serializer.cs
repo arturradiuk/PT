@@ -15,21 +15,45 @@ namespace OwnSerializerLib
         public override SerializationBinder Binder { get; set; }
         public override StreamingContext Context { get; set; }
 
-        private StringBuilder _dataSB = new StringBuilder();
-        
-        public override void Serialize(Stream serializationStream, object graph)
+        public Serializer()
         {
-            List<PropertyInfo> properties = graph.GetType().GetProperties().ToList();
-            // this._dataSB.Append()
-            ISerializable sGraph = graph as ISerializable;
-            foreach (PropertyInfo propertyInfo in properties)
-            {
-                
-                
-            }
-            
+            this.Binder = new TypeBinder();
+            Context = new StreamingContext(StreamingContextStates.File);
         }
         
+        private StringBuilder _dataSB = new StringBuilder();
+        private String _dataStr = "";
+
+        private void SaveToDataSB()
+        {
+            this._dataSB.Append(_dataStr + "\n");
+            this._dataStr = "";
+        }
+
+        private void SaveToStream(Stream serializationStream)
+        {
+            using (StreamWriter writer = new StreamWriter(serializationStream))
+            {
+                    writer.Write(this._dataSB);
+            }
+        }
+        public override void Serialize(Stream serializationStream, object graph)
+        {
+            ISerializable sGraph = graph as ISerializable;
+            SerializationInfo info = new SerializationInfo(graph.GetType(), new FormatterConverter());
+            Binder.BindToName(graph.GetType(), out string assemblyName, out string typeName);
+            sGraph.GetObjectData(info, Context);
+            foreach (SerializationEntry se in info)
+            {
+                WriteMember(se.Name, se.Value);
+            }
+            this.SaveToDataSB();
+            while (this.m_objectQueue.Count != 0)
+            {
+                this.Serialize(null,this.m_objectQueue.Dequeue());
+            }
+        }
+
         public override object Deserialize(Stream serializationStream)
         {
             throw new NotImplementedException();
@@ -139,8 +163,5 @@ namespace OwnSerializerLib
         {
             throw new NotImplementedException();
         }
-
-
-
     }
 }
