@@ -8,16 +8,13 @@ namespace OwnSerializerLib
     {
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            Assembly asm = serializedType.Assembly;
-            assemblyName = asm.FullName;
+            assemblyName = serializedType.Assembly.FullName;
             typeName = serializedType.FullName;
         }
-
-
+        
         public override Type BindToType(string assemblyName, string typeName)
         {
-            Assembly asm = Assembly.Load(assemblyName);
-            return asm.GetType(typeName);
+            return Assembly.Load(assemblyName).GetType(typeName);
         }
     }
 }

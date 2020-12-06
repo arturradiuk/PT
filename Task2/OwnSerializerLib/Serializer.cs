@@ -20,7 +20,10 @@ namespace OwnSerializerLib
             set => throw new NotImplementedException();
         }
     
+        private List<string> DeserializeInfoStr = new List<string>();
+        private Dictionary<string, object> TypeProperties = new Dictionary<string, object>();
 
+        
         public Serializer()
         {
             this.Binder = new TypeBinder();
@@ -40,6 +43,31 @@ namespace OwnSerializerLib
             }
         }
 
+        private void ReadStream(Stream serializationStream)
+        {
+            if (serializationStream != null)
+            {
+                using (StreamReader reader = new StreamReader(serializationStream))
+                {
+                    String l;
+                    while ((l = reader.ReadLine()) != null)
+                    {
+                        DeserializeInfoStr.Add(l);
+                    }
+                }
+            }
+        }
+
+        private void FillTypeProperties()
+        {
+            foreach (string l in DeserializeInfoStr)
+            {
+                string[] splits = l.Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                string t = splits[2].Split(':')[1];
+                
+            }
+        }
+
         public override void Serialize(Stream serializationStream, object graph) // todo should add version
             // to the serialized objects to ensure the version compatibility?
         {
@@ -54,7 +82,7 @@ namespace OwnSerializerLib
             List<PropertyInfo> properties = graph.GetType().GetProperties().ToList();
 
             Binder.BindToName(graph.GetType(), out string assemblyName, out string typeName);
-            this.m_idGenerator.GetId(graph, out bool firstTime);
+            this._dataSB.Append( "{" +assemblyName+"}{"+typeName+"}{m_idGenerator:\"" +this.m_idGenerator.GetId(graph, out bool firstTime)+"\"}");
 
             foreach (PropertyInfo propertyInfo in properties)
             {
@@ -74,7 +102,14 @@ namespace OwnSerializerLib
 
         public override object Deserialize(Stream serializationStream)
         {
-            throw new NotImplementedException();
+            this.ReadStream(serializationStream);
+            // FillTypeProperties();
+            foreach (string l in this.DeserializeInfoStr)
+            {
+                string[] splits = l.Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                Type type = Binder.BindToType(splits[0],splits[1]);
+            }
+            return new object();
         }
 
 
@@ -88,10 +123,7 @@ namespace OwnSerializerLib
         {
             this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val + "\"" + "}");
         }
-
-
-
-
+        
         protected override void WriteObjectRef(object obj, string name, Type memberType)
         {
             if (memberType.Equals(typeof(String)))
@@ -118,7 +150,7 @@ namespace OwnSerializerLib
             }
             else
             {
-                this._dataSB.Append("{" + "null" + ":" + name + ":"+"\""+"null"+"\"");
+                this._dataSB.Append("{" + "null" + ":" + name + ":"+"\""+"null"+"\"}");
             }
         }
 
