@@ -18,12 +18,15 @@ namespace ConsoleApp
             classA.IntProperty = 65;
             classA.BoolProperty = false;
             
+            
+            
             ClassB classB = new ClassB();
             classB.StringProperty = "message from B class";
             classB.FloatProperty = 57.35345f;
             classB.IntProperty = 66;
             classB.BoolProperty = true;
 
+            
 
             ClassC classC = new ClassC();
             classC.StringProperty = "message from C class";
@@ -41,7 +44,7 @@ namespace ConsoleApp
             using (FileStream s = new FileStream("output.txt", FileMode.Create))
             {
                 IFormatter f = new Serializer();
-                f.Serialize(s, classA);
+                f.Serialize(s, classC);
             }
         }
     }

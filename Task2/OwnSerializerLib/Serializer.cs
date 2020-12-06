@@ -41,9 +41,16 @@ namespace OwnSerializerLib
         }
 
         public override void Serialize(Stream serializationStream, object graph) // todo should add version
-                                                                                 // to the serialized objects to ensure the version compatibility?
+            // to the serialized objects to ensure the version compatibility?
         {
+            
+            this.Serialize(graph);
+            this.WriteStream(serializationStream);
+        }
 
+        private void Serialize(object graph)
+        {
+            
             List<PropertyInfo> properties = graph.GetType().GetProperties().ToList();
 
             Binder.BindToName(graph.GetType(), out string assemblyName, out string typeName);
@@ -59,10 +66,10 @@ namespace OwnSerializerLib
 
             while (this.m_objectQueue.Count != 0)
             {
-                this.Serialize(null, this.m_objectQueue.Dequeue());
+                this.Serialize(this.m_objectQueue.Dequeue());
             }
 
-            this.WriteStream(serializationStream);
+        
         }
 
         public override object Deserialize(Stream serializationStream)
