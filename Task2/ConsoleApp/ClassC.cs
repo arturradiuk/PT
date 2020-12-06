@@ -19,5 +19,14 @@ namespace ConsoleApp
             info.AddValue("BoolProperty", BoolProperty, typeof(bool));
             info.AddValue("AProperty", AProperty, typeof(ClassA));
         }
+
+        public ClassC(string stringProperty, float floatProperty, int intProperty, bool boolProperty, ClassA aProperty)
+        {
+            StringProperty = stringProperty;
+            FloatProperty = floatProperty;
+            IntProperty = intProperty;
+            BoolProperty = boolProperty;
+            AProperty = aProperty;
+        }
     }
 }
