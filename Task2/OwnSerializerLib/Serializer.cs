@@ -1,11 +1,14 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace OwnSerializerLib
 {
@@ -103,13 +106,63 @@ namespace OwnSerializerLib
         public override object Deserialize(Stream serializationStream)
         {
             this.ReadStream(serializationStream);
-            // FillTypeProperties();
-            foreach (string l in this.DeserializeInfoStr)
+
+            // Dictionary<String, object> dictionary= new Dictionary<String,object>();
+            // Dictionary<String, object> dictionary= new Dictionary<String,object>();
+            object[,,]  arr= new Object[1,3,3];
+            // for (int i = DeserializeInfoStr.Count-1; i>=0; i--)
+            for (int i = 0; i<DeserializeInfoStr.Count; i++)
             {
-                string[] splits = l.Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                string[] splits = DeserializeInfoStr[i].Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
                 Type type = Binder.BindToType(splits[0],splits[1]);
+                
+                List<PropertyInfo> properties = type.GetProperties().ToList();
+               
+                Type[] types = new Type[5];
+                object[] values = new object[5];
+                string[] names = new String[5];
+                
+                arr[0, i, 0] = splits[2].Split(':')[1].Split('"')[1];
+                arr[0, i, 1] =splits[7].Split(':')[2].Split('"')[1];
+                
+                for (int j = 3; j < splits.Length; j++)
+                {
+                    string[] local_splits = splits[j].Split(':');
+                    names[j - 3] = local_splits[1];
+                    string temp = local_splits[2].Split('"')[1];
+                    values[j-3]=temp;
+                    types[j-3]=( properties[j-3].PropertyType);
+                    values[j-3]=TypeConveter(temp,types[j-3]);
+                }
+                
+                arr[0, i, 2]= type.GetConstructor(types).Invoke(values);
+                
             }
-            return new object();
+
+            object res = arr[0, 0, 2];
+            
+            return res;
+        }
+
+        private object TypeConveter(String val, Type type)
+        {
+                if (type.Equals(typeof(string)))
+                {
+                    return val;
+                }
+                else if(type.Equals(typeof(float)))
+                {
+                    return Single.Parse(val);
+                }else if (type.Equals(typeof(int)))
+                {
+                    return int.Parse(val);
+                }
+                else if (type.Equals(typeof(bool)))
+                {
+                    return bool.Parse(val);
+                }
+
+                return null;
         }
 
 
@@ -150,7 +203,33 @@ namespace OwnSerializerLib
             }
             else
             {
-                this._dataSB.Append("{" + "null" + ":" + name + ":"+"\""+"null"+"\"}");
+                Type tempType;
+                switch (name)
+                {
+                    case "BProperty":
+                    {
+                        tempType = Binder.BindToType("ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ConsoleApp.ClassB");
+                        break;
+                    }                    
+                    case "CProperty":
+                    {
+                        tempType = Binder.BindToType("ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ConsoleApp.ClassC");
+                        break;
+                    }                    
+                    case "AProperty":
+                    {
+                        tempType = Binder.BindToType("ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ConsoleApp.ClassA");
+                        break;
+                    }
+                    default:
+                    {
+                        tempType = typeof(object);
+                        break;
+                    }
+                    
+                }
+                
+                this._dataSB.Append("{" + tempType + ":" + name + ":"+"\""+"null"+"\"}");
             }
         }
 
