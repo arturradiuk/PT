@@ -119,22 +119,22 @@ namespace OwnSerializerLib
 
                 List<PropertyInfo> properties = type.GetProperties().ToList();
                 Type[] types = new Type[properties.Count];
-                object[] values = new object[properties.Count];
+                object[] paramValues = new object[properties.Count];
                 int referenceID = (int) TypeConverter(splits[7].Split(':')[2].Split('"')[1], typeof(int));
 
                 int propertiesStart = 3;
                 for (int j = 0; j < splits.Length - propertiesStart; j++)
                 {
                     string[] localSplits = splits[j + propertiesStart].Split(':');
-                    Type parameterType = properties[j].PropertyType;
-                    types[j] = parameterType;
+                    Type paramType = properties[j].PropertyType;
+                    types[j] = paramType;
                     string uncastedValue = localSplits[2].Replace("\"", "");
                     
-                    values[j] = j != splits.Length - propertiesStart - 1 ?
-                         TypeConverter(uncastedValue, parameterType) : objectIDs[referenceID];
+                    paramValues[j] = j != splits.Length - propertiesStart - 1 ?
+                         TypeConverter(uncastedValue, paramType) : objectIDs[referenceID];
                 }
 
-                type.GetConstructor(types)?.Invoke(objects[i], values); //conditional access to avoid NPR
+                type.GetConstructor(types).Invoke(objects[i], paramValues);
             }
             
             return objects[0];
