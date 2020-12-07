@@ -3,12 +3,22 @@ using System.Runtime.Serialization;
 
 namespace ConsoleApp
 {
-    public class ClassA : ISerializable
+    // [DataContract]
+    public class ClassA
     {
+        [DataMember]
         public string StringProperty { get; set; }
+        [DataMember]
+
         public float FloatProperty { get; set; }
+        [DataMember]
+
         public int IntProperty { get; set; }
+        [DataMember]
+
         public bool BoolProperty { get; set; }
+        [DataMember]
+
         public ClassB BProperty { get; set; }
 
         public ClassA(string stringProperty, float floatProperty, int intProperty, bool boolProperty, ClassB bProperty)
@@ -32,6 +42,11 @@ namespace ConsoleApp
             info.AddValue("IntProperty", IntProperty, typeof(int));
             info.AddValue("BoolProperty", BoolProperty, typeof(bool));
             info.AddValue("BProperty", BProperty, typeof(ClassB));
+        }
+
+        public override string ToString()
+        {
+            return $"{StringProperty}=StringProperty,{FloatProperty}=FloatProperty,{IntProperty}=IntProperty,{BoolProperty}=BoolProperty";
         }
     }
 }

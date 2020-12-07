@@ -2,13 +2,23 @@
 using System.Runtime.Serialization;
 
 namespace ConsoleApp
-{
-    public class ClassC : ISerializable
-    {
+{        [DataContract]
+
+    public class ClassC 
+    {       
+        [DataMember]
         public string StringProperty { get; set; }
+        [DataMember]
+
         public float FloatProperty { get; set; }
+        [DataMember]
+
         public int IntProperty { get; set; }
+        [DataMember]
+
         public bool BoolProperty { get; set; }
+        [DataMember]
+
         public ClassA AProperty { get; set; }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -19,5 +29,19 @@ namespace ConsoleApp
             info.AddValue("BoolProperty", BoolProperty, typeof(bool));
             info.AddValue("AProperty", AProperty, typeof(ClassA));
         }
+        public override string ToString()
+        {
+            return $"{StringProperty}=StringProperty,{FloatProperty}=FloatProperty,{IntProperty}=IntProperty,{BoolProperty}=BoolProperty";
+        }
+
+        public ClassC(string stringProperty, float floatProperty, int intProperty, bool boolProperty, ClassA aProperty)
+        {
+            StringProperty = stringProperty;
+            FloatProperty = floatProperty;
+            IntProperty = intProperty;
+            BoolProperty = boolProperty;
+            AProperty = aProperty;
+        }
+        public ClassC(){}
     }
 }

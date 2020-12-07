@@ -1,14 +1,10 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace OwnSerializerLib
 {
@@ -17,16 +13,10 @@ namespace OwnSerializerLib
         public override ISurrogateSelector SurrogateSelector { get; set; }
         public override SerializationBinder Binder { get; set; }
 
-        public override StreamingContext Context
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-    
         private List<string> DeserializeInfoStr = new List<string>();
-        private Dictionary<string, object> TypeProperties = new Dictionary<string, object>();
+        private Dictionary<string, object> _typeProperties = new Dictionary<string, object>();
 
-        
+
         public Serializer()
         {
             this.Binder = new TypeBinder();
@@ -59,6 +49,7 @@ namespace OwnSerializerLib
                     }
                 }
             }
+            else throw new ArgumentException("Provided stream is empty or doesn't exist");
         }
 
         private void FillTypeProperties()
@@ -67,31 +58,28 @@ namespace OwnSerializerLib
             {
                 string[] splits = l.Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
                 string t = splits[2].Split(':')[1];
-                
             }
         }
 
         public override void Serialize(Stream serializationStream, object graph) // todo should add version
             // to the serialized objects to ensure the version compatibility?
         {
-            
             this.Serialize(graph);
             this.WriteStream(serializationStream);
         }
 
         private void Serialize(object graph)
         {
-            
             List<PropertyInfo> properties = graph.GetType().GetProperties().ToList();
 
             Binder.BindToName(graph.GetType(), out string assemblyName, out string typeName);
-            this._dataSB.Append( "{" +assemblyName+"}{"+typeName+"}{m_idGenerator:\"" +this.m_idGenerator.GetId(graph, out bool firstTime)+"\"}");
+            this._dataSB.Append("{" + assemblyName + "}\t{" + typeName + "}\t{m_idGenerator:\"" +
+                                this.m_idGenerator.GetId(graph, out bool firstTime) + "\"}");
 
             foreach (PropertyInfo propertyInfo in properties)
             {
-                WriteMember(propertyInfo.Name,propertyInfo.GetValue(graph));
+                WriteMember(propertyInfo.Name, propertyInfo.GetValue(graph));
             }
-
 
             this._dataSB.Append("\n");
 
@@ -99,73 +87,63 @@ namespace OwnSerializerLib
             {
                 this.Serialize(this.m_objectQueue.Dequeue());
             }
-
-        
         }
+
 
         public override object Deserialize(Stream serializationStream)
         {
-            this.ReadStream(serializationStream);
+            ReadStream(serializationStream);
 
-            // Dictionary<String, object> dictionary= new Dictionary<String,object>();
-            // Dictionary<String, object> dictionary= new Dictionary<String,object>();
-            object[,,]  arr= new Object[1,3,3];
-            // for (int i = DeserializeInfoStr.Count-1; i>=0; i--)
-            for (int i = 0; i<DeserializeInfoStr.Count; i++)
+            // creating uninitialized objects and adding theirs IDs to dictionary
+            object[] objects = new object[DeserializeInfoStr.Count];
+            Dictionary<int, object> objectIDs = new Dictionary<int, object>();
+            for (int i = 0; i < DeserializeInfoStr.Count; i++)
             {
-                string[] splits = DeserializeInfoStr[i].Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
-                Type type = Binder.BindToType(splits[0],splits[1]);
-                
-                List<PropertyInfo> properties = type.GetProperties().ToList();
-               
-                Type[] types = new Type[5];
-                object[] values = new object[5];
-                string[] names = new String[5];
-                
-                arr[0, i, 0] = splits[2].Split(':')[1].Split('"')[1];
-                arr[0, i, 1] =splits[7].Split(':')[2].Split('"')[1];
-                
-                for (int j = 3; j < splits.Length; j++)
-                {
-                    string[] local_splits = splits[j].Split(':');
-                    names[j - 3] = local_splits[1];
-                    string temp = local_splits[2].Split('"')[1];
-                    values[j-3]=temp;
-                    types[j-3]=( properties[j-3].PropertyType);
-                    values[j-3]=TypeConveter(temp,types[j-3]);
-                }
-                
-                arr[0, i, 2]= type.GetConstructor(types).Invoke(values);
-                
+                string[] splits = DeserializeInfoStr[i].Replace("\t", "").Split('{', '}')
+                    .Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                Type type = Binder.BindToType(splits[0], splits[1]);
+                int selfID = Convert.ToInt32(splits[2].Split(':')[1].Replace("\"", ""));
+
+                object uninitializedObject = FormatterServices.GetUninitializedObject(type);
+                objects[i] = uninitializedObject;
+                objectIDs.Add(selfID, uninitializedObject);
             }
 
-            object res = arr[0, 0, 2];
-            
-            return res;
+            // actual deserialization
+            for (int i = 0; i < DeserializeInfoStr.Count; i++)
+            {
+                string[] splits = DeserializeInfoStr[i].Replace("\t", "").Split('{', '}')
+                    .Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                Type type = Binder.BindToType(splits[0], splits[1]);
+
+                List<PropertyInfo> properties = type.GetProperties().ToList();
+                Type[] types = new Type[properties.Count];
+                object[] paramValues = new object[properties.Count];
+                int referenceID = Convert.ToInt32(splits[7].Split(':')[2].Split('"')[1]);
+
+                int propertiesStart = 3;
+
+                // reading serialized properties
+                for (int j = 0; j < splits.Length - propertiesStart; j++)
+                {
+                    string[] localSplits = splits[j + propertiesStart].Split(':');
+                    Type paramType = properties[j].PropertyType;
+                    types[j] = paramType;
+
+                    // checking if property's type matches one of uninitialized object's type
+                    bool isSerializedObjectType = objects.Any(o => o.GetType() == paramType);
+                    string uncastedValue = localSplits[2].Replace("\"", "");
+
+                    paramValues[j] = isSerializedObjectType ? objectIDs[referenceID] : Convert.ChangeType(uncastedValue, paramType);
+                    
+                }
+
+                type.GetConstructor(types).Invoke(objects[i], paramValues);
+            }
+
+            return objects[0];
         }
-
-        private object TypeConveter(String val, Type type)
-        {
-                if (type.Equals(typeof(string)))
-                {
-                    return val;
-                }
-                else if(type.Equals(typeof(float)))
-                {
-                    return Single.Parse(val);
-                }else if (type.Equals(typeof(int)))
-                {
-                    return int.Parse(val);
-                }
-                else if (type.Equals(typeof(bool)))
-                {
-                    return bool.Parse(val);
-                }
-
-                return null;
-        }
-
-
+        
         protected override void WriteBoolean(bool val, string name)
         {
             this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val + "\"" + "}");
@@ -176,10 +154,10 @@ namespace OwnSerializerLib
         {
             this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val + "\"" + "}");
         }
-        
+
         protected override void WriteObjectRef(object obj, string name, Type memberType)
         {
-            if (memberType.Equals(typeof(String)))
+            if (memberType == typeof(String))
             {
                 WriteString(obj, name);
             }
@@ -194,7 +172,7 @@ namespace OwnSerializerLib
             if (obj != null)
             {
                 this._dataSB.Append("{" + memberType + ":" + name + ":" +
-                                    "\""+this.m_idGenerator.GetId(obj, out bool firstTime).ToString()+"\"" + "}");
+                                    "\"" + this.m_idGenerator.GetId(obj, out bool firstTime) + "\"" + "}");
 
                 if (firstTime)
                 {
@@ -208,17 +186,20 @@ namespace OwnSerializerLib
                 {
                     case "BProperty":
                     {
-                        tempType = Binder.BindToType("ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ConsoleApp.ClassB");
+                        tempType = Binder.BindToType(
+                            "ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "ConsoleApp.ClassB");
                         break;
-                    }                    
+                    }
                     case "CProperty":
                     {
-                        tempType = Binder.BindToType("ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ConsoleApp.ClassC");
+                        tempType = Binder.BindToType(
+                            "ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "ConsoleApp.ClassC");
                         break;
-                    }                    
+                    }
                     case "AProperty":
                     {
-                        tempType = Binder.BindToType("ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","ConsoleApp.ClassA");
+                        tempType = Binder.BindToType(
+                            "ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "ConsoleApp.ClassA");
                         break;
                     }
                     default:
@@ -226,10 +207,9 @@ namespace OwnSerializerLib
                         tempType = typeof(object);
                         break;
                     }
-                    
                 }
-                
-                this._dataSB.Append("{" + tempType + ":" + name + ":"+"\""+"null"+"\"}");
+
+                this._dataSB.Append("{" + tempType + ":" + name + ":" + "\"" + "null" + "\"}");
             }
         }
 
@@ -240,21 +220,18 @@ namespace OwnSerializerLib
 
         protected override void WriteSingle(float val, string name)
         {
-            this._dataSB.Append("{" + val.GetType() + ":" + name + ":" +"\""+ val.ToString()+"\"" + "}");
+            this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val + "\"" + "}");
         }
 
-
-        protected override object GetNext(out long objID)
-        {
-            return base.GetNext(out objID);
-        }
-
-        protected override long Schedule(object obj)
-        {
-            return base.Schedule(obj);
-        }
 
         #region NotImplementedRegion
+
+        public override StreamingContext Context
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+        
         protected override void WriteSByte(sbyte val, string name)
         {
             throw new NotImplementedException();
@@ -285,7 +262,7 @@ namespace OwnSerializerLib
         {
             throw new NotImplementedException();
         }
-        
+
         protected override void WriteByte(byte val, string name)
         {
             throw new NotImplementedException();
@@ -320,12 +297,12 @@ namespace OwnSerializerLib
         {
             throw new NotImplementedException();
         }
-        
+
         protected override void WriteArray(object obj, string name, Type memberType)
         {
             throw new NotImplementedException();
         }
+
         #endregion
-        
     }
 }
