@@ -86,7 +86,7 @@ namespace OwnSerializerLib
             {
                 WriteMember(propertyInfo.Name, propertyInfo.GetValue(graph));
             }
-            
+
             while (this.m_objectQueue.Count != 0)
             {
                 this.Serialize(this.m_objectQueue.Dequeue());
@@ -95,22 +95,22 @@ namespace OwnSerializerLib
 
         public override object Deserialize(Stream serializationStream)
         {
-            this.ReadStream(serializationStream);
-            Dictionary<int, object> objectIDs = new Dictionary<int, object>();
-
+            ReadStream(serializationStream);
+            
             //creating uninitialized objects and adding theirs IDs to dictionary
-            foreach (string line in DeserializeInfoStr)
+            object[] objects = new object[DeserializeInfoStr.Count];
+            Dictionary<int, object> objectIDs = new Dictionary<int, object>();
+            for (int i = 0; i < DeserializeInfoStr.Count; i++)
             {
-                string[] splits = line.Replace("\t", "").Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                string[] splits = DeserializeInfoStr[i].Replace("\t", "").Split('{', '}').Where(s => !string.IsNullOrEmpty(s)).ToArray();
                 Type type = Binder.BindToType(splits[0], splits[1]);
-                int selfID = (int)TypeConverter(splits[2].Split(':')[1].Replace("\"", ""), typeof(int));
-                
+                int selfID = (int) TypeConverter(splits[2].Split(':')[1].Replace("\"", ""), typeof(int));
+
                 object uninitializedObject = FormatterServices.GetUninitializedObject(type);
+                objects[i] = uninitializedObject;
                 objectIDs.Add(selfID, uninitializedObject);
             }
-            
-            ///
-            ///
+
             for (int i = 0; i < DeserializeInfoStr.Count; i++)
             {
                 string[] splits = DeserializeInfoStr[i].Replace("\t", "").Split('{', '}')
@@ -120,46 +120,24 @@ namespace OwnSerializerLib
                 List<PropertyInfo> properties = type.GetProperties().ToList();
                 Type[] types = new Type[properties.Count];
                 object[] values = new object[properties.Count];
-                string[] names = new string[properties.Count];
-                int generatorID = (int)TypeConverter(splits[2].Split(':')[1].Split('"')[1], typeof(int));
-                int referenceID = (int)TypeConverter(splits[7].Split(':')[2].Split('"')[1], typeof(int));
-            }
-            ///
-            ///
-            
-            object[,,] arr = new Object[1, 3, 3];
-            // for (int i = DeserializeInfoStr.Count-1; i>=0; i--)
-            for (int i = 0; i < DeserializeInfoStr.Count; i++)
-            {
-                string[] splits = DeserializeInfoStr[i].Replace("\t", "").Split('{', '}')
-                    .Where(s => !string.IsNullOrEmpty(s)).ToArray();
-                Type type = Binder.BindToType(splits[0], splits[1]);
+                int referenceID = (int) TypeConverter(splits[7].Split(':')[2].Split('"')[1], typeof(int));
 
-                List<PropertyInfo> properties = type.GetProperties().ToList();
-
-                Type[] types = new Type[5];
-                object[] values = new object[5];
-                string[] names = new String[5];
-
-                arr[0, i, 0] = splits[2].Split(':')[1].Split('"')[1];
-                arr[0, i, 1] = splits[7].Split(':')[2].Split('"')[1];
-
-                for (int j = 3; j < splits.Length; j++)
+                int propertiesStart = 3;
+                for (int j = 0; j < splits.Length - propertiesStart; j++)
                 {
-                    string[] local_splits = splits[j].Split(':');
-                    names[j - 3] = local_splits[1];
-                    string temp = local_splits[2].Split('"')[1];
-                    values[j - 3] = temp;
-                    types[j - 3] = (properties[j - 3].PropertyType);
-                    values[j - 3] = TypeConverter(temp, types[j - 3]);
+                    string[] localSplits = splits[j + propertiesStart].Split(':');
+                    Type parameterType = properties[j].PropertyType;
+                    types[j] = parameterType;
+                    string uncastedValue = localSplits[2].Replace("\"", "");
+                    
+                    values[j] = j != splits.Length - propertiesStart - 1 ?
+                         TypeConverter(uncastedValue, parameterType) : objectIDs[referenceID];
                 }
 
-                arr[0, i, 2] = type.GetConstructor(types).Invoke(values);
+                type.GetConstructor(types)?.Invoke(objects[i], values); //conditional access to avoid NPR
             }
-
-            object res = arr[0, 0, 2];
-
-            return res;
+            
+            return objects[0];
         }
 
         private object TypeConverter(String val, Type type)
