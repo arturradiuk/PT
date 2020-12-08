@@ -1,27 +1,15 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace ConsoleApp
 {
-    // [DataContract]
-
+    [DataContract]
     public class ClassB
-    {        
-        [DataMember]
-
-        public string StringProperty { get; set; }
-        [DataMember]
-
-        public float FloatProperty { get; set; }
-        [DataMember]
-
-        public int IntProperty { get; set; }
-        [DataMember]
-
-        public bool BoolProperty { get; set; }
-        [DataMember]
-
-        public ClassC CProperty { get; set; }
+    {
+        [DataMember] public string StringProperty { get; set; }
+        [DataMember] public float FloatProperty { get; set; }
+        [DataMember] public int IntProperty { get; set; }
+        [DataMember] public bool BoolProperty { get; set; }
+        [DataMember] public ClassC CProperty { get; set; }
 
         public ClassB(string stringProperty, float floatProperty, int intProperty, bool boolProperty, ClassC cProperty)
         {
@@ -31,7 +19,10 @@ namespace ConsoleApp
             BoolProperty = boolProperty;
             CProperty = cProperty;
         }
-                public ClassB(){}
+
+        public ClassB()
+        {
+        }
 
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -42,16 +33,19 @@ namespace ConsoleApp
             info.AddValue("BoolProperty", BoolProperty, typeof(bool));
             info.AddValue("CProperty", CProperty, typeof(ClassC));
         }
+
         public override string ToString()
         {
-            return $"{StringProperty}=StringProperty,{FloatProperty}=FloatProperty,{IntProperty}=IntProperty,{BoolProperty}=BoolProperty";
+            return
+                $"{StringProperty}=StringProperty,{FloatProperty}=FloatProperty,{IntProperty}=IntProperty,{BoolProperty}=BoolProperty";
         }
+
         public override bool Equals(object obj)
         {
             ClassB inst = (ClassB) obj;
-            return  this.BoolProperty.Equals(inst.BoolProperty) && this.IntProperty.Equals(inst.IntProperty)
-                                                                && this.FloatProperty.Equals(inst.FloatProperty)
-                                                                && this.StringProperty.Equals(inst.StringProperty);
+            return this.BoolProperty.Equals(inst.BoolProperty) && this.IntProperty.Equals(inst.IntProperty)
+                                                               && this.FloatProperty.Equals(inst.FloatProperty)
+                                                               && this.StringProperty.Equals(inst.StringProperty);
         }
     }
 }

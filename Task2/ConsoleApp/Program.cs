@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.Xsl;
 using OwnSerializerLib;
 using XMLSerializerLib;
 
@@ -24,14 +17,14 @@ namespace ConsoleApp
                 case "own":
                 {
                     Console.WriteLine("Choose option \ns - for serialization \nd - for deserialization");
-                    String local_option = Console.ReadLine();
-                    switch (local_option)
+                    String localOption = Console.ReadLine();
+                    switch (localOption)
                     {
                         case "s":
                         {
                             Console.WriteLine(
                                 "Choose option \nA - for class A serialization \nB - for class B serialization \nC - for class C serialization");
-                            String local_class_option = Console.ReadLine();
+                            String localClassOption = Console.ReadLine();
 
                             ClassA classA = new ClassA("message from A class", 56.35345f, 65, false, null);
                             ClassB classB = new ClassB("message from B class", 57.35345f, 66, true, null);
@@ -41,13 +34,13 @@ namespace ConsoleApp
                             classB.CProperty = classC;
                             classC.AProperty = classA;
 
-                            switch (local_class_option)
+                            switch (localClassOption)
                             {
                                 case "A":
                                 {
                                     using (FileStream fs = new FileStream("output.txt", FileMode.Create))
                                     {
-                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        IFormatter ownSerializer = new Serializer();
                                         ownSerializer.Serialize(fs, classA);
                                     }
 
@@ -58,7 +51,7 @@ namespace ConsoleApp
                                 {
                                     using (FileStream fs = new FileStream("output.txt", FileMode.Create))
                                     {
-                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        IFormatter ownSerializer = new Serializer();
                                         ownSerializer.Serialize(fs, classB);
                                     }
 
@@ -69,7 +62,7 @@ namespace ConsoleApp
                                 {
                                     using (FileStream fs = new FileStream("output.txt", FileMode.Create))
                                     {
-                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        IFormatter ownSerializer = new Serializer();
                                         ownSerializer.Serialize(fs, classC);
                                     }
 
@@ -93,7 +86,7 @@ namespace ConsoleApp
                                     ClassA test;
                                     using (FileStream fs = new FileStream("output.txt", FileMode.Open))
                                     {
-                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        IFormatter ownSerializer = new Serializer();
                                         test = ownSerializer.Deserialize(fs) as ClassA;
                                     }
 
@@ -109,7 +102,7 @@ namespace ConsoleApp
                                     ClassB test;
                                     using (FileStream fs = new FileStream("output.txt", FileMode.Open))
                                     {
-                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        IFormatter ownSerializer = new Serializer();
                                         test = ownSerializer.Deserialize(fs) as ClassB;
                                     }
 
@@ -125,7 +118,7 @@ namespace ConsoleApp
                                     ClassC test;
                                     using (FileStream fs = new FileStream("output.txt", FileMode.Open))
                                     {
-                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        IFormatter ownSerializer = new Serializer();
                                         test = ownSerializer.Deserialize(fs) as ClassC;
                                     }
 
@@ -170,21 +163,21 @@ namespace ConsoleApp
                             {
                                 case "A":
                                 {
-                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    XmlSerializer f = new XmlSerializer();
                                     f.Serialize("output.xml", classA);
                                     Console.WriteLine("Success");
                                     break;
                                 }
                                 case "B":
                                 {
-                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    XmlSerializer f = new XmlSerializer();
                                     f.Serialize("output.xml", classB);
                                     Console.WriteLine("Success");
                                     break;
                                 }
                                 case "C":
                                 {
-                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    XmlSerializer f = new XmlSerializer();
                                     f.Serialize("output.xml", classC);
                                     Console.WriteLine("Success");
                                     break;
@@ -205,18 +198,18 @@ namespace ConsoleApp
                             {
                                 case "A":
                                 {
-                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    XmlSerializer f = new XmlSerializer();
                                     ClassA test = (ClassA) f.Deserialize("output.xml", typeof(ClassA));
                                     Console.WriteLine(test.ToString());
                                     Console.WriteLine(test.BProperty.ToString());
                                     Console.WriteLine(test.BProperty.CProperty.ToString());
-                                    
+
                                     Console.WriteLine("Success");
                                     break;
                                 }
                                 case "B":
                                 {
-                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    XmlSerializer f = new XmlSerializer();
                                     ClassB test = (ClassB) f.Deserialize("output.xml", typeof(ClassB));
                                     Console.WriteLine(test.ToString());
                                     Console.WriteLine(test.CProperty.ToString());
@@ -226,7 +219,7 @@ namespace ConsoleApp
                                 }
                                 case "C":
                                 {
-                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    XmlSerializer f = new XmlSerializer();
                                     ClassC test = (ClassC) f.Deserialize("output.xml", typeof(ClassC));
                                     Console.WriteLine(test.ToString());
                                     Console.WriteLine(test.AProperty.ToString());
