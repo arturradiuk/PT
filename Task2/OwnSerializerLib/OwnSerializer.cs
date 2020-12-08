@@ -65,6 +65,7 @@ namespace OwnSerializerLib
             // to the serialized objects to ensure the version compatibility?
         {
             this.Serialize(graph);
+            this._dataSB.Remove(this._dataSB.Length - 1, 1);
             this.WriteStream(serializationStream);
         }
 

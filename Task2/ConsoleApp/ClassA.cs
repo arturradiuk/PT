@@ -48,5 +48,13 @@ namespace ConsoleApp
         {
             return $"{StringProperty}=StringProperty,{FloatProperty}=FloatProperty,{IntProperty}=IntProperty,{BoolProperty}=BoolProperty";
         }
+
+        public override bool Equals(object obj)
+        {
+            ClassA inst = (ClassA) obj;
+            return  this.BoolProperty.Equals(inst.BoolProperty) && this.IntProperty.Equals(inst.IntProperty)
+                                                                && this.FloatProperty.Equals(inst.FloatProperty)
+                                                                && this.StringProperty.Equals(inst.StringProperty);
+        }
     }
 }

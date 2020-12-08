@@ -43,5 +43,12 @@ namespace ConsoleApp
             AProperty = aProperty;
         }
         public ClassC(){}
+        public override bool Equals(object obj)
+        {
+            ClassC inst = (ClassC) obj;
+            return  this.BoolProperty.Equals(inst.BoolProperty) && this.IntProperty.Equals(inst.IntProperty)
+                                                                && this.FloatProperty.Equals(inst.FloatProperty)
+                                                                && this.StringProperty.Equals(inst.StringProperty);
+        }
     }
 }
