@@ -5,7 +5,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.Xsl;
 using OwnSerializerLib;
 using XMLSerializerLib;
 
@@ -15,72 +17,233 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            ClassA classA = new ClassA();
-            classA.StringProperty = "message from A class";
-            classA.FloatProperty = 56.35345f;
-            classA.IntProperty = 65;
-            classA.BoolProperty = false;
+            Console.WriteLine("Choose option \nown - for own serializer \nxml - for xml serializer");
+            String option = Console.ReadLine();
+            switch (option)
+            {
+                case "own":
+                {
+                    Console.WriteLine("Choose option \ns - for serialization \nd - for deserialization");
+                    String local_option = Console.ReadLine();
+                    switch (local_option)
+                    {
+                        case "s":
+                        {
+                            Console.WriteLine(
+                                "Choose option \nA - for class A serialization \nB - for class B serialization \nC - for class C serialization");
+                            String local_class_option = Console.ReadLine();
+
+                            ClassA classA = new ClassA("message from A class", 56.35345f, 65, false, null);
+                            ClassB classB = new ClassB("message from B class", 57.35345f, 66, true, null);
+                            ClassC classC = new ClassC("message from C class", 58.35345f, 67, false, null);
+
+                            classA.BProperty = classB;
+                            classB.CProperty = classC;
+                            classC.AProperty = classA;
+
+                            switch (local_class_option)
+                            {
+                                case "A":
+                                {
+                                    using (FileStream fs = new FileStream("output.txt", FileMode.Create))
+                                    {
+                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        ownSerializer.Serialize(fs, classA);
+                                    }
+
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "B":
+                                {
+                                    using (FileStream fs = new FileStream("output.txt", FileMode.Create))
+                                    {
+                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        ownSerializer.Serialize(fs, classB);
+                                    }
+
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "C":
+                                {
+                                    using (FileStream fs = new FileStream("output.txt", FileMode.Create))
+                                    {
+                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        ownSerializer.Serialize(fs, classC);
+                                    }
+
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case "d":
+                        {
+                            Console.WriteLine(
+                                "Choose option \nA - for class A deserialization \nB - for class B deserialization \nC - for class C deserialization");
+                            String local_class_option = Console.ReadLine();
+                            switch (local_class_option)
+                            {
+                                case "A":
+                                {
+                                    ClassA test;
+                                    using (FileStream fs = new FileStream("output.txt", FileMode.Open))
+                                    {
+                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        test = ownSerializer.Deserialize(fs) as ClassA;
+                                    }
+
+                                    Console.WriteLine(test.ToString());
+                                    Console.WriteLine(test.BProperty.ToString());
+                                    Console.WriteLine(test.BProperty.CProperty.ToString());
+
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "B":
+                                {
+                                    ClassB test;
+                                    using (FileStream fs = new FileStream("output.txt", FileMode.Open))
+                                    {
+                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        test = ownSerializer.Deserialize(fs) as ClassB;
+                                    }
+
+                                    Console.WriteLine(test.ToString());
+                                    Console.WriteLine(test.CProperty.ToString());
+                                    Console.WriteLine(test.CProperty.AProperty.ToString());
+
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "C":
+                                {
+                                    ClassC test;
+                                    using (FileStream fs = new FileStream("output.txt", FileMode.Open))
+                                    {
+                                        IFormatter ownSerializer = new OwnSerializerLib.Serializer();
+                                        test = ownSerializer.Deserialize(fs) as ClassC;
+                                    }
+
+                                    Console.WriteLine(test.ToString());
+                                    Console.WriteLine(test.AProperty.ToString());
+                                    Console.WriteLine(test.AProperty.BProperty.ToString());
+
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    break;
+                }
 
 
-            ClassB classB = new ClassB();
-            classB.StringProperty = "message from B class";
-            classB.FloatProperty = 57.35345f;
-            classB.IntProperty = 66;
-            classB.BoolProperty = true;
+                case "xml":
+                {
+                    Console.WriteLine("Choose option \ns - for serialization \nd - for deserialization");
+                    String local_option = Console.ReadLine();
+                    switch (local_option)
+                    {
+                        case "s":
+                        {
+                            Console.WriteLine(
+                                "Choose option \nA - for class A serialization \nB - for class B serialization \nC - for class C serialization");
+                            String local_class_option = Console.ReadLine();
+
+                            ClassA classA = new ClassA("message from A class", 56.35345f, 65, false, null);
+                            ClassB classB = new ClassB("message from B class", 57.35345f, 66, true, null);
+                            ClassC classC = new ClassC("message from C class", 58.35345f, 67, false, null);
+
+                            classA.BProperty = classB;
+                            classB.CProperty = classC;
+                            classC.AProperty = classA;
+
+                            switch (local_class_option)
+                            {
+                                case "A":
+                                {
+                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    f.Serialize("output.xml", classA);
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "B":
+                                {
+                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    f.Serialize("output.xml", classB);
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "C":
+                                {
+                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    f.Serialize("output.xml", classC);
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case "d":
+                        {
+                            Console.WriteLine(
+                                "Choose option \nA - for class A deserialization \nB - for class B deserialization \nC - for class C deserialization");
+                            String local_class_option = Console.ReadLine();
 
 
-            ClassC classC = new ClassC();
-            classC.StringProperty = "message from C class";
-            classC.FloatProperty = 58.35345f;
-            classC.IntProperty = 67;
-            classC.BoolProperty = false;
+                            switch (local_class_option)
+                            {
+                                case "A":
+                                {
+                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    ClassA test = (ClassA) f.Deserialize("output.xml", typeof(ClassA));
+                                    Console.WriteLine(test.ToString());
+                                    Console.WriteLine(test.BProperty.ToString());
+                                    Console.WriteLine(test.BProperty.CProperty.ToString());
+                                    
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "B":
+                                {
+                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    ClassB test = (ClassB) f.Deserialize("output.xml", typeof(ClassB));
+                                    Console.WriteLine(test.ToString());
+                                    Console.WriteLine(test.CProperty.ToString());
+                                    Console.WriteLine(test.CProperty.AProperty.ToString());
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                                case "C":
+                                {
+                                    XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
+                                    ClassC test = (ClassC) f.Deserialize("output.xml", typeof(ClassC));
+                                    Console.WriteLine(test.ToString());
+                                    Console.WriteLine(test.AProperty.ToString());
+                                    Console.WriteLine(test.AProperty.BProperty.ToString());
+                                    Console.WriteLine("Success");
+                                    break;
+                                }
+                            }
 
-            classA.BProperty = classB;
-            classB.CProperty = classC;
-            classC.AProperty = classA;
-            
-            
-            
-            XMLSerializerLib.XmlSerializer f = new XMLSerializerLib.XmlSerializer();
-            f.Serialize("output.xml", classA);
-            ClassA temp = (ClassA) f.Deserialize("output.xml", typeof(ClassA));
-            
-            Console.WriteLine(temp);
-            Console.WriteLine(temp.BProperty);
-            Console.WriteLine(temp.BProperty.CProperty);
-            Console.WriteLine(temp.BProperty.CProperty.AProperty);
+                            break;
+                        }
+                    }
 
-            // using (FileStream s= new FileStream("output.txt", FileMode.Create))
-            // {
-            // XMLSerializerLib.Serializer f = new XMLSerializerLib.Serializer()
-            // IFormatter f = new OwnSerializerLib.Serializer();
-            // f.Serialize(s,classA);
-            // }
-
-            // ClassA A;
-            // using (FileStream s = new FileStream("output.txt", FileMode.Open))
-            // {
-            // XMLSerializerLib.Serializer f = new XMLSerializerLib.Serializer()
-            //     IFormatter f = new OwnSerializerLib.Serializer();
-            //     A = (ClassA) f.Deserialize(s);
-            // }
-            //
-            // Console.WriteLine(A.ToString());
-            // Console.WriteLine(A.BProperty);
-            // Console.WriteLine(A.BProperty.CProperty);
-
-
-            // ClassA classA = new ClassA();
-
-            // using (FileStream s = new FileStream("output.txt", FileMode.Open))
-            // {
-            // IFormatter f = new Serializer();
-            // ClassA testClass = (ClassA)f.Deserialize(s);
-            // Console.WriteLine(testClass.StringProperty);
-            // Console.WriteLine(testClass.FloatProperty);
-            // Console.WriteLine(testClass.IntProperty);
-            // Console.WriteLine(testClass.BoolProperty);
-            // }
+                    break;
+                }
+                default: break;
+            }
         }
     }
 }

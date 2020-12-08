@@ -49,11 +49,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="XmlSerializerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleApp\ConsoleApp.csproj">
+      <Project>{f5c3f942-6d6b-4085-a5fd-a0d7b5941cf7}</Project>
+      <Name>ConsoleApp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XMLSerializerLib\XMLSerializerLib.csproj">
+      <Project>{d8cf5bde-dcc6-4e47-b889-6d75cc7143da}</Project>
+      <Name>XMLSerializerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
