@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 using ConsoleApp;
@@ -11,6 +12,9 @@ namespace OwnSerializerTest
     [TestClass]
     public class OwnSerializerTest
     {
+
+        private CultureInfo CultureInfo = Serializer.GetCultureInfo();
+        
         [TestMethod]
         public void ClassASerializeTest()
         {
@@ -39,11 +43,11 @@ namespace OwnSerializerTest
 
             Assert.AreEqual(3, temp.Count);
             Assert.AreEqual(temp[0],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassA}	{m_idGenerator:\"1\"}{System.String:StringProperty:\"message from A class\"}{System.Single:FloatProperty:\"56.35345\"}{System.Int32:IntProperty:\"65\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassB:BProperty:\"2\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassA}	{m_idGenerator:\"1\"}{System.String:StringProperty:\"message from A class\"}{System.Single:FloatProperty:\"" + 56.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"65\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassB:BProperty:\"2\"}");
             Assert.AreEqual(temp[1],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassB}	{m_idGenerator:\"2\"}{System.String:StringProperty:\"message from B class\"}{System.Single:FloatProperty:\"57.35345\"}{System.Int32:IntProperty:\"66\"}{System.Boolean:BoolProperty:\"True\"}{ConsoleApp.ClassC:CProperty:\"3\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassB}	{m_idGenerator:\"2\"}{System.String:StringProperty:\"message from B class\"}{System.Single:FloatProperty:\"" + 57.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"66\"}{System.Boolean:BoolProperty:\"True\"}{ConsoleApp.ClassC:CProperty:\"3\"}");
             Assert.AreEqual(temp[2],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassC}	{m_idGenerator:\"3\"}{System.String:StringProperty:\"message from C class\"}{System.Single:FloatProperty:\"58.35345\"}{System.Int32:IntProperty:\"67\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassA:AProperty:\"1\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassC}	{m_idGenerator:\"3\"}{System.String:StringProperty:\"message from C class\"}{System.Single:FloatProperty:\"" + 58.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"67\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassA:AProperty:\"1\"}");
             File.Delete("test_output.txt");
         }
 
@@ -76,11 +80,11 @@ namespace OwnSerializerTest
 
             Assert.AreEqual(3, temp.Count);
             Assert.AreEqual(temp[0],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassB}	{m_idGenerator:\"1\"}{System.String:StringProperty:\"message from B class\"}{System.Single:FloatProperty:\"57.35345\"}{System.Int32:IntProperty:\"66\"}{System.Boolean:BoolProperty:\"True\"}{ConsoleApp.ClassC:CProperty:\"2\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassB}	{m_idGenerator:\"1\"}{System.String:StringProperty:\"message from B class\"}{System.Single:FloatProperty:\"" + 57.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"66\"}{System.Boolean:BoolProperty:\"True\"}{ConsoleApp.ClassC:CProperty:\"2\"}");
             Assert.AreEqual(temp[1],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassC}	{m_idGenerator:\"2\"}{System.String:StringProperty:\"message from C class\"}{System.Single:FloatProperty:\"58.35345\"}{System.Int32:IntProperty:\"67\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassA:AProperty:\"3\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassC}	{m_idGenerator:\"2\"}{System.String:StringProperty:\"message from C class\"}{System.Single:FloatProperty:\"" + 58.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"67\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassA:AProperty:\"3\"}");
             Assert.AreEqual(temp[2],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassA}	{m_idGenerator:\"3\"}{System.String:StringProperty:\"message from A class\"}{System.Single:FloatProperty:\"56.35345\"}{System.Int32:IntProperty:\"65\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassB:BProperty:\"1\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassA}	{m_idGenerator:\"3\"}{System.String:StringProperty:\"message from A class\"}{System.Single:FloatProperty:\"" + 56.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"65\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassB:BProperty:\"1\"}");
             File.Delete("test_output.txt");
         }
 
@@ -113,11 +117,11 @@ namespace OwnSerializerTest
 
             Assert.AreEqual(3, temp.Count);
             Assert.AreEqual(temp[0],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassC}	{m_idGenerator:\"1\"}{System.String:StringProperty:\"message from C class\"}{System.Single:FloatProperty:\"58.35345\"}{System.Int32:IntProperty:\"67\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassA:AProperty:\"2\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassC}	{m_idGenerator:\"1\"}{System.String:StringProperty:\"message from C class\"}{System.Single:FloatProperty:\"" + 58.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"67\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassA:AProperty:\"2\"}");
             Assert.AreEqual(temp[1],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassA}	{m_idGenerator:\"2\"}{System.String:StringProperty:\"message from A class\"}{System.Single:FloatProperty:\"56.35345\"}{System.Int32:IntProperty:\"65\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassB:BProperty:\"3\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassA}	{m_idGenerator:\"2\"}{System.String:StringProperty:\"message from A class\"}{System.Single:FloatProperty:\"" + 56.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"65\"}{System.Boolean:BoolProperty:\"False\"}{ConsoleApp.ClassB:BProperty:\"3\"}");
             Assert.AreEqual(temp[2],
-                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassB}	{m_idGenerator:\"3\"}{System.String:StringProperty:\"message from B class\"}{System.Single:FloatProperty:\"57.35345\"}{System.Int32:IntProperty:\"66\"}{System.Boolean:BoolProperty:\"True\"}{ConsoleApp.ClassC:CProperty:\"1\"}");
+                "{ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null}	{ConsoleApp.ClassB}	{m_idGenerator:\"3\"}{System.String:StringProperty:\"message from B class\"}{System.Single:FloatProperty:\"" + 57.35345.ToString(CultureInfo) + "\"}{System.Int32:IntProperty:\"66\"}{System.Boolean:BoolProperty:\"True\"}{ConsoleApp.ClassC:CProperty:\"1\"}");
             File.Delete("test_output.txt");
         }
 

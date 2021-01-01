@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 
 namespace OwnSerializerLib
 {
@@ -13,9 +15,16 @@ namespace OwnSerializerLib
         public override ISurrogateSelector SurrogateSelector { get; set; }
         public override SerializationBinder Binder { get; set; }
 
+        private static CultureInfo CultureInfo = new CultureInfo("pl-PL");
+
         private List<string> DeserializeInfoStr = new List<string>();
         private Dictionary<string, object> _typeProperties = new Dictionary<string, object>();
 
+
+        public static CultureInfo GetCultureInfo()
+        {
+            return CultureInfo;
+        }
 
         public Serializer()
         {
@@ -135,8 +144,9 @@ namespace OwnSerializerLib
                     bool isSerializedObjectType = objects.Any(o => o.GetType() == paramType);
                     string uncastedValue = localSplits[2].Replace("\"", "");
 
-                    paramValues[j] = isSerializedObjectType ? objectIDs[referenceID] : Convert.ChangeType(uncastedValue, paramType);
-                    
+                    paramValues[j] = isSerializedObjectType
+                        ? objectIDs[referenceID]
+                        : Convert.ChangeType(uncastedValue, paramType);
                 }
 
                 type.GetConstructor(types).Invoke(objects[i], paramValues);
@@ -144,7 +154,7 @@ namespace OwnSerializerLib
 
             return objects[0];
         }
-        
+
         protected override void WriteBoolean(bool val, string name)
         {
             this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val + "\"" + "}");
@@ -221,7 +231,7 @@ namespace OwnSerializerLib
 
         protected override void WriteSingle(float val, string name)
         {
-            this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val + "\"" + "}");
+            this._dataSB.Append("{" + val.GetType() + ":" + name + ":" + "\"" + val.ToString(CultureInfo) + "\"" + "}");
         }
 
 
@@ -232,7 +242,7 @@ namespace OwnSerializerLib
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();
         }
-        
+
         protected override void WriteSByte(sbyte val, string name)
         {
             throw new NotImplementedException();
