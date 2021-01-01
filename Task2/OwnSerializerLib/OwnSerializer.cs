@@ -192,35 +192,7 @@ namespace OwnSerializerLib
             }
             else
             {
-                Type tempType;
-                switch (name)
-                {
-                    case "BProperty":
-                    {
-                        tempType = Binder.BindToType(
-                            "ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "ConsoleApp.ClassB");
-                        break;
-                    }
-                    case "CProperty":
-                    {
-                        tempType = Binder.BindToType(
-                            "ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "ConsoleApp.ClassC");
-                        break;
-                    }
-                    case "AProperty":
-                    {
-                        tempType = Binder.BindToType(
-                            "ConsoleApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "ConsoleApp.ClassA");
-                        break;
-                    }
-                    default:
-                    {
-                        tempType = typeof(object);
-                        break;
-                    }
-                }
-
-                this._dataSB.Append("{" + tempType + ":" + name + ":" + "\"" + "null" + "\"}");
+                this._dataSB.Append("{" + typeof(object) + ":" + name + ":" + "\"" + "null" + "\"}");
             }
         }
 
