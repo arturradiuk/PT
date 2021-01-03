@@ -42,19 +42,18 @@ namespace Task3
 
         public static List<Product> GetProductsWithNRecentReviews(int howManyReviews)
         {
-            List<Product> res = (from pr in data.GetTable<ProductReview>()
-                orderby pr.ReviewDate descending
-                select pr.Product).Take(howManyReviews).Distinct().ToList();
+            List<Product> res = (from product in data.GetTable<Product>()
+                where product.ProductReviews.Count == howManyReviews
+                select product).ToList();
+
             return res;
         }
 
         public static List<Product> GetNRecentlyReviewedProducts(int howManyProducts)
         {
-            List<Product> res = (from pr in data.GetTable<ProductReview>()
-                orderby pr.ReviewDate descending
-                group pr.Product by pr.ProductID
-                into g
-                select g.First()).Take(howManyProducts).ToList();
+            List<Product> res = (from product in data.GetTable<ProductReview>()
+                orderby product.ReviewDate descending
+                select product.Product).Distinct().Take(howManyProducts).ToList();
             return res;
         }
 
@@ -66,10 +65,10 @@ namespace Task3
             return res;
         }
 
-        public static int GetTotalStandardCostByCategory(ProductCategory category)
+        public static double GetTotalStandardCostByCategory(string category)
         {
-            int res = (int) (from product in data.GetTable<Product>()
-                where product.ProductSubcategory.ProductCategory.Name.Equals(category.Name)
+            double res = (double) (from product in data.GetTable<Product>()
+                where product.ProductSubcategory.ProductCategory.Name.Equals(category)
                 select product.StandardCost).ToList().Sum();
             return res;
         }

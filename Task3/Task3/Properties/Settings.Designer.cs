@@ -23,10 +23,11 @@ namespace Task3.Properties {
             }
         }
         
+        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-PN887RS;Initial Catalog=AdventureWorks2014;Integrated Securit" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=AdventureWorks2014;Integrated Securit" +
             "y=True")]
         public string AdventureWorks2014ConnectionString {
             get {
@@ -37,7 +38,7 @@ namespace Task3.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-PN887RS;Initial Catalog=AdventureWorks2019;Integrated Securit" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=AdventureWorks2019;Integrated Securit" +
             "y=True")]
         public string AdventureWorks2019ConnectionString {
             get {
