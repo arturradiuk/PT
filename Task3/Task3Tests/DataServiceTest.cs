@@ -7,11 +7,20 @@ namespace Task3Tests
     [TestClass]
     public class DataServiceTest
     {
+
+
         [TestMethod]
-        public void TestMethod1()
+        public void GetProductsByNameTest()
         {
-            DataService data = new DataService();
-            Assert.AreEqual(504, data.firstMethod().Count);
+            Assert.AreEqual(5,DataService.GetProductsByName("Cha").Count );
         }
+        [TestMethod]
+        public void GetProductsByVendorNameTest()
+        {
+            Assert.AreEqual(16,DataService.GetProductsByVendorName("Australia Bike Retailer").Count );
+        }
+
+
+
     }
 }
