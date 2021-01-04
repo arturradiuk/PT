@@ -18,6 +18,7 @@ namespace OwnSerializerLib
         private static CultureInfo CultureInfo = new CultureInfo("pl-PL");
 
         private List<string> DeserializeInfoStr = new List<string>();
+        
         private Dictionary<string, object> _typeProperties = new Dictionary<string, object>();
 
 
@@ -102,6 +103,7 @@ namespace OwnSerializerLib
 
         public override object Deserialize(Stream serializationStream)
         {
+            // Thread.CurrentThread.s
             ReadStream(serializationStream);
 
             // creating uninitialized objects and adding theirs IDs to dictionary
@@ -146,7 +148,7 @@ namespace OwnSerializerLib
 
                     paramValues[j] = isSerializedObjectType
                         ? objectIDs[referenceID]
-                        : Convert.ChangeType(uncastedValue, paramType);
+                        : Convert.ChangeType(uncastedValue, paramType,CultureInfo);
                 }
 
                 type.GetConstructor(types).Invoke(objects[i], paramValues);
