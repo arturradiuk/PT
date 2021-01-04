@@ -72,5 +72,12 @@ namespace Task3
                 select product.StandardCost).ToList().Sum();
             return res;
         }
+
+        public static List<Product> GetFirstNProducts(int n)
+        {
+            List<Product> products = (from product in data.GetTable<Product>()
+                select product).Take(n).ToList();
+            return products;
+        }
     }
 }

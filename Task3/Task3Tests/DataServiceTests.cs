@@ -7,7 +7,7 @@ using Task3;
 namespace Task3Tests
 {
     [TestClass]
-    public class DataServiceTest
+    public class DataServiceTests
     {
         [TestMethod]
         public void GetProductsByNameTest()
