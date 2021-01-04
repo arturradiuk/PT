@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DataServiceTests.cs" />
     <Compile Include="ExtensionMethodsTests.cs" />
+    <Compile Include="MyProductDataServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

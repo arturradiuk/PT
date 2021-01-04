@@ -23,7 +23,7 @@ namespace Task3.MyProduct
         public List<MyProduct> GetNProductsFromCategory(string categoryName, int n)
         {
             List<MyProduct> res = (from product in Products
-                where product.ProductSubcategory.ProductCategory.Name.Equals(categoryName)
+                where product.ProductSubcategory != null && product.ProductSubcategory.ProductCategory.Name.Equals(categoryName)
                 select product).Take(n).ToList();
             return res;
         }
