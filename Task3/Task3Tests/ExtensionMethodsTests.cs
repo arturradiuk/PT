@@ -40,7 +40,7 @@ namespace Task3Tests
         }
 
         [TestMethod]
-        public void GetProductNamesAndVendors_QSTest()
+        public void GetProductNamesAndVendorsTest()
         {
             List<Product> productsSublist = Products.GetRange(0, 10);
             string resultString = productsSublist.GetProductNamesAndVendors();
