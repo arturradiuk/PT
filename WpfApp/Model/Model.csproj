@@ -31,24 +31,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System"/>
+    <Reference Include="System" />
     
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Xml.Linq"/>
-    <Reference Include="System.Data.DataSetExtensions"/>
+    <Reference Include="System.Core" />
+    
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     
     
-    <Reference Include="Microsoft.CSharp"/>
+    <Reference Include="Microsoft.CSharp" />
     
-    <Reference Include="System.Data"/>
+    <Reference Include="System.Data" />
     
-    <Reference Include="System.Net.Http"/>
+    <Reference Include="System.Net.Http" />
     
-    <Reference Include="System.Xml"/>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DataRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{edffa801-898c-47b9-9016-75e33a4229dd}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
  </Project>

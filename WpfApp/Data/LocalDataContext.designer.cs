@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Model
+namespace Data
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,7 +22,7 @@ namespace Model
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="AdventureWorks2014")]
+	[Database(Name="AdventureWorks2014")]
 	public partial class LocalDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -33,10 +33,13 @@ namespace Model
     partial void InsertDepartment(Department instance);
     partial void UpdateDepartment(Department instance);
     partial void DeleteDepartment(Department instance);
+    partial void InsertEmployeeDepartmentHistory(EmployeeDepartmentHistory instance);
+    partial void UpdateEmployeeDepartmentHistory(EmployeeDepartmentHistory instance);
+    partial void DeleteEmployeeDepartmentHistory(EmployeeDepartmentHistory instance);
     #endregion
 		
 		public LocalDataContext() : 
-				base(global::Model.Properties.Settings.Default.AdventureWorks2014ConnectionString, mappingSource)
+				base(global::Data.Properties.Settings.Default.AdventureWorks2014ConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -72,9 +75,17 @@ namespace Model
 				return this.GetTable<Department>();
 			}
 		}
+		
+		public System.Data.Linq.Table<EmployeeDepartmentHistory> EmployeeDepartmentHistories
+		{
+			get
+			{
+				return this.GetTable<EmployeeDepartmentHistory>();
+			}
+		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="HumanResources.Department")]
+	[Table(Name="HumanResources.Department")]
 	public partial class Department : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -87,6 +98,8 @@ namespace Model
 		private string _GroupName;
 		
 		private System.DateTime _ModifiedDate;
+		
+		private EntitySet<EmployeeDepartmentHistory> _EmployeeDepartmentHistories;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -104,10 +117,11 @@ namespace Model
 		
 		public Department()
 		{
+			this._EmployeeDepartmentHistories = new EntitySet<EmployeeDepartmentHistory>(new Action<EmployeeDepartmentHistory>(this.attach_EmployeeDepartmentHistories), new Action<EmployeeDepartmentHistory>(this.detach_EmployeeDepartmentHistories));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartmentID", AutoSync=AutoSync.OnInsert, DbType="SmallInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_DepartmentID", AutoSync=AutoSync.OnInsert, DbType="SmallInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public short DepartmentID
 		{
 			get
@@ -127,7 +141,7 @@ namespace Model
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -147,7 +161,7 @@ namespace Model
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_GroupName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string GroupName
 		{
 			get
@@ -167,7 +181,7 @@ namespace Model
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime NOT NULL")]
+		[Column(Storage="_ModifiedDate", DbType="DateTime NOT NULL")]
 		public System.DateTime ModifiedDate
 		{
 			get
@@ -183,6 +197,254 @@ namespace Model
 					this._ModifiedDate = value;
 					this.SendPropertyChanged("ModifiedDate");
 					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[Association(Name="Department_EmployeeDepartmentHistory", Storage="_EmployeeDepartmentHistories", ThisKey="DepartmentID", OtherKey="DepartmentID")]
+		public EntitySet<EmployeeDepartmentHistory> EmployeeDepartmentHistories
+		{
+			get
+			{
+				return this._EmployeeDepartmentHistories;
+			}
+			set
+			{
+				this._EmployeeDepartmentHistories.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EmployeeDepartmentHistories(EmployeeDepartmentHistory entity)
+		{
+			this.SendPropertyChanging();
+			entity.Department = this;
+		}
+		
+		private void detach_EmployeeDepartmentHistories(EmployeeDepartmentHistory entity)
+		{
+			this.SendPropertyChanging();
+			entity.Department = null;
+		}
+	}
+	
+	[Table(Name="HumanResources.EmployeeDepartmentHistory")]
+	public partial class EmployeeDepartmentHistory : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _BusinessEntityID;
+		
+		private short _DepartmentID;
+		
+		private byte _ShiftID;
+		
+		private System.DateTime _StartDate;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
+		private System.DateTime _ModifiedDate;
+		
+		private EntityRef<Department> _Department;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnBusinessEntityIDChanging(int value);
+    partial void OnBusinessEntityIDChanged();
+    partial void OnDepartmentIDChanging(short value);
+    partial void OnDepartmentIDChanged();
+    partial void OnShiftIDChanging(byte value);
+    partial void OnShiftIDChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
+    partial void OnModifiedDateChanging(System.DateTime value);
+    partial void OnModifiedDateChanged();
+    #endregion
+		
+		public EmployeeDepartmentHistory()
+		{
+			this._Department = default(EntityRef<Department>);
+			OnCreated();
+		}
+		
+		[Column(Storage="_BusinessEntityID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int BusinessEntityID
+		{
+			get
+			{
+				return this._BusinessEntityID;
+			}
+			set
+			{
+				if ((this._BusinessEntityID != value))
+				{
+					this.OnBusinessEntityIDChanging(value);
+					this.SendPropertyChanging();
+					this._BusinessEntityID = value;
+					this.SendPropertyChanged("BusinessEntityID");
+					this.OnBusinessEntityIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_DepartmentID", DbType="SmallInt NOT NULL", IsPrimaryKey=true)]
+		public short DepartmentID
+		{
+			get
+			{
+				return this._DepartmentID;
+			}
+			set
+			{
+				if ((this._DepartmentID != value))
+				{
+					if (this._Department.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDepartmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._DepartmentID = value;
+					this.SendPropertyChanged("DepartmentID");
+					this.OnDepartmentIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ShiftID", DbType="TinyInt NOT NULL", IsPrimaryKey=true)]
+		public byte ShiftID
+		{
+			get
+			{
+				return this._ShiftID;
+			}
+			set
+			{
+				if ((this._ShiftID != value))
+				{
+					this.OnShiftIDChanging(value);
+					this.SendPropertyChanging();
+					this._ShiftID = value;
+					this.SendPropertyChanged("ShiftID");
+					this.OnShiftIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_StartDate", DbType="Date NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_EndDate", DbType="Date")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ModifiedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[Association(Name="Department_EmployeeDepartmentHistory", Storage="_Department", ThisKey="DepartmentID", OtherKey="DepartmentID", IsForeignKey=true)]
+		public Department Department
+		{
+			get
+			{
+				return this._Department.Entity;
+			}
+			set
+			{
+				Department previousValue = this._Department.Entity;
+				if (((previousValue != value) 
+							|| (this._Department.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Department.Entity = null;
+						previousValue.EmployeeDepartmentHistories.Remove(this);
+					}
+					this._Department.Entity = value;
+					if ((value != null))
+					{
+						value.EmployeeDepartmentHistories.Add(this);
+						this._DepartmentID = value.DepartmentID;
+					}
+					else
+					{
+						this._DepartmentID = default(short);
+					}
+					this.SendPropertyChanged("Department");
 				}
 			}
 		}
