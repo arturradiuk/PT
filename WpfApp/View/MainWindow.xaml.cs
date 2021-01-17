@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Task4
+namespace View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,11 @@ namespace Task4
         public MainWindow()
         {
             InitializeComponent();
+        }
+        
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
         }
     }
 }
