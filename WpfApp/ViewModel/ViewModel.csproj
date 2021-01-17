@@ -47,5 +47,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModelListener.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{edffa801-898c-47b9-9016-75e33a4229dd}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{2b8a603e-51c0-4ca6-84a4-063c183ff1a4}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
