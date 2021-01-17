@@ -1,0 +1,10 @@
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\bin\Debug\Model.dll
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\bin\Debug\Model.pdb
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\bin\Debug\Data.dll
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\bin\Debug\Data.pdb
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\bin\Debug\Data.dll.config
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\obj\Debug\Model.csprojAssemblyReference.cache
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\obj\Debug\Model.csproj.CopyComplete
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\obj\Debug\Model.dll
+C:\Users\Artur Radiuk\Desktop\WpfApp\Model\obj\Debug\Model.pdb

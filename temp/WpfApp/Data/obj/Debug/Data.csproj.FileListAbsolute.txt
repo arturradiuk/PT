@@ -1,0 +1,7 @@
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\bin\Debug\Data.dll.config
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\bin\Debug\Data.dll
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\bin\Debug\Data.pdb
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\obj\Debug\Data.csprojAssemblyReference.cache
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\obj\Debug\Data.csproj.CoreCompileInputs.cache
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\obj\Debug\Data.dll
+C:\Users\Artur Radiuk\Desktop\WpfApp\Data\obj\Debug\Data.pdb
