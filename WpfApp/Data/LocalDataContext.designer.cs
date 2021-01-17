@@ -100,6 +100,8 @@ namespace Data
 		private System.DateTime _ModifiedDate;
 		
 		private EntitySet<EmployeeDepartmentHistory> _EmployeeDepartmentHistories;
+
+
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -113,8 +115,16 @@ namespace Data
     partial void OnGroupNameChanged();
     partial void OnModifiedDateChanging(System.DateTime value);
     partial void OnModifiedDateChanged();
-    #endregion
-		
+		#endregion
+
+		public Department(short _DepartmentID, string _Name, string _GroupName, System.DateTime _ModifiedDate)
+		{
+			this._DepartmentID = _DepartmentID;
+			this._Name = _Name;
+			this._GroupName = _GroupName;
+			this._ModifiedDate = _ModifiedDate;
+		}
+
 		public Department()
 		{
 			this._EmployeeDepartmentHistories = new EntitySet<EmployeeDepartmentHistory>(new Action<EmployeeDepartmentHistory>(this.attach_EmployeeDepartmentHistories), new Action<EmployeeDepartmentHistory>(this.detach_EmployeeDepartmentHistories));

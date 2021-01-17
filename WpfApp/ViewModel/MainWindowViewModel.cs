@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Data;
+using System.Data.Linq;
 
 namespace ViewModel
 {
@@ -13,6 +15,12 @@ namespace ViewModel
 
         private void Refresh()
         {
+            // Department department = new Department();
+        }
+
+        public MainWindowViewModel()
+        {
+            this.Refresh();
         }
 
 
