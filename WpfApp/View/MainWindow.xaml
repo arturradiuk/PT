@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task4"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="350" Width="620"  Background="#336633">
+
+    <Grid Margin="0,0,0,1">
+        <Button Content="Add Department" HorizontalAlignment="Left" Margin="70,210,0,0" VerticalAlignment="Top"/>
+        <Button Content="Update Department" HorizontalAlignment="Left" Margin="70,235,0,0" VerticalAlignment="Top"/>
+        <Button Content="Delete Department" HorizontalAlignment="Left" Margin="70,260,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="DepartmentID:" HorizontalAlignment="Left" Margin="26,50,0,0" VerticalAlignment="Top"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="26,80,0,0" VerticalAlignment="Top"/>
+        <Label Content="GroupName:" HorizontalAlignment="Left" Margin="26,110,0,0" VerticalAlignment="Top"/>
+        <Label Content="ModifiedDate:" HorizontalAlignment="Left" Margin="26,140,0,0" VerticalAlignment="Top"/>
+
+        <TextBox HorizontalAlignment="Left" Margin="140,50,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="140,80,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="140,110,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <DatePicker HorizontalAlignment="Left" Margin="140,140,0,0" VerticalAlignment="Top" Width="120"/>
+
+
+
+        <ListView Margin="289,43,10,47">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="DepartmentId" Width="90"/>
+                    <GridViewColumn Header="Name" Width="50"/>
+                    <GridViewColumn Header="GroupName" Width="80"/>
+                    <GridViewColumn Header="ModifiedDate" Width="80"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
     </Grid>
 </Window>
