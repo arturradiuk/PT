@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DataContext.cs" />
     <Compile Include="Department.cs" />
+    <Compile Include="IDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

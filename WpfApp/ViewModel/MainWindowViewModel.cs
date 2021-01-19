@@ -12,7 +12,7 @@ namespace ViewModel
 {
     public class MainWindowViewModel : ViewModelListener
     {
-        private DataContext DataContext = new DataContext(); //todo should it be interface ???
+        private IDataContext _dataContext; //todo should it be interface ???
         public ICommand UpdateDepartmentCommand { get; private set; }
         public ICommand DeleteDepartmentCommand { get; private set; }
         public ICommand AddWindowCommand { get; private set; }
@@ -25,25 +25,28 @@ namespace ViewModel
 
         private void Refresh()
         {
-            Departments = DataContext.GetAllDepartments();
+            Departments = _dataContext.GetAllDepartments();
         }
 
         public List<Department> Departments { get; set; }
 
         public MainWindowViewModel()
         {
-            this.DataContext = new DataContext();
-            List<Department> depart = this.DataContext.GetAllDepartments();
-            ModifiedDate = DateTime.Now;
-            // Department department = dataContext.GetDepartmentById(5);
-            // this.Departments = new ObservableCollection<Department>(depart);
+            this._dataContext = new DataContext();
+            this.Refresh(); 
+            
             UpdateDepartmentCommand = new Command(UpdateDepartment);
             DeleteDepartmentCommand = new Command(DeleteDepartment);
             AddWindowCommand = new Command(AddWindow);
             RefreshWindowCommand = new Command(RefreshWindow);
-            this.Refresh();
-            this.DataContext.UpdateDepartment(this.Departments.First().DepartmentID, new Department(113, "temp", "temp_group", ModifiedDate));
-            int f = 6;
+            
+            // ModifiedDate = DateTime.Now;
+            // Department department = dataContext.GetDepartmentById(5);
+            // this.Departments = new ObservableCollection<Department>(depart);
+
+            // this.Refresh();
+            // this.DataContext.UpdateDepartment(this.Departments.First().DepartmentID, new Department(113, "temp", "temp_group", ModifiedDate));
+            // int f = 6;
         }
 
 

@@ -8,7 +8,7 @@ using Logic;
 
 namespace Model
 {
-    public class DataContext
+    public class DataContext : IDataContext
     {
         private IDataService _service;
 
