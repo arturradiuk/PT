@@ -29,10 +29,10 @@
 
 
 
-        <ListView Margin="289,43,10,47">
-            <ListView.View>
+        <ListView Margin="289,43,10,47" ItemsSource="{Binding Departments}">
+            <ListView.View >
                 <GridView>
-                    <GridViewColumn Header="DepartmentId" Width="90"/>
+                    <GridViewColumn Header="DepartmentID" Width="90" />
                     <GridViewColumn Header="Name" Width="50"/>
                     <GridViewColumn Header="GroupName" Width="80"/>
                     <GridViewColumn Header="ModifiedDate" Width="80"/>
