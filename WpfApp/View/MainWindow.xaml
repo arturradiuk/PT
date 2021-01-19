@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:View"
         xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="960">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -32,10 +32,10 @@
         <ListView Margin="289,43,10,47" ItemsSource="{Binding Departments}">
             <ListView.View >
                 <GridView>
-                    <GridViewColumn Header="DepartmentID" Width="90" />
-                    <GridViewColumn Header="Name" Width="50"/>
-                    <GridViewColumn Header="GroupName" Width="80"/>
-                    <GridViewColumn Header="ModifiedDate" Width="80"/>
+                    <GridViewColumn Header="DepartmentID" Width="90" DisplayMemberBinding="{Binding DepartmentID}"/>
+                    <GridViewColumn Header="Name" Width="180" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="GroupName" Width="220"  DisplayMemberBinding="{Binding GroupName}"/>
+                    <GridViewColumn Header="ModifiedDate" Width="140"  DisplayMemberBinding="{Binding ModifiedDate}"/>
                 </GridView>
             </ListView.View>
         </ListView>
