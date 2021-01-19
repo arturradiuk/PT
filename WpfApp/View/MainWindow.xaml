@@ -13,7 +13,7 @@
     </Window.DataContext>
     
     <Grid>
-        <Button Content="Add Department" HorizontalAlignment="Left" Margin="70,210,0,0" VerticalAlignment="Top"/>
+        <Button Content="Add Department" HorizontalAlignment="Left" Margin="70,210,0,0" VerticalAlignment="Top" Command="{Binding UpdateDepartmentCommand}"/>
         <Button Content="Update Department" HorizontalAlignment="Left" Margin="70,235,0,0" VerticalAlignment="Top"/>
         <Button Content="Delete Department" HorizontalAlignment="Left" Margin="70,260,0,0" VerticalAlignment="Top"/>
 
@@ -22,7 +22,13 @@
         <Label Content="GroupName:" HorizontalAlignment="Left" Margin="26,110,0,0" VerticalAlignment="Top"/>
         <Label Content="ModifiedDate:" HorizontalAlignment="Left" Margin="26,140,0,0" VerticalAlignment="Top"/>
 
-        <TextBox HorizontalAlignment="Left" Margin="140,50,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="140,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="Name" UpdateSourceTrigger="Default">
+                </Binding>
+            </TextBox.Text>
+            
+        </TextBox>
         <TextBox HorizontalAlignment="Left" Margin="140,80,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox HorizontalAlignment="Left" Margin="140,110,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <DatePicker HorizontalAlignment="Left" Margin="140,140,0,0" VerticalAlignment="Top" Width="120"/>

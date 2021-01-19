@@ -65,16 +65,30 @@ namespace Logic
 
         public void UpdateDepartment(short departmentID, ISerializable department)
         {
+            Department department_temp = GetDepartmentFromISerializable(department);
+            
             Table<Department> departments = _ldc.GetTable<Department>();
             Department dbDepartment = GetDepartmentById(departmentID) as Department;
 
             foreach (var property in dbDepartment.GetType().GetProperties())
             {
-                property.SetValue(dbDepartment, property.GetValue(department));
+                property.SetValue(dbDepartment, property.GetValue(department_temp));
             }
 
             dbDepartment.DepartmentID = departmentID;
             this._ldc.SubmitChanges();
+        }
+        
+        private Department GetDepartmentFromISerializable(ISerializable iSerializable)
+        {
+            Department department = new Department();
+            SerializationInfo si = new SerializationInfo(iSerializable.GetType(),new FormatterConverter());
+            iSerializable.GetObjectData(si,new StreamingContext());
+            department.Name=si.GetString("Name");
+            department.DepartmentID=si.GetInt16("DepartmentID");
+            department.GroupName=si.GetString("GroupName");
+            department.ModifiedDate=si.GetDateTime("ModifiedDate");
+            return department;
         }
     }
 }

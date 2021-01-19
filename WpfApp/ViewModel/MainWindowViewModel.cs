@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,6 +18,11 @@ namespace ViewModel
         public ICommand AddWindowCommand { get; private set; }
         public ICommand RefreshWindowCommand { get; private set; }
 
+        public short DepartmentID { get; set; }
+        public string Name { get; set; }
+        public string GroupName { get; set; }
+        public System.DateTime ModifiedDate { get; set; }
+
         private void Refresh()
         {
             Departments = DataContext.GetAllDepartments();
@@ -27,16 +34,30 @@ namespace ViewModel
         {
             this.DataContext = new DataContext();
             List<Department> depart = this.DataContext.GetAllDepartments();
+            ModifiedDate = DateTime.Now;
             // Department department = dataContext.GetDepartmentById(5);
             // this.Departments = new ObservableCollection<Department>(depart);
+            UpdateDepartmentCommand = new Command(UpdateDepartment);
+            DeleteDepartmentCommand = new Command(DeleteDepartment);
+            AddWindowCommand = new Command(AddWindow);
+            RefreshWindowCommand = new Command(RefreshWindow);
             this.Refresh();
+            this.DataContext.UpdateDepartment(this.Departments.First().DepartmentID, new Department(113, "temp", "temp_group", ModifiedDate));
             int f = 6;
         }
 
 
         public void UpdateDepartment()
         {
-            Task.Run(() => { });
+            Task.Run(() =>
+            {
+                Department department = new Department();
+                department.Name = Name;
+                department.GroupName = GroupName;
+                department.ModifiedDate = ModifiedDate;
+            });
+            
+            
         }
 
         public void DeleteDepartment()
