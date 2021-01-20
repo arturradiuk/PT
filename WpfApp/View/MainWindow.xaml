@@ -26,7 +26,7 @@
         <Label Content="ModifiedDate:" HorizontalAlignment="Left" Margin="26,140,0,0" VerticalAlignment="Top" />
 
         <!-- input region start -->
-        <TextBox HorizontalAlignment="Left" Margin="140,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="140,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
             <TextBox.Text>
                 <Binding Path="DepartmentID" UpdateSourceTrigger="Default" />
             </TextBox.Text>
@@ -42,9 +42,15 @@
             <TextBox.Text>
                 <Binding Path="GroupName" UpdateSourceTrigger="PropertyChanged" />
             </TextBox.Text>
+        </TextBox>        
+        
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="140,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="ModifiedDate" UpdateSourceTrigger="PropertyChanged" />
+            </TextBox.Text>
         </TextBox>
         
-        <DatePicker SelectedDate="{Binding ModifiedDate, Mode=TwoWay}" HorizontalAlignment="Left" Margin="140,140,0,0" VerticalAlignment="Top" Width="120" />
+        <!-- <DatePicker  SelectedDate="{Binding ModifiedDate, Mode=TwoWay}" HorizontalAlignment="Left" Margin="140,140,0,0" VerticalAlignment="Top" Width="120" /> -->
         
         <!-- input region end -->
 

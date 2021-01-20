@@ -93,8 +93,6 @@ namespace ViewModel
         }
 
 
-        
-        
         public ObservableCollection<Department> Departments { get; set; }
 
         public void RefreshData()
@@ -112,7 +110,6 @@ namespace ViewModel
             UpdateDepartmentCommand = new Command(UpdateDepartment);
             DeleteDepartmentCommand = new Command(DeleteDepartment);
             AddDepartmentCommand = new Command(AddDepartment);
-
         }
 
 
@@ -122,14 +119,14 @@ namespace ViewModel
             {
                 if (this.Department.DepartmentID != null)
                 {
-
                     Department department = new Department();
                     department.Name = Name;
                     department.GroupName = GroupName;
-                    department.ModifiedDate = ModifiedDate;
-                    this._dataContext.UpdateDepartment(this.Department.DepartmentID, department); 
+                    // department.ModifiedDate = ModifiedDate; // ModifiedDate should be correct, try to set it automatically
+                    department.ModifiedDate =
+                        DateTime.Now; // ModifiedDate should be correct, try to set it automatically
+                    this._dataContext.UpdateDepartment(this.Department.DepartmentID, department);
                     this.RefreshData();
-                    
                 }
             });
         }
@@ -151,12 +148,11 @@ namespace ViewModel
                 Department department = new Department();
                 department.Name = this.Name;
                 department.GroupName = this.GroupName;
-                department.ModifiedDate = this.ModifiedDate;  // ModifiedDate should be correct, try to set it automaticly
-                // department.DepartmentID = 234;
+                // department.ModifiedDate = this.ModifiedDate;  // ModifiedDate should be correct, try to set it automatically
+                department.ModifiedDate = DateTime.Now;
                 this._dataContext.AddDepartment(department);
                 this.RefreshData();
             });
         }
-        
     }
 }
