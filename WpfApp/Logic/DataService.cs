@@ -37,8 +37,29 @@ namespace Logic
 
         public void AddDepartment(ISerializable department)
         {
-            Table<Department> departments = _ldc.GetTable<Department>();
-            departments.InsertOnSubmit(department as Department);
+            Table<Department> departments = _ldc.GetTable<Department>();//
+            Department department_temp = GetDepartmentFromISerializable(department);
+            
+            // Department department_temp = new Department();
+            // department_temp.Name = "aaa";
+            // department_temp.GroupName = "aaa";
+            // department_temp.DepartmentID = 0;
+            // department_temp.ModifiedDate = DateTime.Now;
+
+            // department_temp2.Name = department_temp.Name;
+            // department_temp2.GroupName = department_temp.GroupName;
+            // department_temp2.DepartmentID = department_temp.DepartmentID;
+            // department_temp2.ModifiedDate = department_temp.ModifiedDate;
+
+    
+            departments.InsertOnSubmit(department_temp);
+
+            // Department department_temp = new Department();
+            // department_temp.Name = "dsfd" + new Random().Next(50004);
+            // department_temp.GroupName = "fd";
+            // department_temp.ModifiedDate = DateTime.Now;
+            // departments.InsertOnSubmit(department_temp);
+            
             this._ldc.SubmitChanges();
         }
 

@@ -47,11 +47,6 @@ namespace Model
             return departments;
         }        
         
-        public Department GetDepartmentById(short departmentId)
-        {
-            ISerializable serializable = this._service.GetDepartmentById(departmentId);
-            return this.GetDepartmentFromISerializable(serializable);
-        }
 
         public void RemoveDepartment(short departmentID)
         {
@@ -62,6 +57,12 @@ namespace Model
         {
             this._service.UpdateDepartment(departmentID, department);
         }
+
+        public void AddDepartment(ISerializable department)
+        {
+            this._service.AddDepartment(department);
+        }
+
 
     }
 }
