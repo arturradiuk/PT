@@ -14,5 +14,6 @@ namespace ModelTest.TestLogic
         void UpdateDepartment(short departmentID, ISerializable department);
         void AddDepartment(ISerializable department);
         Department GetDepartmentFromISerializable(ISerializable iSerializable);
+        ISerializable GetDepartmentById(short departmentID);
     }
 }

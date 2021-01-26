@@ -22,7 +22,7 @@ namespace Model
             this._service = new DataService();
         }
 
-        private Department GetDepartmentFromISerializable(ISerializable iSerializable)
+        public Department GetDepartmentFromISerializable(ISerializable iSerializable)
         {
             Department department = new Department();
             SerializationInfo si = new SerializationInfo(iSerializable.GetType(),new FormatterConverter());
