@@ -30,5 +30,19 @@ namespace Model
         public Department()
         {
         }
+
+        protected bool Equals(Department other)
+        {
+            return DepartmentID == other.DepartmentID && Name == other.Name && GroupName == other.GroupName && ModifiedDate.Equals(other.ModifiedDate);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Department) obj);
+        }
+
     }
 }

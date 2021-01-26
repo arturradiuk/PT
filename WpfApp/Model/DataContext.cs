@@ -62,7 +62,5 @@ namespace Model
         {
             this._service.AddDepartment(department);
         }
-
-
     }
 }

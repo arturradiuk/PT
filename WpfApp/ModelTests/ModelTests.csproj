@@ -50,17 +50,21 @@
     <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestData\TestDataContext.cs" />
+    <Compile Include="TestData\TestLocalDataContext.cs" />
     <Compile Include="TestData\TestDataFiller.cs" />
     <Compile Include="TestLogic\ITestDataService.cs" />
     <Compile Include="TestLogic\TestDataService.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logic\Logic.csproj">
+      <Project>{83f2f895-3809-48e0-9316-76aeb3d3d5c1}</Project>
+      <Name>Logic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{84efaa4b-64a6-4fbb-be37-afab32d24e1f}</Project>
       <Name>Model</Name>

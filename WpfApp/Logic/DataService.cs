@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Text;
@@ -89,7 +90,7 @@ namespace Logic
             Table<Department> departments = _ldc.GetTable<Department>();
             Department dbDepartment = GetDepartmentById(departmentID) as Department;
 
-            foreach (var property in dbDepartment.GetType().GetProperties())
+            foreach (PropertyInfo property in dbDepartment.GetType().GetProperties())
             {
                 property.SetValue(dbDepartment, property.GetValue(department_temp));
             }

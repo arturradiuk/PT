@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Logic;
+using Model;
 
-namespace ViewModelTest.TestLogic
+namespace ModelTest.TestLogic
 {
-    public interface ITestDataService
+    public interface ITestDataService : IDataService
     {
         IEnumerable<ISerializable> GetAllDepartments();
 
@@ -11,6 +13,6 @@ namespace ViewModelTest.TestLogic
 
         void UpdateDepartment(short departmentID, ISerializable department);
         void AddDepartment(ISerializable department);
-
+        Department GetDepartmentFromISerializable(ISerializable iSerializable);
     }
 }

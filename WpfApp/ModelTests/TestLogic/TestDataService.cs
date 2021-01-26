@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Model;
-using ViewModelTest.TestData;
+using ModelTest.TestData;
 
-namespace ViewModelTest.TestLogic
+namespace ModelTest.TestLogic
 {
     public class TestDataService : IDisposable, ITestDataService
     {
@@ -16,16 +17,16 @@ namespace ViewModelTest.TestLogic
         }
 
 
-        private readonly TestDataContext _tdc;
+        private readonly TestLocalDataContext _tdc;
 
-        public TestDataService(TestDataContext ldc)
+        public TestDataService(TestLocalDataContext ldc)
         {
             this._tdc = ldc;
         }
 
         public TestDataService()
         {
-            this._tdc = new TestDataContext();
+            this._tdc = new TestLocalDataContext();
         }
 
 
@@ -75,7 +76,7 @@ namespace ViewModelTest.TestLogic
 
             Department dbDepartment = GetDepartmentById(departmentID) as Department;
 
-            foreach (var property in dbDepartment.GetType().GetProperties())
+            foreach (PropertyInfo property in dbDepartment.GetType().GetProperties())
             {
                 property.SetValue(dbDepartment, property.GetValue(department_temp));
             }
@@ -83,7 +84,7 @@ namespace ViewModelTest.TestLogic
             dbDepartment.DepartmentID = departmentID;
         }
 
-        private Department GetDepartmentFromISerializable(ISerializable iSerializable)
+        public Department GetDepartmentFromISerializable(ISerializable iSerializable)
         {
             Department department = new Department();
             SerializationInfo si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());

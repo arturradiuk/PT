@@ -1,11 +1,11 @@
 using System;
 using Model;
 
-namespace ViewModelTest.TestData
+namespace ModelTest.TestData
 {
     public static class TestDataFiller
     {
-        public static void Fill(TestDataContext dataContext)
+        public static void Fill(TestLocalDataContext dataContext)
         {
             dataContext.Departments.Add(new Department(1, "Los Santos Hills", "LS", new DateTime(2021, 1, 20, 10, 10, 10)));
             dataContext.Departments.Add(new Department(2, "Miami Vice Department", "MV", new DateTime(2020, 2, 20, 1, 10, 10)));

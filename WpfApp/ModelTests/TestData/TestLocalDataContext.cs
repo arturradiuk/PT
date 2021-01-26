@@ -448,9 +448,9 @@ using Model;
 // 	}
 // }
 
-namespace ViewModelTest.TestData
+namespace ModelTest.TestData
 {
-    public class TestDataContext
+    public class TestLocalDataContext
     {
         public ObservableCollection<Department> Departments = new ObservableCollection<Department>();
     }
