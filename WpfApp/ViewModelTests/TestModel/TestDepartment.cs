@@ -4,7 +4,7 @@ using Model;
 
 namespace ViewModelTests.TestModel
 {
-    public class Department : IDepartment
+    public class TestDepartment : IDepartment
     {
         public short DepartmentID { get; set; }
         public string Name { get; set; }
@@ -20,7 +20,7 @@ namespace ViewModelTests.TestModel
             info.AddValue("ModifiedDate", ModifiedDate, typeof(System.DateTime));
         }
 
-        public Department(short departmentId, string name, string groupName, DateTime modifiedDate)
+        public TestDepartment(short departmentId, string name, string groupName, DateTime modifiedDate)
         {
             DepartmentID = departmentId;
             Name = name;
@@ -28,7 +28,7 @@ namespace ViewModelTests.TestModel
             ModifiedDate = modifiedDate;
         }
 
-        public Department()
+        public TestDepartment()
         {
         }
 
