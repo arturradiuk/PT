@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Model;
-using ModelTest.TestData;
-using ModelTest.TestLogic;
+using ModelTests.TestData;
+using ModelTests.TestLogic;
 
-namespace ModelTest
+namespace ModelTests
 {
     [TestClass]
     public class ModelTest
@@ -39,7 +39,7 @@ namespace ModelTest
         public void GetAllDepartmentsTest()
         {
             IEnumerable<ISerializable> tdsDepartments = _testDataService.GetAllDepartments();
-            List<Department> dataContextDepartments = _dataContext.GetAllDepartments();
+            List<IDepartment> dataContextDepartments = _dataContext.GetAllDepartments();
 
             List<ISerializable> tdsDepartmentsList = tdsDepartments.ToList();
 
@@ -67,7 +67,7 @@ namespace ModelTest
         public void UpdateDepartmentTest()
         {
             short ID = 1;
-            Department department = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
+            IDepartment department = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
 
             string testDepartmentName = "testDepartmentName";
 
@@ -79,7 +79,7 @@ namespace ModelTest
 
             _dataContext.UpdateDepartment(ID, testDepartment);
 
-            Department updatedDepartment = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
+            IDepartment updatedDepartment = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
             Assert.AreNotEqual(department, updatedDepartment);
             Assert.AreEqual(testDepartmentName, updatedDepartment.Name);
         }
@@ -87,7 +87,7 @@ namespace ModelTest
         [TestMethod]
         public void AddDepartmentTest()
         {
-            List<Department> departments = _dataContext.GetAllDepartments();
+            List<IDepartment> departments = _dataContext.GetAllDepartments();
             int departmentsNum = departments.Count;
 
             Department testDepartment = new Department(20, "testDep", "testDepGroup", DateTime.Now);

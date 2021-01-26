@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
+using Model;
 
-namespace Model
+namespace ViewModelTests.TestModel
 {
     public class Department : IDepartment
     {
@@ -31,7 +32,7 @@ namespace Model
         {
         }
 
-        public bool Equals(Department other)
+        protected bool Equals(Department other)
         {
             return DepartmentID == other.DepartmentID && Name == other.Name && GroupName == other.GroupName && ModifiedDate.Equals(other.ModifiedDate);
         }

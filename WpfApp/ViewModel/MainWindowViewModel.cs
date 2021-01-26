@@ -12,14 +12,15 @@ namespace ViewModel
 {
     public class MainWindowViewModel : ViewModelListener
     {
-        private IDataContext _dataContext; //todo should it be interface ???
+        private IDataContext _dataContext;
         public ICommand UpdateDepartmentCommand { get; private set; }
         public ICommand DeleteDepartmentCommand { get; private set; }
         public ICommand AddDepartmentCommand { get; private set; }
 
-        private Department m_Department;
+        private IDepartment m_Department;
+        private IDepartment BufferedDepartment;
 
-        public Department Department
+        public IDepartment Department
         {
             get { return m_Department; }
             set
@@ -93,11 +94,11 @@ namespace ViewModel
         }
 
 
-        public ObservableCollection<Department> Departments { get; set; }
+        public ObservableCollection<IDepartment> Departments { get; set; }
 
         public void RefreshData()
         {
-            Departments = new ObservableCollection<Department>(_dataContext.GetAllDepartments());
+            Departments = new ObservableCollection<IDepartment>(_dataContext.GetAllDepartments());
             OnPropertyChanged("Departments");
         }
 
@@ -110,6 +111,19 @@ namespace ViewModel
             UpdateDepartmentCommand = new Command(UpdateDepartment);
             DeleteDepartmentCommand = new Command(DeleteDepartment);
             AddDepartmentCommand = new Command(AddDepartment);
+            BufferedDepartment = new Department();
+        }
+
+
+        public MainWindowViewModel(IDataContext dataContext, IDepartment department)
+        {
+            this._dataContext = dataContext;
+            this.RefreshData();
+
+            UpdateDepartmentCommand = new Command(UpdateDepartment);
+            DeleteDepartmentCommand = new Command(DeleteDepartment);
+            AddDepartmentCommand = new Command(AddDepartment);
+            BufferedDepartment = department;
         }
 
 
@@ -119,13 +133,12 @@ namespace ViewModel
             {
                 if (this.Department.DepartmentID != null)
                 {
-                    Department department = new Department();
-                    department.Name = Name;
-                    department.GroupName = GroupName;
+                    BufferedDepartment.Name = Name;
+                    BufferedDepartment.GroupName = GroupName;
                     // department.ModifiedDate = ModifiedDate; // ModifiedDate should be correct, try to set it automatically
-                    department.ModifiedDate =
+                    BufferedDepartment.ModifiedDate =
                         DateTime.Now; // ModifiedDate should be correct, try to set it automatically
-                    this._dataContext.UpdateDepartment(this.Department.DepartmentID, department);
+                    this._dataContext.UpdateDepartment(this.Department.DepartmentID, BufferedDepartment);
                     this.RefreshData();
                 }
             });
@@ -145,12 +158,12 @@ namespace ViewModel
         {
             Task.Run(() =>
             {
-                Department department = new Department();
-                department.Name = this.Name;
-                department.GroupName = this.GroupName;
+                // BufferedDepartment.DepartmentID = 20;
+                BufferedDepartment.Name = this.Name;
+                BufferedDepartment.GroupName = this.GroupName;
                 // department.ModifiedDate = this.ModifiedDate;  // ModifiedDate should be correct, try to set it automatically
-                department.ModifiedDate = DateTime.Now;
-                this._dataContext.AddDepartment(department);
+                BufferedDepartment.ModifiedDate = DateTime.Now;
+                this._dataContext.AddDepartment(BufferedDepartment);
                 this.RefreshData();
             });
         }

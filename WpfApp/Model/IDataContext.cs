@@ -6,8 +6,8 @@ namespace Model
     public interface IDataContext
     {
         void AddDepartment(ISerializable department);
-        List<Department> GetAllDepartments();
+        List<IDepartment> GetAllDepartments();
         void RemoveDepartment(short departmentID);
-        void UpdateDepartment(short departmentID, Department department);
+        void UpdateDepartment(short departmentID, IDepartment department);
     }
 }

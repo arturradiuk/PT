@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using Logic;
 using Model;
 
-namespace ModelTest.TestLogic
+namespace ModelTests.TestLogic
 {
     public interface ITestDataService : IDataService
     {

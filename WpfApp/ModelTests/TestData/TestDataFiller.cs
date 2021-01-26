@@ -1,7 +1,7 @@
 using System;
 using Model;
 
-namespace ModelTest.TestData
+namespace ModelTests.TestData
 {
     public static class TestDataFiller
     {

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Model;
-using ModelTest.TestData;
+using ModelTests.TestData;
 
-namespace ModelTest.TestLogic
+namespace ModelTests.TestLogic
 {
     public class TestDataService : IDisposable, ITestDataService
     {
@@ -40,14 +40,6 @@ namespace ModelTest.TestLogic
             ObservableCollection<Department> departments = _tdc.Departments;
             Department department_temp = GetDepartmentFromISerializable(department);
             _tdc.Departments.Add(department_temp);
-            // try
-            // {
-            //     this._tdc.SubmitChanges();
-            // }
-            // catch (Exception e)
-            // {
-            //     departments.DeleteOnSubmit(department_temp);
-            // }
         }
 
         public void RemoveDepartment(short departmentID)

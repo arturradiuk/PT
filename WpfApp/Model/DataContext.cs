@@ -34,10 +34,10 @@ namespace Model
             return department;
         }
         
-        public List<Department> GetAllDepartments()
+        public List<IDepartment> GetAllDepartments()
         {
             IEnumerable<ISerializable> tempDeps = this._service.GetAllDepartments();
-            List<Department> departments = new List<Department>();
+            List<IDepartment> departments = new List<IDepartment>();
 
             foreach (ISerializable var in tempDeps)
             {
@@ -53,7 +53,7 @@ namespace Model
             this._service.RemoveDepartment(departmentID);
         }
 
-        public void UpdateDepartment(short departmentID, Department department)
+        public void UpdateDepartment(short departmentID, IDepartment department)
         {
             this._service.UpdateDepartment(departmentID, department);
         }

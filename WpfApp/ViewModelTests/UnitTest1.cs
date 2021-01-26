@@ -1,25 +1,14 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ViewModel;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ViewModelTests
 {
     [TestClass]
-    public class ViewModelTest
+    public class UnitTest1
     {
-        private MainWindowViewModel MainWindowVM = new MainWindowViewModel();
-        
         [TestMethod]
-        public void UpdateDepartmentTest()
+        public void TestMethod1()
         {
-            DateTime currentDate = DateTime.Now;
-            MainWindowVM.Name = "TestName";
-            MainWindowVM.GroupName = "TestGroup";
-            MainWindowVM.ModifiedDate = currentDate;
-            MainWindowVM.DepartmentID = 1;
-            MainWindowVM.UpdateDepartmentCommand.Execute(null);
-            Assert.IsTrue(false);
         }
     }
 }
