@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Linq;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using Model;
 using ViewModelTest.TestData;
 
 namespace ViewModelTest.TestLogic
@@ -11,7 +12,7 @@ namespace ViewModelTest.TestLogic
     {
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _tdc.Departments.Clear();
         }
 
 
@@ -30,61 +31,48 @@ namespace ViewModelTest.TestLogic
 
         public IEnumerable<ISerializable> GetAllDepartments()
         {
-            return _tdc.GetTable<Department>().ToList();
+            return _tdc.Departments;
         }
 
         public void AddDepartment(ISerializable department)
         {
-            Table<Department> departments = _tdc.GetTable<Department>(); //
+            ObservableCollection<Department> departments = _tdc.Departments;
             Department department_temp = GetDepartmentFromISerializable(department);
-            departments.InsertOnSubmit(department_temp);
-            try
-            {
-                this._tdc.SubmitChanges();
-            }
-            catch (Exception e)
-            {
-                departments.DeleteOnSubmit(department_temp);
-            }
+            _tdc.Departments.Add(department_temp);
+            // try
+            // {
+            //     this._tdc.SubmitChanges();
+            // }
+            // catch (Exception e)
+            // {
+            //     departments.DeleteOnSubmit(department_temp);
+            // }
         }
 
         public void RemoveDepartment(short departmentID)
         {
-            Table<EmployeeDepartmentHistory> edh = _tdc.GetTable<EmployeeDepartmentHistory>();
-            IEnumerable<EmployeeDepartmentHistory> edhEnumerable = (from e in edh
-                where e.DepartmentID == departmentID
-                select e);
-            
-            Table<Department> departments = _tdc.GetTable<Department>();
-            Department tempDep = this.GetDepartmentById(departmentID) as Department;
-            edh.DeleteAllOnSubmit(edh);
-            departments.DeleteOnSubmit(tempDep);
-            
             try
             {
-
-                this._tdc.SubmitChanges();
-
+                Department department = (from d in _tdc.Departments
+                    where d.DepartmentID == departmentID
+                    select d).First();
+                _tdc.Departments.Remove(department);
             }
             catch (Exception e)
             {
-                edh.InsertAllOnSubmit(edh);
-                departments.InsertOnSubmit(tempDep);
+                throw new KeyNotFoundException("No department with this ID");
             }
-
         }
 
         public ISerializable GetDepartmentById(short departmentID)
         {
-            Table<Department> departments = _tdc.GetTable<Department>();
-            return departments.First(department => department.DepartmentID.Equals(departmentID));
+            return _tdc.Departments.First(department => department.DepartmentID.Equals(departmentID));
         }
 
         public void UpdateDepartment(short departmentID, ISerializable department)
         {
             Department department_temp = GetDepartmentFromISerializable(department);
 
-            Table<Department> departments = _tdc.GetTable<Department>();
             Department dbDepartment = GetDepartmentById(departmentID) as Department;
 
             foreach (var property in dbDepartment.GetType().GetProperties())
@@ -93,7 +81,6 @@ namespace ViewModelTest.TestLogic
             }
 
             dbDepartment.DepartmentID = departmentID;
-            this._tdc.SubmitChanges();
         }
 
         private Department GetDepartmentFromISerializable(ISerializable iSerializable)
