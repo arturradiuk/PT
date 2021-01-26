@@ -12,14 +12,14 @@ namespace ViewModel
 {
     public class MainWindowViewModel : ViewModelListener
     {
-        private IDataContext _dataContext;
+        private IDataContext _dataContext { get; }
         public ICommand UpdateDepartmentCommand { get; private set; }
         public ICommand DeleteDepartmentCommand { get; private set; }
         public ICommand AddDepartmentCommand { get; private set; }
 
         private IDepartment m_Department;
-        private IDepartment BufferedDepartment;
-
+        public IDepartment BufferedDepartment { get; set; }
+        
         public IDepartment Department
         {
             get { return m_Department; }
@@ -31,10 +31,6 @@ namespace ViewModel
                     Name = value.Name;
                     GroupName = value.GroupName;
                     ModifiedDate = value.ModifiedDate;
-                    // OnPropertyChanged("DepartmentID");
-                    // OnPropertyChanged("Name");
-                    // OnPropertyChanged("GroupName");
-                    // OnPropertyChanged("ModifiedDate");
                 }
 
                 m_Department = value;
@@ -158,10 +154,8 @@ namespace ViewModel
         {
             Task.Run(() =>
             {
-                // BufferedDepartment.DepartmentID = 20;
                 BufferedDepartment.Name = this.Name;
                 BufferedDepartment.GroupName = this.GroupName;
-                // department.ModifiedDate = this.ModifiedDate;  // ModifiedDate should be correct, try to set it automatically
                 BufferedDepartment.ModifiedDate = DateTime.Now;
                 this._dataContext.AddDepartment(BufferedDepartment);
                 this.RefreshData();

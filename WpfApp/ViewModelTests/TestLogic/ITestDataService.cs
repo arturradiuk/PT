@@ -13,7 +13,7 @@ namespace ViewModelTests.TestLogic
 
         void UpdateDepartment(short departmentID, ISerializable department);
         void AddDepartment(ISerializable department);
-        Department GetDepartmentFromISerializable(ISerializable iSerializable);
+        IDepartment GetDepartmentFromISerializable(ISerializable iSerializable);
         ISerializable GetDepartmentById(short departmentID);
     }
 }

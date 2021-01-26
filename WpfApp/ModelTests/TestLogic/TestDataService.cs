@@ -37,8 +37,8 @@ namespace ModelTests.TestLogic
 
         public void AddDepartment(ISerializable department)
         {
-            ObservableCollection<Department> departments = _tdc.Departments;
-            Department department_temp = GetDepartmentFromISerializable(department);
+            ObservableCollection<IDepartment> departments = _tdc.Departments;
+            IDepartment department_temp = GetDepartmentFromISerializable(department);
             _tdc.Departments.Add(department_temp);
         }
 
@@ -46,7 +46,7 @@ namespace ModelTests.TestLogic
         {
             try
             {
-                Department department = (from d in _tdc.Departments
+                IDepartment department = (from d in _tdc.Departments
                     where d.DepartmentID == departmentID
                     select d).First();
                 _tdc.Departments.Remove(department);
@@ -64,7 +64,7 @@ namespace ModelTests.TestLogic
 
         public void UpdateDepartment(short departmentID, ISerializable department)
         {
-            Department department_temp = GetDepartmentFromISerializable(department);
+            IDepartment department_temp = GetDepartmentFromISerializable(department);
 
             Department dbDepartment = GetDepartmentById(departmentID) as Department;
 
@@ -76,7 +76,7 @@ namespace ModelTests.TestLogic
             dbDepartment.DepartmentID = departmentID;
         }
 
-        public Department GetDepartmentFromISerializable(ISerializable iSerializable)
+        public IDepartment GetDepartmentFromISerializable(ISerializable iSerializable)
         {
             Department department = new Department();
             SerializationInfo si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());

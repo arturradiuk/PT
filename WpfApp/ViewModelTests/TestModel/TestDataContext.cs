@@ -5,16 +5,16 @@ using Model;
 
 namespace ViewModelTests.TestModel
 {
-    public class DataContext : IDataContext
+    public class TestDataContext : IDataContext
     {
         private IDataService _service;
 
-        public DataContext(IDataService _service)
+        public TestDataContext(IDataService _service)
         {
             this._service = _service;
         }
 
-        public DataContext()
+        public TestDataContext()
         {
             this._service = new DataService();
         }

@@ -2,7 +2,7 @@ using System;
 using Model;
 using ViewModelTests.TestData;
 
-namespace ModelTests.TestData
+namespace ViewModelTests.TestData
 {
     public static class TestDataFiller
     {

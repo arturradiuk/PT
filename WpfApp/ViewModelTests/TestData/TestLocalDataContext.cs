@@ -4,6 +4,6 @@ namespace ViewModelTests.TestData
 {
     public class TestLocalDataContext
     {
-        public ObservableCollection<Department> Departments = new ObservableCollection<Department>();
+        public ObservableCollection<IDepartment> Departments = new ObservableCollection<IDepartment>();
     }
 }
