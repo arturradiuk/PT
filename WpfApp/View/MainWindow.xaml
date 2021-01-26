@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
         xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="960">
@@ -16,7 +15,7 @@
         <Button Content="Add Department" HorizontalAlignment="Left" Margin="70,210,0,0" VerticalAlignment="Top"
                 Command="{Binding AddDepartmentCommand}" />
         <Button Content="Update Department" HorizontalAlignment="Left" Margin="70,235,0,0" VerticalAlignment="Top"
-                Command="{Binding UpdateDepartmentCommand}"/>
+                Command="{Binding UpdateDepartmentCommand}" />
         <Button Content="Delete Department" HorizontalAlignment="Left" Margin="70,260,0,0" VerticalAlignment="Top"
                 Command="{Binding DeleteDepartmentCommand}" />
 
@@ -26,7 +25,8 @@
         <Label Content="ModifiedDate:" HorizontalAlignment="Left" Margin="26,140,0,0" VerticalAlignment="Top" />
 
         <!-- input region start -->
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="140,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="140,50,0,0" TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="120">
             <TextBox.Text>
                 <Binding Path="DepartmentID" UpdateSourceTrigger="Default" />
             </TextBox.Text>
@@ -38,20 +38,22 @@
             </TextBox.Text>
         </TextBox>
 
-        <TextBox HorizontalAlignment="Left" Margin="140,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+        <TextBox HorizontalAlignment="Left" Margin="140,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
+                 Width="120">
             <TextBox.Text>
                 <Binding Path="GroupName" UpdateSourceTrigger="PropertyChanged" />
             </TextBox.Text>
-        </TextBox>        
-        
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="140,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+        </TextBox>
+
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="140,140,0,0" TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="120">
             <TextBox.Text>
                 <Binding Path="ModifiedDate" UpdateSourceTrigger="PropertyChanged" />
             </TextBox.Text>
         </TextBox>
-        
+
         <!-- <DatePicker  SelectedDate="{Binding ModifiedDate, Mode=TwoWay}" HorizontalAlignment="Left" Margin="140,140,0,0" VerticalAlignment="Top" Width="120" /> -->
-        
+
         <!-- input region end -->
 
 

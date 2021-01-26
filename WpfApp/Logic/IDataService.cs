@@ -11,6 +11,5 @@ namespace Logic
 
         void UpdateDepartment(short departmentID, ISerializable department);
         void AddDepartment(ISerializable department);
-
     }
 }

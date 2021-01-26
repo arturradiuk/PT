@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Runtime.Serialization;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
 using ModelTests.TestData;
 using ModelTests.TestLogic;
@@ -30,31 +28,29 @@ namespace ModelTests
         public void GetDepartmentFromISerializable()
         {
             short ID = 1;
-            ISerializable serializableDepartment = _testDataService.GetDepartmentById(ID);
-            Department department = _dataContext.GetDepartmentFromISerializable(serializableDepartment);
+            var serializableDepartment = _testDataService.GetDepartmentById(ID);
+            var department = _dataContext.GetDepartmentFromISerializable(serializableDepartment);
             Assert.AreEqual(ID, department.DepartmentID);
         }
 
         [TestMethod]
         public void GetAllDepartmentsTest()
         {
-            IEnumerable<ISerializable> tdsDepartments = _testDataService.GetAllDepartments();
-            List<IDepartment> dataContextDepartments = _dataContext.GetAllDepartments();
+            var tdsDepartments = _testDataService.GetAllDepartments();
+            var dataContextDepartments = _dataContext.GetAllDepartments();
 
-            List<ISerializable> tdsDepartmentsList = tdsDepartments.ToList();
+            var tdsDepartmentsList = tdsDepartments.ToList();
 
-            for (int i = 0; i < dataContextDepartments.Count; i++)
-            {
+            for (var i = 0; i < dataContextDepartments.Count; i++)
                 Assert.AreEqual(_dataContext.GetDepartmentFromISerializable(tdsDepartmentsList[i]),
                     dataContextDepartments[i]);
-            }
         }
 
         [TestMethod]
         public void RemoveDepartmentTest()
         {
             short ID = 1;
-            int departmentsNum = _dataContext.GetAllDepartments().Count;
+            var departmentsNum = _dataContext.GetAllDepartments().Count;
             Assert.IsTrue(_dataContext.GetAllDepartments().Any(d => d.DepartmentID == 1));
 
             _dataContext.RemoveDepartment(ID);
@@ -67,19 +63,19 @@ namespace ModelTests
         public void UpdateDepartmentTest()
         {
             short ID = 1;
-            IDepartment department = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
+            var department = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
 
-            string testDepartmentName = "testDepartmentName";
+            var testDepartmentName = "testDepartmentName";
 
             Assert.AreNotEqual(department.Name, testDepartmentName);
 
-            Department testDepartment = new Department(department.DepartmentID, testDepartmentName,
+            var testDepartment = new Department(department.DepartmentID, testDepartmentName,
                 department.GroupName,
                 department.ModifiedDate);
 
             _dataContext.UpdateDepartment(ID, testDepartment);
 
-            IDepartment updatedDepartment = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
+            var updatedDepartment = _dataContext.GetAllDepartments().First(d => d.DepartmentID == 1);
             Assert.AreNotEqual(department, updatedDepartment);
             Assert.AreEqual(testDepartmentName, updatedDepartment.Name);
         }
@@ -87,10 +83,10 @@ namespace ModelTests
         [TestMethod]
         public void AddDepartmentTest()
         {
-            List<IDepartment> departments = _dataContext.GetAllDepartments();
-            int departmentsNum = departments.Count;
+            var departments = _dataContext.GetAllDepartments();
+            var departmentsNum = departments.Count;
 
-            Department testDepartment = new Department(20, "testDep", "testDepGroup", DateTime.Now);
+            var testDepartment = new Department(20, "testDep", "testDepGroup", DateTime.Now);
 
             Assert.IsFalse(departments.Contains(testDepartment));
 

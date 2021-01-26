@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using Model;
 using ModelTests.TestData;
@@ -11,22 +9,21 @@ namespace ModelTests.TestLogic
 {
     public class TestDataService : IDisposable, ITestDataService
     {
-        public void Dispose()
-        {
-            _tdc.Departments.Clear();
-        }
-
-
         private readonly TestLocalDataContext _tdc;
 
         public TestDataService(TestLocalDataContext ldc)
         {
-            this._tdc = ldc;
+            _tdc = ldc;
         }
 
         public TestDataService()
         {
-            this._tdc = new TestLocalDataContext();
+            _tdc = new TestLocalDataContext();
+        }
+
+        public void Dispose()
+        {
+            _tdc.Departments.Clear();
         }
 
 
@@ -37,8 +34,8 @@ namespace ModelTests.TestLogic
 
         public void AddDepartment(ISerializable department)
         {
-            ObservableCollection<IDepartment> departments = _tdc.Departments;
-            IDepartment department_temp = GetDepartmentFromISerializable(department);
+            var departments = _tdc.Departments;
+            var department_temp = GetDepartmentFromISerializable(department);
             _tdc.Departments.Add(department_temp);
         }
 
@@ -46,7 +43,7 @@ namespace ModelTests.TestLogic
         {
             try
             {
-                IDepartment department = (from d in _tdc.Departments
+                var department = (from d in _tdc.Departments
                     where d.DepartmentID == departmentID
                     select d).First();
                 _tdc.Departments.Remove(department);
@@ -64,22 +61,20 @@ namespace ModelTests.TestLogic
 
         public void UpdateDepartment(short departmentID, ISerializable department)
         {
-            IDepartment department_temp = GetDepartmentFromISerializable(department);
+            var department_temp = GetDepartmentFromISerializable(department);
 
-            Department dbDepartment = GetDepartmentById(departmentID) as Department;
+            var dbDepartment = GetDepartmentById(departmentID) as Department;
 
-            foreach (PropertyInfo property in dbDepartment.GetType().GetProperties())
-            {
+            foreach (var property in dbDepartment.GetType().GetProperties())
                 property.SetValue(dbDepartment, property.GetValue(department_temp));
-            }
 
             dbDepartment.DepartmentID = departmentID;
         }
 
         public IDepartment GetDepartmentFromISerializable(ISerializable iSerializable)
         {
-            Department department = new Department();
-            SerializationInfo si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());
+            var department = new Department();
+            var si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());
             iSerializable.GetObjectData(si, new StreamingContext());
             department.Name = si.GetString("Name");
             department.DepartmentID = si.GetInt16("DepartmentID");

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Model;
+
 namespace ViewModelTests.TestData
 {
     public class TestLocalDataContext

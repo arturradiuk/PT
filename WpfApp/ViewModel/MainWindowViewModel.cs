@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Model;
@@ -12,17 +8,51 @@ namespace ViewModel
 {
     public class MainWindowViewModel : ViewModelListener
     {
-        private IDataContext _dataContext { get; }
-        public ICommand UpdateDepartmentCommand { get; private set; }
-        public ICommand DeleteDepartmentCommand { get; private set; }
-        public ICommand AddDepartmentCommand { get; private set; }
-
         private IDepartment m_Department;
+
+
+        private short m_DepartmentID;
+
+        private string m_GroupName;
+
+
+        private DateTime m_ModifiedDate;
+
+        private string m_Name;
+
+
+        public MainWindowViewModel()
+        {
+            _dataContext = new DataContext();
+            RefreshData();
+
+            UpdateDepartmentCommand = new Command(UpdateDepartment);
+            DeleteDepartmentCommand = new Command(DeleteDepartment);
+            AddDepartmentCommand = new Command(AddDepartment);
+            BufferedDepartment = new Department();
+        }
+
+
+        public MainWindowViewModel(IDataContext dataContext, IDepartment department)
+        {
+            _dataContext = dataContext;
+            RefreshData();
+
+            UpdateDepartmentCommand = new Command(UpdateDepartment);
+            DeleteDepartmentCommand = new Command(DeleteDepartment);
+            AddDepartmentCommand = new Command(AddDepartment);
+            BufferedDepartment = department;
+        }
+
+        private IDataContext _dataContext { get; }
+        public ICommand UpdateDepartmentCommand { get; }
+        public ICommand DeleteDepartmentCommand { get; }
+        public ICommand AddDepartmentCommand { get; }
         public IDepartment BufferedDepartment { get; set; }
-        
+
         public IDepartment Department
         {
-            get { return m_Department; }
+            get => m_Department;
             set
             {
                 if (value != null)
@@ -34,16 +64,13 @@ namespace ViewModel
                 }
 
                 m_Department = value;
-                this.OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
-
-        private short m_DepartmentID;
-
         public short DepartmentID
         {
-            get { return m_DepartmentID; }
+            get => m_DepartmentID;
             set
             {
                 m_DepartmentID = value;
@@ -51,11 +78,9 @@ namespace ViewModel
             }
         }
 
-        private string m_Name;
-
         public string Name
         {
-            get { return m_Name; }
+            get => m_Name;
             set
             {
                 m_Name = value;
@@ -63,11 +88,9 @@ namespace ViewModel
             }
         }
 
-        private string m_GroupName;
-
         public string GroupName
         {
-            get { return m_GroupName; }
+            get => m_GroupName;
             set
             {
                 m_GroupName = value;
@@ -75,12 +98,9 @@ namespace ViewModel
             }
         }
 
-
-        private System.DateTime m_ModifiedDate;
-
-        public System.DateTime ModifiedDate
+        public DateTime ModifiedDate
         {
-            get { return m_ModifiedDate; }
+            get => m_ModifiedDate;
 
             set
             {
@@ -99,43 +119,17 @@ namespace ViewModel
         }
 
 
-        public MainWindowViewModel()
-        {
-            this._dataContext = new DataContext();
-            this.RefreshData();
-
-            UpdateDepartmentCommand = new Command(UpdateDepartment);
-            DeleteDepartmentCommand = new Command(DeleteDepartment);
-            AddDepartmentCommand = new Command(AddDepartment);
-            BufferedDepartment = new Department();
-        }
-
-
-        public MainWindowViewModel(IDataContext dataContext, IDepartment department)
-        {
-            this._dataContext = dataContext;
-            this.RefreshData();
-
-            UpdateDepartmentCommand = new Command(UpdateDepartment);
-            DeleteDepartmentCommand = new Command(DeleteDepartment);
-            AddDepartmentCommand = new Command(AddDepartment);
-            BufferedDepartment = department;
-        }
-
-
         public void UpdateDepartment()
         {
             Task.Run(() =>
             {
-                if (this.Department.DepartmentID != null)
+                if (Department.DepartmentID != null)
                 {
                     BufferedDepartment.Name = Name;
                     BufferedDepartment.GroupName = GroupName;
-                    // department.ModifiedDate = ModifiedDate; // ModifiedDate should be correct, try to set it automatically
-                    BufferedDepartment.ModifiedDate =
-                        DateTime.Now; // ModifiedDate should be correct, try to set it automatically
-                    this._dataContext.UpdateDepartment(this.Department.DepartmentID, BufferedDepartment);
-                    this.RefreshData();
+                    BufferedDepartment.ModifiedDate = DateTime.Now; 
+                    _dataContext.UpdateDepartment(Department.DepartmentID, BufferedDepartment);
+                    RefreshData();
                 }
             });
         }
@@ -144,8 +138,8 @@ namespace ViewModel
         {
             Task.Run(() =>
             {
-                this._dataContext.RemoveDepartment(this.Department.DepartmentID);
-                this.RefreshData();
+                _dataContext.RemoveDepartment(Department.DepartmentID);
+                RefreshData();
             });
         }
 
@@ -154,11 +148,11 @@ namespace ViewModel
         {
             Task.Run(() =>
             {
-                BufferedDepartment.Name = this.Name;
-                BufferedDepartment.GroupName = this.GroupName;
+                BufferedDepartment.Name = Name;
+                BufferedDepartment.GroupName = GroupName;
                 BufferedDepartment.ModifiedDate = DateTime.Now;
-                this._dataContext.AddDepartment(BufferedDepartment);
-                this.RefreshData();
+                _dataContext.AddDepartment(BufferedDepartment);
+                RefreshData();
             });
         }
     }

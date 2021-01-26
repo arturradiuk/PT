@@ -13,8 +13,8 @@ namespace ViewModelTests
     [TestClass]
     public class ViewModelTest
     {
-        private MainWindowViewModel _mainWindowViewModel;
         private IDataContext _dataContext;
+        private MainWindowViewModel _mainWindowViewModel;
 
         private ITestDataService _testDataService;
         private TestLocalDataContext _tldc;
@@ -23,8 +23,8 @@ namespace ViewModelTests
         public void TestInitialize()
         {
             IDepartment department = new TestDepartment();
-            
-            TestLocalDataContext _tldc = new TestLocalDataContext();
+
+            var _tldc = new TestLocalDataContext();
             TestDataFiller.Fill(_tldc);
 
             ITestDataService _testDataService = new TestDataService(_tldc);
@@ -35,14 +35,14 @@ namespace ViewModelTests
         [TestMethod]
         public void AddDepartmentTest()
         {
-            int departmentsNum = _mainWindowViewModel.Departments.Count;
+            var departmentsNum = _mainWindowViewModel.Departments.Count;
 
             IDepartment department = new TestDepartment(25, "testName", "testGroup", DateTime.Now);
             _mainWindowViewModel.Name = department.Name;
             _mainWindowViewModel.GroupName = department.GroupName;
             _mainWindowViewModel.DepartmentID = department.DepartmentID;
             _mainWindowViewModel.AddDepartmentCommand.Execute(null);
-            
+
             Thread.Sleep(100);
             Assert.AreEqual(departmentsNum + 1, _mainWindowViewModel.Departments.Count);
         }
@@ -50,16 +50,16 @@ namespace ViewModelTests
         [TestMethod]
         public void UpdateDepartmentTest()
         {
-            IDepartment originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
+            var originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
             _mainWindowViewModel.Department = originalDepartment;
             _mainWindowViewModel.Name = "testName";
             _mainWindowViewModel.GroupName = "testGroupName";
             _mainWindowViewModel.ModifiedDate = DateTime.Now;
             _mainWindowViewModel.DepartmentID = 1;
             _mainWindowViewModel.UpdateDepartmentCommand.Execute(null);
-            
+
             Thread.Sleep(100);
-            IDepartment updatedDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
+            var updatedDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
 
             Assert.AreNotEqual(originalDepartment, updatedDepartment);
             Assert.AreEqual("testName", updatedDepartment.Name);
@@ -68,14 +68,14 @@ namespace ViewModelTests
         [TestMethod]
         public void DeleteDepartmentTest()
         {
-            int departmentsNum = _mainWindowViewModel.Departments.Count;
-            IDepartment originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
+            var departmentsNum = _mainWindowViewModel.Departments.Count;
+            var originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
             _mainWindowViewModel.Department = originalDepartment;
-            
+
             _mainWindowViewModel.DeleteDepartmentCommand.Execute(null);
-            
+
             Thread.Sleep(100);
-            
+
             Assert.IsFalse(_mainWindowViewModel.Departments.Contains(originalDepartment));
             Assert.AreEqual(departmentsNum - 1, _mainWindowViewModel.Departments.Count);
         }
