@@ -46,8 +46,6 @@
       <HintPath>..\packages\MSTest.TestFramework.2.1.1\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestData\TestLocalDataContext.cs" />
@@ -55,7 +53,6 @@
     <Compile Include="TestLogic\ITestDataService.cs" />
     <Compile Include="TestLogic\TestDataService.cs" />
     <Compile Include="ModelTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
