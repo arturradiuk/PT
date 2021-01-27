@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Model;
 using ModelTests.TestData;
@@ -34,8 +36,8 @@ namespace ModelTests.TestLogic
 
         public void AddDepartment(ISerializable department)
         {
-            var departments = _tdc.Departments;
-            var department_temp = GetDepartmentFromISerializable(department);
+            ObservableCollection<IDepartment> departments = _tdc.Departments;
+            IDepartment department_temp = GetDepartmentFromISerializable(department);
             _tdc.Departments.Add(department_temp);
         }
 
@@ -43,7 +45,7 @@ namespace ModelTests.TestLogic
         {
             try
             {
-                var department = (from d in _tdc.Departments
+                IDepartment department = (from d in _tdc.Departments
                     where d.DepartmentID == departmentID
                     select d).First();
                 _tdc.Departments.Remove(department);
@@ -61,11 +63,11 @@ namespace ModelTests.TestLogic
 
         public void UpdateDepartment(short departmentID, ISerializable department)
         {
-            var department_temp = GetDepartmentFromISerializable(department);
+            IDepartment department_temp = GetDepartmentFromISerializable(department);
 
-            var dbDepartment = GetDepartmentById(departmentID) as Department;
+            Department dbDepartment = GetDepartmentById(departmentID) as Department;
 
-            foreach (var property in dbDepartment.GetType().GetProperties())
+            foreach (PropertyInfo property in dbDepartment.GetType().GetProperties())
                 property.SetValue(dbDepartment, property.GetValue(department_temp));
 
             dbDepartment.DepartmentID = departmentID;
@@ -73,8 +75,8 @@ namespace ModelTests.TestLogic
 
         public IDepartment GetDepartmentFromISerializable(ISerializable iSerializable)
         {
-            var department = new Department();
-            var si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());
+            Department department = new Department();
+            SerializationInfo si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());
             iSerializable.GetObjectData(si, new StreamingContext());
             department.Name = si.GetString("Name");
             department.DepartmentID = si.GetInt16("DepartmentID");

@@ -24,7 +24,7 @@ namespace ViewModelTests
         {
             IDepartment department = new TestDepartment();
 
-            var _tldc = new TestLocalDataContext();
+            TestLocalDataContext _tldc = new TestLocalDataContext();
             TestDataFiller.Fill(_tldc);
 
             ITestDataService _testDataService = new TestDataService(_tldc);
@@ -35,7 +35,7 @@ namespace ViewModelTests
         [TestMethod]
         public void AddDepartmentTest()
         {
-            var departmentsNum = _mainWindowViewModel.Departments.Count;
+            int departmentsNum = _mainWindowViewModel.Departments.Count;
 
             IDepartment department = new TestDepartment(25, "testName", "testGroup", DateTime.Now);
             _mainWindowViewModel.Name = department.Name;
@@ -50,7 +50,7 @@ namespace ViewModelTests
         [TestMethod]
         public void UpdateDepartmentTest()
         {
-            var originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
+            IDepartment originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
             _mainWindowViewModel.Department = originalDepartment;
             _mainWindowViewModel.Name = "testName";
             _mainWindowViewModel.GroupName = "testGroupName";
@@ -59,7 +59,7 @@ namespace ViewModelTests
             _mainWindowViewModel.UpdateDepartmentCommand.Execute(null);
 
             Thread.Sleep(100);
-            var updatedDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
+            IDepartment updatedDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
 
             Assert.AreNotEqual(originalDepartment, updatedDepartment);
             Assert.AreEqual("testName", updatedDepartment.Name);
@@ -68,8 +68,8 @@ namespace ViewModelTests
         [TestMethod]
         public void DeleteDepartmentTest()
         {
-            var departmentsNum = _mainWindowViewModel.Departments.Count;
-            var originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
+            int departmentsNum = _mainWindowViewModel.Departments.Count;
+            IDepartment originalDepartment = _mainWindowViewModel.Departments.First(d => d.DepartmentID == 1);
             _mainWindowViewModel.Department = originalDepartment;
 
             _mainWindowViewModel.DeleteDepartmentCommand.Execute(null);

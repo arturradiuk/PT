@@ -20,12 +20,12 @@ namespace Model
 
         public List<IDepartment> GetAllDepartments()
         {
-            var tempDeps = _service.GetAllDepartments();
-            var departments = new List<IDepartment>();
+            IEnumerable<ISerializable> tempDeps = _service.GetAllDepartments();
+            List<IDepartment> departments = new List<IDepartment>();
 
-            foreach (var var in tempDeps)
+            foreach (ISerializable var in tempDeps)
             {
-                var department = GetDepartmentFromISerializable(var);
+                Department department = GetDepartmentFromISerializable(var);
                 departments.Add(department);
             }
 
@@ -50,8 +50,8 @@ namespace Model
 
         public Department GetDepartmentFromISerializable(ISerializable iSerializable)
         {
-            var department = new Department();
-            var si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());
+            Department department = new Department();
+            SerializationInfo si = new SerializationInfo(iSerializable.GetType(), new FormatterConverter());
             iSerializable.GetObjectData(si, new StreamingContext());
             department.Name = si.GetString("Name");
             department.DepartmentID = si.GetInt16("DepartmentID");
